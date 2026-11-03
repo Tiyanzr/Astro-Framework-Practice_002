@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "@fontsource-variable/archivo/standard.css";
 @import "@fontsource-variable/jetbrains-mono";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -12,59 +13,87 @@
    ========================================================================== */
 
 :root {
-  /* Palet mentah */
-  --ink-950: #070c11; /* latar utama */
-  --ink-900: #0c131a; /* latar section selang-seling */
-  --ink-800: #121920; /* kartu */
-  --ink-700: #1a232c; /* kartu hover / input */
-  --steel-600: #323b42; /* garis & border */
-  --steel-400: #9ba7b1; /* teks sekunder */
-  --steel-100: #edf1f4; /* teks utama di gelap */
-  --paper: #f4f6f6; /* latar section terang */
+  /* Palet mentah — 2 warna dasar */
+  --midnight: #001f3f; /* Midnight Mirage — dasar dark mode */
+  --midnight-900: #062949; /* section selang-seling (dark) */
+  --midnight-800: #0b2b4d; /* kartu (dark) */
+  --midnight-700: #0e3358; /* hover (dark) */
+  --midnight-600: #24476b; /* garis & border (dark) */
+  --mist: #a7b6c6; /* teks sekunder (dark) */
 
-  --olive-300: #d8d6ac;
-  --olive-400: #c1be81; /* warna brand utama */
-  --olive-500: #aaa753; /* warna asli logo */
-  --olive-800: #4a4a1c;
+  --praxeti: #f6f7ed; /* Praxeti White — dasar light mode */
+  --praxeti-200: #edefe0; /* section selang-seling (light) */
+  --praxeti-300: #dcdfcf; /* garis & border (light) */
+  --slate: #4f5d6b; /* teks sekunder (light) */
 
-  --teal-600: #027b62;
-  --blue-500: #3e90cb;
+  /* Palet mentah — 4 warna utama */
+  --lime: #dbe64c; /* First Colors of Spring */
+  --lime-hover: #e6ee7f;
+  --mantis: #74c365; /* Mantis */
+  --green: #00804c; /* Picture Book Green */
+  --green-hover: #006b40;
+  --blue: #1e488f; /* Nuit Blanche */
 
-  /* Token semantik (tema gelap = default) */
-  --background: var(--ink-950);
-  --background-alt: var(--ink-900);
-  --foreground: var(--steel-100);
-  --card: var(--ink-800);
-  --card-foreground: var(--steel-100);
-  --popover: var(--ink-800);
-  --popover-foreground: var(--steel-100);
-  --primary: var(--olive-400);
-  --primary-foreground: var(--ink-950);
-  --secondary: var(--ink-700);
-  --secondary-foreground: var(--steel-100);
-  --muted: var(--ink-800);
-  --muted-foreground: var(--steel-400);
-  --accent: var(--ink-700);
-  --accent-foreground: var(--steel-100);
-  --highlight: var(--blue-500);
-  --destructive: #e5484d;
-  --border: var(--steel-600);
-  --input: var(--steel-600);
-  --ring: var(--olive-400);
+  /* Warna asli logo — sama di kedua tema */
+  --logo: #aaa753;
+
   --radius: 0.75rem;
 }
 
-/* Section terang: tambahkan class `surface-light` pada <section>. */
-.surface-light {
-  --background: var(--paper);
-  --foreground: var(--ink-950);
+/* Light mode (default). Class `theme-light` memaksa tema terang di elemen mana pun. */
+:root,
+.theme-light {
+  --background: var(--praxeti);
+  --background-alt: var(--praxeti-200);
+  --foreground: var(--midnight);
   --card: #ffffff;
-  --card-foreground: var(--ink-950);
-  --primary: var(--teal-600);
+  --card-foreground: var(--midnight);
+  --popover: #ffffff;
+  --popover-foreground: var(--midnight);
+  --primary: var(--green);
+  --primary-hover: var(--green-hover);
   --primary-foreground: #ffffff;
-  --muted-foreground: #5d6a74;
-  --border: #dfe5e8;
-  --ring: var(--teal-600);
+  --secondary: var(--praxeti-200);
+  --secondary-foreground: var(--midnight);
+  --muted: var(--praxeti-200);
+  --muted-foreground: var(--slate);
+  --accent: var(--praxeti-200);
+  --accent-foreground: var(--midnight);
+  --highlight: var(--blue);
+  --destructive: #c62828;
+  --border: var(--praxeti-300);
+  --input: var(--praxeti-300);
+  --ring: var(--green);
+}
+
+/* Dark mode. Class `dark` di <html> untuk seluruh halaman, `theme-dark` untuk satu section. */
+.dark,
+.theme-dark {
+  --background: var(--midnight);
+  --background-alt: var(--midnight-900);
+  --foreground: var(--praxeti);
+  --card: var(--midnight-800);
+  --card-foreground: var(--praxeti);
+  --popover: var(--midnight-800);
+  --popover-foreground: var(--praxeti);
+  --primary: var(--lime);
+  --primary-hover: var(--lime-hover);
+  --primary-foreground: var(--midnight);
+  --secondary: var(--midnight-700);
+  --secondary-foreground: var(--praxeti);
+  --muted: var(--midnight-800);
+  --muted-foreground: var(--mist);
+  --accent: var(--midnight-700);
+  --accent-foreground: var(--praxeti);
+  --highlight: var(--mantis);
+  --destructive: #ff6b6b;
+  --border: var(--midnight-600);
+  --input: var(--midnight-600);
+  --ring: var(--lime);
+}
+
+.theme-light,
+.theme-dark {
   background-color: var(--background);
   color: var(--foreground);
 }
@@ -83,6 +112,7 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -95,22 +125,23 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-logo: var(--logo);
 
-  /* Palet mentah → utility seperti bg-olive-400, text-teal-600 */
-  --color-ink-950: var(--ink-950);
-  --color-ink-900: var(--ink-900);
-  --color-ink-800: var(--ink-800);
-  --color-ink-700: var(--ink-700);
-  --color-steel-600: var(--steel-600);
-  --color-steel-400: var(--steel-400);
-  --color-steel-100: var(--steel-100);
-  --color-paper: var(--paper);
-  --color-olive-300: var(--olive-300);
-  --color-olive-400: var(--olive-400);
-  --color-olive-500: var(--olive-500);
-  --color-olive-800: var(--olive-800);
-  --color-teal-600: var(--teal-600);
-  --color-blue-500: var(--blue-500);
+  /* Palet mentah → utility seperti bg-lime, text-mantis, bg-midnight */
+  --color-midnight: var(--midnight);
+  --color-midnight-900: var(--midnight-900);
+  --color-midnight-800: var(--midnight-800);
+  --color-midnight-700: var(--midnight-700);
+  --color-midnight-600: var(--midnight-600);
+  --color-mist: var(--mist);
+  --color-praxeti: var(--praxeti);
+  --color-praxeti-200: var(--praxeti-200);
+  --color-praxeti-300: var(--praxeti-300);
+  --color-slate: var(--slate);
+  --color-lime: var(--lime);
+  --color-mantis: var(--mantis);
+  --color-green: var(--green);
+  --color-blue: var(--blue);
 
   /* Radius */
   --radius-sm: calc(var(--radius) - 6px); /* 6px  — chip kecil */

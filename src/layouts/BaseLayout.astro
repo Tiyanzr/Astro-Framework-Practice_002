@@ -1,0 +1,36 @@
+---
+// Kerangka semua halaman: <head>, tema, navbar, lalu isi halaman di <slot />.
+import "@/styles/global.css";
+import Navbar from "@/components/layout/Navbar.astro";
+import { site } from "@/config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : site.name;
+---
+
+<html lang={site.lang} class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+    <!-- Terapkan tema sebelum halaman tampil agar tidak berkedip. Default: dark. -->
+    <script is:inline>
+      try {
+        if (localStorage.getItem("theme") === "light") document.documentElement.classList.remove("dark");
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <Navbar />
+    <main class="pt-16">
+      <slot />
+    </main>
+  </body>
+</html>

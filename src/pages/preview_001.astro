@@ -1,215 +1,50 @@
 ---
-// Preview 001: navbar glass (ringan), palet warna, dan uji ukuran teks.
+// Preview 001: palet warna di light & dark mode. Navbar & menu datang dari BaseLayout.
 // Semua nilai berasal dari token di src/styles/global.css (lihat DESIGN.md).
-import "../styles/global.css";
-
-const menuItems = ["Button 1", "Button 2", "Button 3", "Button 4"];
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
 // Hex hanya muncul sebagai tooltip saat kursor diarahkan.
-const swatches = [
-  { token: "ink-950", hex: "#070c11" },
-  { token: "ink-900", hex: "#0c131a" },
-  { token: "ink-800", hex: "#121920" },
-  { token: "ink-700", hex: "#1a232c" },
-  { token: "steel-600", hex: "#323b42" },
-  { token: "steel-400", hex: "#9ba7b1" },
-  { token: "steel-100", hex: "#edf1f4" },
-  { token: "paper", hex: "#f4f6f6" },
-  { token: "olive-300", hex: "#d8d6ac" },
-  { token: "olive-400", hex: "#c1be81" },
-  { token: "olive-500", hex: "#aaa753" },
-  { token: "olive-800", hex: "#4a4a1c" },
-  { token: "teal-600", hex: "#027b62" },
-  { token: "blue-500", hex: "#3e90cb" },
+const baseColors = [
+  { token: "midnight", hex: "#001f3f" },
+  { token: "praxeti", hex: "#f6f7ed" },
 ];
-
-// Dari kecil ke besar.
-const typeScale = [
-  "text-eyebrow",
-  "text-caption",
-  "text-small",
-  "text-body",
-  "text-lead",
-  "text-h4",
-  "text-h3",
-  "text-h2",
-  "text-h1",
-  "text-display",
-  "text-display-xl",
+const mainColors = [
+  { token: "lime", hex: "#dbe64c" },
+  { token: "mantis", hex: "#74c365" },
+  { token: "green", hex: "#00804c" },
+  { token: "blue", hex: "#1e488f" },
+];
+const neutrals = [
+  { token: "midnight-900", hex: "#062949" },
+  { token: "midnight-800", hex: "#0b2b4d" },
+  { token: "midnight-700", hex: "#0e3358" },
+  { token: "midnight-600", hex: "#24476b" },
+  { token: "mist", hex: "#a7b6c6" },
+  { token: "slate", hex: "#4f5d6b" },
+  { token: "praxeti-300", hex: "#dcdfcf" },
+  { token: "praxeti-200", hex: "#edefe0" },
 ];
 ---
 
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Preview 001 — Parametrik</title>
-  </head>
-  <body>
-    <!-- Navbar glass ringan + menu pop-up. data-state="open" mengatur semua animasi lewat group-data. -->
-    <div id="site-menu" class="group/menu" data-state="closed">
-      <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink-950/35 backdrop-blur-sm backdrop-saturate-150">
-        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 md:px-8">
-          <a href="#" aria-label="Parametrik">
-            <img src="/logo-parametrik.png" alt="Parametrik" class="h-5 w-auto drop-shadow-[0_0_0_#aaa753] md:h-6" />
-          </a>
-          <div class="flex items-center gap-2">
-            <a
-              href="#"
-              class="hidden rounded-md bg-primary px-4 py-2 text-small font-semibold whitespace-nowrap text-primary-foreground transition-colors duration-300 hover:bg-olive-300 sm:inline-block"
-            >
-              Hubungi Kami
-            </a>
-            <button
-              id="menu-toggle"
-              class="relative size-10 rounded-md border border-white/10"
-              aria-label="Buka menu"
-              aria-expanded="false"
-              aria-controls="menu-panel"
-            >
-              <span
-                class="absolute top-1/2 left-1/2 h-0.5 w-5 -translate-x-1/2 -translate-y-[4px] bg-foreground group-data-[state=open]/menu:translate-y-0 group-data-[state=open]/menu:rotate-45"
-              ></span>
-              <span
-                class="absolute top-1/2 left-1/2 h-0.5 w-5 -translate-x-1/2 translate-y-[3px] bg-foreground group-data-[state=open]/menu:translate-y-0 group-data-[state=open]/menu:-rotate-45"
-              ></span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <!-- Latar gelap di belakang panel -->
-      <div
-        id="menu-overlay"
-        class="pointer-events-none fixed inset-0 top-16 z-40 bg-ink-950/60 opacity-0 transition-opacity duration-500 ease-out-quart group-data-[state=open]/menu:pointer-events-auto group-data-[state=open]/menu:opacity-100"
-      ></div>
-
-      <!-- Panel menu: masuk dari kanan. Buka = ease-out-expo 700ms (cepat lalu melambat), tutup = ease-in-out-quart 400ms. -->
-      <nav
-        id="menu-panel"
-        class="invisible fixed top-16 right-0 bottom-0 z-40 flex w-full translate-x-full flex-col border-l border-border bg-background transition-[translate,visibility] duration-400 ease-in-out-quart group-data-[state=open]/menu:visible group-data-[state=open]/menu:translate-x-0 group-data-[state=open]/menu:duration-700 group-data-[state=open]/menu:ease-out-expo md:w-[420px]"
-        aria-label="Menu utama"
-      >
-        <ul class="divide-y divide-border border-b border-border">
-          {menuItems.map((item) => (
-            <li>
-              <!-- Hover: hanya latar yang makin terang, tanpa gerakan -->
-              <a href="#" class="flex items-center gap-4 px-6 py-5 transition-colors duration-300 ease-out-quart hover:bg-card">
-                <span class="flex-1 text-h4">{item}</span>
-                <svg class="size-5 text-muted-foreground" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" />
-                </svg>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+<BaseLayout title="Preview 001">
+  <!-- Palet -->
+  <section class="py-20">
+    <div class="mx-auto max-w-7xl space-y-3 px-4 md:px-8">
+      <div class="grid grid-cols-2 gap-3">
+        {baseColors.map((s) => (
+          <div class="h-40 rounded-lg border border-border" style={`background:${s.hex}`} title={`${s.token} · ${s.hex}`}></div>
+        ))}
+      </div>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {mainColors.map((s) => (
+          <div class="aspect-square rounded-lg" style={`background:${s.hex}`} title={`${s.token} · ${s.hex}`}></div>
+        ))}
+      </div>
+      <div class="grid grid-cols-4 gap-3 sm:grid-cols-8">
+        {neutrals.map((s) => (
+          <div class="aspect-square rounded-lg border border-border" style={`background:${s.hex}`} title={`${s.token} · ${s.hex}`}></div>
+        ))}
+      </div>
     </div>
-
-    <main>
-      <!-- Garis untuk uji glass -->
-      <div class="stripes-vertical h-[480px]"></div>
-      <div class="stripes-diagonal h-[260px]"></div>
-      <div class="stripes-horizontal h-[200px]"></div>
-      <div class="stripes-olive h-[200px]"></div>
-      <div class="stripes-grid h-[220px]"></div>
-      <div class="stripes-blocks h-[200px]"></div>
-
-      <!-- Palet -->
-      <section class="bg-background-alt py-20">
-        <div class="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 sm:grid-cols-4 md:px-8 lg:grid-cols-7">
-          {swatches.map((s) => (
-            <div class="aspect-square rounded-lg border border-white/5" style={`background:${s.hex}`} title={`${s.token} · ${s.hex}`}></div>
-          ))}
-        </div>
-      </section>
-
-      <!-- Uji ukuran teks, kecil ke besar -->
-      <section class="py-20">
-        <div class="mx-auto max-w-7xl space-y-6 px-4 md:px-8">
-          {typeScale.map((cls) => (
-            <p class={cls} title={cls}>Parametrik Solusi Integrasi</p>
-          ))}
-        </div>
-      </section>
-
-      <!-- Uji ukuran teks di section terang -->
-      <section class="surface-light py-20">
-        <div class="mx-auto max-w-7xl space-y-6 px-4 md:px-8">
-          {typeScale.map((cls) => (
-            <p class={cls} title={cls}>Parametrik Solusi Integrasi</p>
-          ))}
-        </div>
-      </section>
-    </main>
-
-    <script>
-      const root = document.getElementById("site-menu")!;
-      const toggle = document.getElementById("menu-toggle")!;
-      const overlay = document.getElementById("menu-overlay")!;
-
-      const setOpen = (open: boolean) => {
-        root.dataset.state = open ? "open" : "closed";
-        toggle.setAttribute("aria-expanded", String(open));
-        toggle.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
-        document.documentElement.style.overflow = open ? "hidden" : "";
-      };
-
-      toggle.addEventListener("click", () => setOpen(root.dataset.state !== "open"));
-      overlay.addEventListener("click", () => setOpen(false));
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") setOpen(false);
-      });
-    </script>
-  </body>
-</html>
-
-<style>
-  /* Pola garis khusus halaman uji — bukan bagian design system. */
-  .stripes-vertical {
-    background: repeating-linear-gradient(
-      90deg,
-      var(--olive-400) 0 2px,
-      transparent 2px 28px,
-      var(--teal-600) 28px 30px,
-      transparent 30px 56px,
-      var(--blue-500) 56px 58px,
-      transparent 58px 84px,
-      #ffffff 84px 85px,
-      transparent 85px 112px
-    ), var(--ink-950);
-  }
-  .stripes-diagonal {
-    background: repeating-linear-gradient(
-      45deg,
-      var(--olive-400) 0 18px,
-      var(--ink-950) 18px 36px,
-      var(--teal-600) 36px 54px,
-      var(--ink-950) 54px 72px,
-      var(--blue-500) 72px 90px,
-      var(--ink-950) 90px 108px
-    );
-  }
-  .stripes-horizontal {
-    background: repeating-linear-gradient(0deg, #ffffff 0 1px, transparent 1px 12px), var(--ink-950);
-  }
-  .stripes-olive {
-    background: repeating-linear-gradient(90deg, var(--olive-400) 0 3px, var(--olive-800) 3px 9px);
-  }
-  .stripes-grid {
-    background:
-      repeating-linear-gradient(90deg, var(--blue-500) 0 1px, transparent 1px 32px),
-      repeating-linear-gradient(0deg, var(--teal-600) 0 1px, transparent 1px 32px),
-      var(--ink-900);
-  }
-  .stripes-blocks {
-    background: linear-gradient(
-      90deg,
-      var(--olive-400) 0 20%,
-      var(--teal-600) 20% 40%,
-      var(--blue-500) 40% 60%,
-      var(--paper) 60% 80%,
-      var(--olive-800) 80% 100%
-    );
-  }
-</style>
+  </section>
+</BaseLayout>
