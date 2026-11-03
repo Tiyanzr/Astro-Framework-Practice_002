@@ -1,36 +1,35 @@
 ---
-// Kerangka semua halaman: <head>, tema, navbar, lalu isi halaman di <slot />.
+// Kerangka semua halaman: <head>, navbar, isi halaman di <slot />, lalu footer.
 import "@/styles/global.css";
 import Navbar from "@/components/layout/Navbar.astro";
-import { site } from "@/config/site";
+import Footer from "@/components/layout/footer/Footer.astro";
+import { getSite } from "@/lib/content";
 
 interface Props {
   title?: string;
   description?: string;
 }
 
+const site = await getSite();
 const { title, description = site.description } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : site.name;
 ---
 
-<html lang={site.lang} class="dark">
+<!-- Seluruh situs memakai light mode. Untuk section gelap, pakai class `theme-dark` pada section-nya. -->
+<html lang={site.lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
-    <!-- Terapkan tema sebelum halaman tampil agar tidak berkedip. Default: dark. -->
-    <script is:inline>
-      try {
-        if (localStorage.getItem("theme") === "light") document.documentElement.classList.remove("dark");
-      } catch (e) {}
-    </script>
   </head>
-  <body>
+  <!-- flex + min-h-screen: footer tetap di dasar layar walaupun isi halaman pendek -->
+  <body class="flex min-h-screen flex-col">
     <Navbar />
-    <main class="pt-16">
+    <main class="flex-1 pt-16">
       <slot />
     </main>
+    <Footer />
   </body>
 </html>

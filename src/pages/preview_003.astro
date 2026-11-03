@@ -1,0 +1,42 @@
+---
+// Preview 003: perbandingan kandidat font judul. Teks biasa tetap Archivo.
+// Setiap blok memakai kandidat untuk semua judul. Di situs: h1 = --display-family, h2–h6 = --heading-family (global.css).
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const fonts = [
+  { name: "Roboto Condensed", family: "Roboto Condensed Variable", note: "100–900 · dipakai untuk h1" },
+  { name: "Schibsted Grotesk", family: "Schibsted Grotesk Variable", note: "400–900" },
+  { name: "Hanken Grotesk", family: "Hanken Grotesk Variable", note: "100–900" },
+  { name: "Instrument Sans", family: "Instrument Sans Variable", note: "400–700 (judul 800 tampil sebagai 700)" },
+  { name: "Archivo", family: "Archivo Variable", note: "100–900 · font judul sebelumnya" },
+];
+---
+
+<BaseLayout title="Preview 003">
+  {
+    fonts.map((font) => (
+      <section class="border-b border-border py-16">
+        <div class="mx-auto max-w-7xl px-4 md:px-8" style={`--display-family: "${font.family}"; --heading-family: "${font.family}"`}>
+          <p class="font-mono text-eyebrow text-muted-foreground uppercase">
+            {font.name} · {font.note}
+          </p>
+          <h1 class="mt-6 text-display-xl">Teknologi bertemu kebutuhan nyata.</h1>
+          <div class="mt-10 grid gap-10 md:grid-cols-2">
+            <div>
+              <h2 class="text-h2">7 Titik Kritis Kelistrikan pada Rumah Baru</h2>
+              <p class="mt-4 max-w-prose text-muted-foreground">
+                Mengacu pada standar PUIL 2020 dan SNI, berikut panduan lengkap mengenai hal-hal kelistrikan yang wajib Anda periksa sebelum
+                serah terima rumah baru.
+              </p>
+            </div>
+            <div class="space-y-3">
+              <h3 class="text-h3">Kotak Panel MCB &amp; Pembagian Grup</h3>
+              <h4 class="text-h4 text-primary">Button 1</h4>
+              <p class="text-small text-muted-foreground">ABCDEFGHIJKLM abcdefghijklm 0123456789 &amp; ? !</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</BaseLayout>

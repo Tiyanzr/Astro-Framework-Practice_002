@@ -1,0 +1,62 @@
+---
+// FooterSimple_001: kiri = logo + alamat/email, kanan = judul + ikon media sosial (referensi: dhl.com), lalu garis + copyright.
+// Di HP kolom kanan turun ke bawah. Semua isi dari src/content/site.yaml (footer).
+import Logo from "@/components/ui/Logo.astro";
+import SocialIcon from "@/components/ui/SocialIcon.astro";
+import type { FooterProps } from "./types";
+
+type Props = FooterProps;
+
+const { siteName, company, address, email, socialsTitle, socials } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-border bg-background-alt">
+  <div class="mx-auto max-w-7xl px-4 pt-14 pb-8 md:px-8 md:pt-16">
+    <div class="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+      <div>
+        <Logo label={siteName} class="h-6 md:h-7" />
+        {
+          (address.length > 0 || email) && (
+            <address class="mt-10 space-y-1 text-small font-semibold not-italic">
+              <p>{company}</p>
+              {address.map((line) => (
+                <p>{line}</p>
+              ))}
+              {email && (
+                <p>
+                  <a href={`mailto:${email}`} class="transition-colors duration-300 hover:text-primary">
+                    {email}
+                  </a>
+                </p>
+              )}
+            </address>
+          )
+        }
+      </div>
+
+      {
+        socials.length > 0 && (
+          <div>
+            {socialsTitle && <p class="text-small font-semibold">{socialsTitle}</p>}
+            <ul class:list={["flex flex-wrap gap-3", socialsTitle && "mt-3"]} aria-label={socialsTitle ?? "Media sosial"}>
+              {socials.map((social) => (
+                <li>
+                  <a
+                    href={social.href}
+                    aria-label={social.platform}
+                    class="grid size-10 place-content-center rounded-full border-2 border-foreground/70 text-foreground/80 transition-colors duration-300 ease-out-quart hover:border-primary hover:text-primary"
+                  >
+                    <SocialIcon platform={social.platform} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+
+    <p class="mt-12 border-t border-border pt-6 text-small text-muted-foreground">© {year} {company}</p>
+  </div>
+</footer>

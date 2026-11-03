@@ -1,0 +1,34 @@
+# Info umum situs: dipakai di <head> (judul tab, SEO) dan navbar.
+name: Parametrik
+description: Parametrik Solusi Integrasi
+url: https://parametris.com
+lang: id
+
+# Tombol aksi utama di navbar
+cta:
+  label: Hubungi Kami
+  href: "#"
+
+# Footer (semua isinya opsional; baris yang dihapus tidak akan tampil)
+footer:
+  # Nama file variasi di src/components/layout/footer/
+  variant: FooterSimple_001
+  company: PT Parametrik Solusi Integrasi
+  # Alamat: 1 baris = 1 item
+  address:
+    - Alamat baris 1
+    - Kota, Kode Pos, Indonesia
+  email: info@parametris.com
+  # Judul di atas ikon media sosial
+  socialsTitle: Ikuti Kami
+  # Media sosial: tambah/hapus item sesuai kebutuhan.
+  # platform yang dikenali: facebook, instagram, linkedin, youtube, x, tiktok, whatsapp
+  socials:
+    - platform: facebook
+      href: "#"
+    - platform: x
+      href: "#"
+    - platform: youtube
+      href: "#"
+    - platform: linkedin
+      href: "#"

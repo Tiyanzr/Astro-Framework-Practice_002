@@ -1,0 +1,31 @@
+---
+// Latar foto penuh untuk variasi HeroImage_*. Tanpa `image`, tampil placeholder midnight bergaris.
+// Diletakkan absolute di belakang isi section (section induk perlu `relative isolate`).
+import { Image } from "astro:assets";
+import type { HeroProps } from "./types";
+
+interface Props {
+  image?: HeroProps["image"];
+}
+
+const { image } = Astro.props;
+---
+
+{
+  image ? (
+    <Image
+      src={image.src}
+      alt={image.alt}
+      widths={[640, 1024, 1600, 2400]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 -z-20 size-full object-cover"
+    />
+  ) : (
+    <div
+      class="theme-dark absolute inset-0 -z-20 bg-midnight bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-size-[48px_48px]"
+      aria-hidden="true"
+    />
+  )
+}

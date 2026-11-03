@@ -1,18 +1,12 @@
 ---
+// Halaman utama: hanya menyusun section. Isi kalimat ada di src/content/pages/home.yaml.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Hero from "@/components/sections/hero/Hero.astro";
+import { getPage } from "@/lib/content";
+
+const { hero } = await getPage("home");
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} >
-    <title>Astro</title>
-  </head>
-  <body>
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-
-    <h1>Parametris test Site</h1>
-  </body>
-</html>
+<BaseLayout>
+  <Hero {...hero} />
+</BaseLayout>

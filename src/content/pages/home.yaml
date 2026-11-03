@@ -1,0 +1,10 @@
+# Isi halaman utama (/). Ubah kalimat di sini, bukan di komponen.
+
+hero:
+  # Nama file variasi di src/components/sections/hero/. Bandingkan semua variasi di /preview_002.
+  variant: HeroImage_002
+  title: Teknologi bertemu kebutuhan nyata.
+  # Foto hero (opsional): taruh fotonya di folder ini, lalu hapus tanda # di 3 baris berikut.
+  # image:
+  #   src: ./hero.jpg
+  #   alt: Deskripsi singkat foto

@@ -1,0 +1,20 @@
+---
+// Pintu masuk hero: memilih variasi lewat prop `variant` (= nama file tanpa .astro).
+// Semua file Hero<Gaya>_<NNN>.astro di folder ini terdeteksi otomatis — variasi baru cukup ditambah sebagai file.
+import type { HeroProps } from "./types";
+
+interface Props extends HeroProps {
+  variant?: string;
+}
+
+const files = import.meta.glob<{ default: any }>("./Hero*_*.astro", { eager: true });
+const variants = Object.fromEntries(Object.entries(files).map(([path, mod]) => [path.slice(2, -6), mod.default]));
+
+const { variant = "HeroImage_001", ...props } = Astro.props;
+const Variant = variants[variant];
+if (!Variant) {
+  throw new Error(`Variasi hero "${variant}" tidak ada. Pilihan: ${Object.keys(variants).join(", ")}`);
+}
+---
+
+<Variant {...props} />

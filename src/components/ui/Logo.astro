@@ -1,0 +1,15 @@
+---
+// Logo Parametrik sebagai link ke beranda. Diwarnai lewat token --logo (mask dari PNG logo).
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className = "h-5 md:h-6" } = Astro.props;
+---
+
+<a
+  href="/"
+  aria-label={label}
+  class:list={["block aspect-[904/165] bg-logo [mask:url(/logo-parametrik-mask.png)_center/contain_no-repeat]", className]}
+></a>

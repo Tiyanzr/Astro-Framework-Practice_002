@@ -1,0 +1,23 @@
+---
+// Preview 002: semua variasi hero berurutan dengan isi yang sama (src/content/pages/home.yaml), untuk dibandingkan.
+// File variasi baru di src/components/sections/hero/ otomatis ikut tampil.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Hero from "@/components/sections/hero/Hero.astro";
+import { getPage } from "@/lib/content";
+
+const { hero } = await getPage("home");
+const names = Object.keys(import.meta.glob("/src/components/sections/hero/Hero*_*.astro"))
+  .map((path) => path.split("/").pop()!.replace(".astro", ""))
+  .sort();
+---
+
+<BaseLayout title="Preview 002">
+  {
+    names.map((name) => (
+      <div>
+        <p class="border-y border-border bg-background-alt px-4 py-2 font-mono text-eyebrow uppercase md:px-8">{name}</p>
+        <Hero {...hero} variant={name} />
+      </div>
+    ))
+  }
+</BaseLayout>

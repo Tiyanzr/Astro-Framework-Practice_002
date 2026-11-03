@@ -1,29 +1,13 @@
 ---
-// Preview 001: palet warna di light & dark mode. Navbar & menu datang dari BaseLayout.
+// Preview 001: palet warna. Navbar & menu datang dari BaseLayout.
 // Semua nilai berasal dari token di src/styles/global.css (lihat DESIGN.md).
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
-// Hex hanya muncul sebagai tooltip saat kursor diarahkan.
-const baseColors = [
-  { token: "midnight", hex: "#001f3f" },
-  { token: "praxeti", hex: "#f6f7ed" },
-];
-const mainColors = [
-  { token: "lime", hex: "#dbe64c" },
-  { token: "mantis", hex: "#74c365" },
-  { token: "green", hex: "#00804c" },
-  { token: "blue", hex: "#1e488f" },
-];
-const neutrals = [
-  { token: "midnight-900", hex: "#062949" },
-  { token: "midnight-800", hex: "#0b2b4d" },
-  { token: "midnight-700", hex: "#0e3358" },
-  { token: "midnight-600", hex: "#24476b" },
-  { token: "mist", hex: "#a7b6c6" },
-  { token: "slate", hex: "#4f5d6b" },
-  { token: "praxeti-300", hex: "#dcdfcf" },
-  { token: "praxeti-200", hex: "#edefe0" },
-];
+// Nama token hanya muncul sebagai tooltip saat kursor diarahkan.
+const baseColors = ["white", "midnight"];
+const mainColors = ["blue", "green", "mantis", "lime"];
+// Turunan (color-mix dari palet) untuk latar selang-seling, garis, teks sekunder, hover.
+const derived = ["background-alt", "border", "muted-foreground", "primary-hover"];
 ---
 
 <BaseLayout title="Preview 001">
@@ -31,20 +15,29 @@ const neutrals = [
   <section class="py-20">
     <div class="mx-auto max-w-7xl space-y-3 px-4 md:px-8">
       <div class="grid grid-cols-2 gap-3">
-        {baseColors.map((s) => (
-          <div class="h-40 rounded-lg border border-border" style={`background:${s.hex}`} title={`${s.token} · ${s.hex}`}></div>
+        {baseColors.map((token) => (
+          <div class="h-40 rounded-lg border border-border" style={`background:var(--${token})`} title={token}></div>
         ))}
       </div>
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {mainColors.map((s) => (
-          <div class="aspect-square rounded-lg" style={`background:${s.hex}`} title={`${s.token} · ${s.hex}`}></div>
+        {mainColors.map((token) => (
+          <div class="aspect-square rounded-lg" style={`background:var(--${token})`} title={token}></div>
         ))}
       </div>
-      <div class="grid grid-cols-4 gap-3 sm:grid-cols-8">
-        {neutrals.map((s) => (
-          <div class="aspect-square rounded-lg border border-border" style={`background:${s.hex}`} title={`${s.token} · ${s.hex}`}></div>
+      <div class="grid grid-cols-4 gap-3">
+        {derived.map((token) => (
+          <div class="h-20 rounded-lg border border-border" style={`background:var(--${token})`} title={token}></div>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- Section gelap (theme-dark): turunan yang sama, versi gelap -->
+  <section class="theme-dark py-20">
+    <div class="mx-auto grid max-w-7xl grid-cols-4 gap-3 px-4 md:px-8">
+      {derived.map((token) => (
+        <div class="h-20 rounded-lg border border-border" style={`background:var(--${token})`} title={`${token} (dark)`}></div>
+      ))}
     </div>
   </section>
 </BaseLayout>
