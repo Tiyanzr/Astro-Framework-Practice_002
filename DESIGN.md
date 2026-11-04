@@ -1,7 +1,7 @@
 # Parametrik — Design System
 
 > Dokumen hidup. Semua nilai di sini sudah terpasang sebagai token di [`src/styles/global.css`](src/styles/global.css).
-> Contoh visualnya bisa dilihat di halaman `/preview_001` (jalankan `astro dev`). Struktur folder ada di bagian [Struktur file](#struktur-file).
+> Contoh visualnya bisa dilihat di halaman `/preview` (jalankan `astro dev`): warna, font, dan semua variasi section. Struktur folder ada di bagian [Struktur file](#struktur-file).
 > Kalau mengubah token, ubah di `global.css` **dan** catat di sini.
 
 ## Ringkasan
@@ -108,7 +108,7 @@ Archivo dipilih sementara. Kalau nanti diganti, cukup ubah `--font-sans` di `glo
 
 - Semua `h1` otomatis Roboto Condensed, `h2`–`h6` otomatis Archivo (aturan di `@layer base`). Ganti font cukup di nilai token.
 - Roboto Condensed sudah rapat dari sananya, jadi `h1` diberi `letter-spacing: 0` (menetralkan letter-spacing negatif token yang dibuat untuk Archivo). Weight mengikuti token (800).
-- Referensi awal: **Trim** (berbayar). Kandidat gratis lain masih terpasang untuk dibandingkan di `/preview_003` (Schibsted Grotesk, Hanken Grotesk, Instrument Sans). Setelah final: hapus `@import` dan paket yang tidak dipakai (`npm uninstall ...`) serta `/preview_003`.
+- Referensi awal: **Trim** (berbayar). Kandidat gratis lain masih terpasang untuk dibandingkan di `/preview/fonts` (Schibsted Grotesk, Hanken Grotesk, Instrument Sans). Setelah final: hapus `@import` dan paket yang tidak dipakai (`npm uninstall ...`) serta `src/pages/preview/fonts.astro`.
 - Kalau nanti punya file Trim berlisensi: taruh `.woff2` di `public/fonts/`, tambahkan `@font-face`, lalu isi tokennya.
 
 ### Skala
@@ -168,11 +168,12 @@ Ukuran judul memakai `clamp()`, jadi otomatis mengecil di layar kecil.
 
 ## Footer — `src/components/layout/footer/`
 
-Polanya sama dengan Hero: 1 file per variasi (`Footer<Gaya>_<NNN>.astro`), terdeteksi otomatis, dipilih lewat `footer.variant` di `src/content/site.yaml`. Footer otomatis terpasang di semua halaman lewat `BaseLayout` dan selalu berada di dasar layar walau isi halaman pendek (`body` = `flex min-h-screen flex-col`, `main` = `flex-1`).
+Mengikuti [standar section dengan variasi](#standar-section-dengan-variasi): 1 file per variasi (`Footer<Gaya>_<NNN>.astro`), terdeteksi otomatis lewat `variants.ts`, dipilih lewat `footer.variant` di `src/content/site.yaml`, dibandingkan di `/preview/footer`. Footer otomatis terpasang di semua halaman lewat `BaseLayout` dan selalu berada di dasar layar walau isi halaman pendek (`body` = `flex min-h-screen flex-col`, `main` = `flex-1`).
 
 ```
 src/components/layout/footer/
 ├── Footer.astro            ← pintu masuk, membaca site.yaml › footer
+├── variants.ts             ← deteksi otomatis semua file Footer*_*.astro
 ├── types.ts                ← props bersama (diturunkan dari skema site.footer)
 └── FooterSimple_001.astro  ← kiri: logo + alamat/email; kanan: judul + ikon sosial; lalu garis + copyright
 ```
@@ -195,13 +196,50 @@ src/components/layout/footer/
 
 ## Section
 
+### Standar section dengan variasi
+
+Semua section yang punya variasi (hero, intro, footer, dan section berikutnya) memakai susunan yang sama:
+
+```
+src/components/sections/<nama>/        (footer: src/components/layout/footer/)
+├── <Nama>.astro                ← pintu masuk: memilih variasi lewat prop `variant`
+├── variants.ts                 ← deteksi otomatis semua file <Nama>*_*.astro (import.meta.glob)
+├── types.ts                    ← props bersama semua variasi
+└── <Nama><Gaya>_<NNN>.astro    ← 1 file = 1 variasi
+```
+
+| Bagian | Aturan |
+|---|---|
+| Nama folder | huruf kecil: `hero`, `intro`, `footer` |
+| Nama variasi | `<Nama><Gaya>_<NNN>`. Gaya = bentuk dasarnya (`Image` = foto penuh, `Media` = teks + video/gambar, `Simple`); nomor 3 digit mulai `_001`. Gaya baru = nama gaya baru, mulai lagi dari `_001` |
+| Isi | dari `src/content/pages/<halaman>.yaml` › `<nama>` (footer: `site.yaml` › `footer`), selalu dengan kolom `variant` |
+| Perbandingan | `/preview/<nama>`: semua variasi tampil berurutan dengan isi yang sama. Daftar semua preview di `/preview` |
+| Helper | `src/lib/variants.ts`: `collectVariants()` (dipakai `variants.ts`) dan `pickVariant()` (dipakai pintu masuk, pesan error menyebut pilihan yang ada) |
+
+- **Menambah variasi = menambah file.** Tidak ada daftar yang perlu diisi manual; file baru otomatis bisa dipilih dan otomatis tampil di `/preview/<nama>`.
+- **Varian dan halaman preview dikerjakan di branch `prototype-01`.** Ke `master` hanya dibawa variasi yang terpilih.
+
+### Pembungkus section — `src/components/ui/Section.astro`
+
+Mengatur **latar, lebar latar, dan posisi** section, terpisah dari isinya (pola `b-section` + `s-context` dari fastems.com). Variasi section hanya mengatur susunan isi, jadi isi yang sama bisa dipakai di latar apa pun. Nilai yang diizinkan ada di `src/lib/section.ts` (dipakai bersama skema konten).
+
+| Prop | Nilai | Keterangan |
+|---|---|---|
+| `tone` | `default` · `alt` · `dark` · `gradient` | `bg-background` · `bg-background-alt` · `theme-dark` · `bg-gradient-soft` (gradasi blue 10% → mantis 14% dicampur putih, token `--gradient-soft`) |
+| `width` | `full` · `contained` | `full` = latar selebar layar, isi `max-w-7xl`. `contained` = latar berupa panel `max-w-7xl rounded-xl`; di HP selebar layar dikurangi gutter 16px |
+| `pulldown` | `true` / `false` | Section ditarik ke atas 96px (`md:-mt-24`) sehingga menumpuk di bagian bawah section sebelumnya. **Hanya mulai `md`**, karena di HP kartu hero bisa tinggi dan tertutup |
+
+- Jarak vertikal: `full` = `py-16 md:py-24`; `contained` = panel `py-10 md:py-16`, di luar panel `py-12 md:py-16`.
+- Supaya pulldown tidak menutupi isi hero, semua variasi hero memberi ruang bawah `md:pb-36`.
+
 ### Hero — `src/components/sections/hero/`
 
-Hero punya beberapa variasi. Setiap variasi = 1 file bernomor, semuanya menerima props yang sama (`types.ts`), dan halaman memilihnya lewat satu kata `variant` (= nama file). **File variasi terdeteksi otomatis** (`import.meta.glob`), jadi tidak ada daftar yang perlu diisi manual.
+Hero punya beberapa variasi. Setiap variasi = 1 file bernomor, semuanya menerima props yang sama (`types.ts`), dan halaman memilihnya lewat satu kata `variant` (= nama file). **File variasi terdeteksi otomatis** lewat `variants.ts`, jadi tidak ada daftar yang perlu diisi manual.
 
 ```
 src/components/sections/hero/
-├── Hero.astro            ← pintu masuk: <Hero variant="HeroImage_002" {...isi} />, mendeteksi semua file Hero*_*.astro
+├── Hero.astro            ← pintu masuk: <Hero variant="HeroImage_002" {...isi} />
+├── variants.ts           ← deteksi otomatis semua file Hero*_*.astro
 ├── types.ts              ← props bersama semua variasi
 ├── HeroBackground.astro  ← latar foto penuh / placeholder, dipakai HeroImage_*
 ├── HeroImage_001.astro   ← foto penuh + gradasi gelap, teks putih kiri bawah
@@ -210,7 +248,7 @@ src/components/sections/hero/
 
 **Penamaan:** `Hero<Gaya>_<NNN>`. Gaya = bentuk dasarnya (`Image` = foto penuh selebar layar); nomor = variasi dari gaya itu. Gaya baru (mis. teks kiri, gambar kanan) memakai nama gaya baru, mulai dari `_001`.
 
-**Ganti variasi:** ubah `hero.variant` di `src/content/pages/home.yaml`. Semua variasi bisa dibandingkan di `/preview_002` dengan isi yang sama; **menambah variasi = menambah file** `Hero<Gaya>_<NNN>.astro`, dan otomatis ikut tampil di sana. Setelah ada yang terpilih, cukup hapus file variasi yang tidak dipakai.
+**Ganti variasi:** ubah `hero.variant` di `src/content/pages/home.yaml`. Semua variasi bisa dibandingkan di `/preview/hero` dengan isi yang sama; **menambah variasi = menambah file** `Hero<Gaya>_<NNN>.astro`, dan otomatis ikut tampil di sana. Setelah ada yang terpilih, cukup hapus file variasi yang tidak dipakai.
 
 | Prop | Wajib | Keterangan |
 |---|---|---|
@@ -228,6 +266,36 @@ src/components/sections/hero/
 **HeroImage_002** (referensi: fastems.com): kartu `bg-background` solid (tanpa transparansi) maks. `max-w-xl`, bayangan `shadow-xl`, judul `text-h1`. Setiap baris: judul `text-h4 text-primary`, deskripsi `text-small text-muted-foreground`, panah kanan `text-primary`, dipisah `divide-border`; hover latar `bg-background-alt`. **Jumlah baris mengikuti jumlah file di `src/content/menu/`.**
 
 - **Foto hero:** minimal lebar 1600px (ideal 2400px), lanskap. Foto dari postingan tidak cocok (≤ 633px atau berupa diagram). Pasang dengan menaruh foto di `src/content/pages/` (sefolder dengan `home.yaml`), lalu aktifkan baris `image:` yang dikomentari di `home.yaml`.
+
+### Intro — `src/components/sections/intro/`
+
+Section pengantar tepat setelah hero (referensi: fastems.com, section "Unleash the Full Potential of Your Manufacturing"). `Intro.astro` memilih variasi, lalu membungkusnya dengan `ui/Section` memakai `tone`, `width`, dan `pulldown` dari isi.
+
+```
+src/components/sections/intro/
+├── Intro.astro            ← pintu masuk: memilih variasi + membungkus dengan ui/Section
+├── variants.ts            ← deteksi otomatis semua file Intro*_*.astro
+├── types.ts               ← IntroContent (isi) + SectionSettings (pembungkus)
+└── IntroMedia_001.astro   ← teks kiri + media kanan
+```
+
+Isi di `src/content/pages/home.yaml` › `intro`:
+
+| Prop | Wajib | Keterangan |
+|---|---|---|
+| `variant` | | Nama file variasi, default `IntroMedia_001` |
+| `tone` / `width` / `pulldown` | | Pengaturan pembungkus, lihat [Pembungkus section](#pembungkus-section--srccomponentsuisectionastro). Beranda: `gradient`, `contained`, `true` |
+| `eyebrow` | | Label kecil di atas judul |
+| `title` | ✅ | Judul (`h2`) |
+| `description` | | Paragraf pengantar. Pisahkan paragraf dengan satu baris kosong (pakai `description: \|` di YAML) |
+| `highlight` | | Satu kalimat penutup berukuran `text-h4` |
+| `media` | | `{ type: youtube, id, title }` atau `{ type: image, src, alt }` (`src` relatif dari file `.yaml`). Tanpa media: teks saja, satu kolom |
+
+**IntroMedia_001:** HP = teks di atas, media di bawah. Mulai `lg` = dua kolom sama lebar, rata tengah vertikal, jarak `gap-16`. Judul `text-h2`, paragraf `text-body` → `md:text-lead` warna `muted-foreground`, `highlight` `text-h4`. Media `aspect-video rounded-lg`.
+
+### Video YouTube — `src/components/ui/YouTube.astro`
+
+**Facade:** awalnya hanya thumbnail (`i.ytimg.com/vi/<id>/hqdefault.jpg`) dan tombol play bulat `bg-primary`; iframe `youtube-nocookie.com` baru dimuat saat tombol diklik (langsung autoplay). Menghemat ratusan KB JavaScript YouTube di setiap kunjungan. Props: `id` (bagian setelah `v=` di link YouTube) dan `title` (dibacakan screen reader).
 
 ### Tombol — `src/components/ui/Button.astro`
 
@@ -264,21 +332,25 @@ Tujuannya: menambah konten = menambah file, tanpa mengubah kode komponen. Pola i
 src/
 ├── content/                    ← SEMUA kalimat & konten ada di sini (tidak ada teks di kode)
 │   ├── site.yaml               ← nama situs, deskripsi, URL, bahasa, tombol CTA navbar, isi footer
-│   ├── pages/home.yaml         ← isi halaman utama (hero: variant, judul, foto); 1 halaman = 1 file
+│   ├── pages/home.yaml         ← isi halaman utama (hero, intro: masing-masing dengan variant); 1 halaman = 1 file
 │   ├── menu/*.yaml             ← 1 item menu = 1 file (title, description, href, order)
 │   └── posts/<slug>/           ← 1 postingan = 1 folder: index.md + gambar-gambarnya
 ├── content.config.ts           ← skema setiap koleksi konten
 ├── lib/content.ts              ← pembaca konten: getSite(), getPage(id), getMainLinks()
+├── lib/variants.ts             ← collectVariants(), pickVariant() untuk semua section dengan variasi
+├── lib/section.ts              ← nilai tone/width yang diizinkan untuk ui/Section
 ├── layouts/BaseLayout.astro    ← <head>, tema, Navbar, <main><slot/></main>
 ├── components/
 │   ├── layout/Navbar.astro     ← bagian yang muncul di semua halaman
-│   ├── layout/footer/          ← Footer.astro + FooterSimple_001, ... (variasi, sama seperti hero)
-│   ├── sections/hero/          ← 1 folder per section yang punya variasi (Hero.astro + HeroImage_001, _002, ...)
-│   └── ui/Button, Logo, SocialIcon ← komponen kecil yang dipakai section (Button, PostCard, ...); shadcn juga menaruh komponennya di sini
+│   ├── layout/footer/          ← Footer.astro + variants.ts + FooterSimple_001, ... (standar section dengan variasi)
+│   ├── sections/hero/          ← 1 folder per section yang punya variasi (Hero.astro + variants.ts + HeroImage_001, _002, ...)
+│   ├── sections/intro/         ← Intro.astro + variants.ts + IntroMedia_001, ...
+│   └── ui/                     ← komponen kecil: Button, Logo, SocialIcon, Section (pembungkus), YouTube, VariantLabel; shadcn juga menaruh komponennya di sini
 ├── assets/                     ← gambar yang dioptimasi lewat astro:assets
 ├── styles/global.css           ← semua token desain
 └── pages/                      ← rute; isinya hanya menyusun section di dalam BaseLayout
-    └── posts/[id].astro        ← halaman otomatis untuk setiap folder di content/posts
+    ├── posts/[id].astro        ← halaman otomatis untuk setiap folder di content/posts
+    └── preview/                ← halaman perbandingan (index, colors, fonts, hero, intro, footer); hanya untuk prototyping
 ```
 
 ### Aturan
@@ -286,7 +358,8 @@ src/
 - **Section tidak berisi teks atau warna hardcode.** Teks datang dari `src/content/` (lewat props atau `lib/content.ts`); warna dari token (`bg-primary`, bukan `bg-green-500`).
 - **Satu komponen untuk bentuk yang sama.** Contoh: satu `Hero` dengan props, bukan `HeroHome`, `HeroAbout`, dst.
 - Import memakai alias `@/` (contoh: `@/components/sections/hero/Hero.astro`).
-- **Section dengan variasi:** 1 folder, 1 pintu masuk dengan prop `variant`, 1 file per variasi bernama `<Section><Gaya>_<NNN>.astro`, props bersama di `types.ts`. Lihat bagian Hero.
+- **Section dengan variasi:** ikuti [standar section dengan variasi](#standar-section-dengan-variasi) (pintu masuk, `variants.ts`, `types.ts`, file `<Nama><Gaya>_<NNN>.astro`, halaman `/preview/<nama>`).
+- **Latar dan lebar section diatur `ui/Section`**, bukan di dalam variasi.
 - Halaman baru selalu memakai `BaseLayout`:
 
 ```astro
@@ -302,7 +375,7 @@ src/
 |---|---|---|
 | `posts` | `src/content/posts/<slug>/index.md` | `title`, `description`, `pubDate`, `updatedDate?`, `author`, `category?`, `tags`, `cover?` (path relatif), `coverAlt?` |
 | `site` | `src/content/site.yaml` | `name`, `description`, `url`, `lang`, `cta` (`label`, `href`), `footer` (lihat bagian Footer) |
-| `pages` | `src/content/pages/<id>.yaml` | `hero` (`variant`, `title`, `eyebrow?`, `description?`, `primaryAction?`, `secondaryAction?`, `image?` = `src` relatif + `alt`) |
+| `pages` | `src/content/pages/<id>.yaml` | `hero` (`variant`, `title`, `eyebrow?`, `description?`, `primaryAction?`, `secondaryAction?`, `image?` = `src` relatif + `alt`) · `intro?` (`variant`, `tone?`, `width?`, `pulldown?`, `eyebrow?`, `title`, `description?`, `highlight?`, `media?`) |
 | `menu` | `src/content/menu/*.yaml` | `title`, `description?`, `href`, `order` — dipakai panel menu navbar & HeroImage_002 |
 | `services` (rencana) | `src/content/services/*.md` | — |
 | `projects` (rencana) | `src/content/projects/*.md` | — |
@@ -353,3 +426,4 @@ Isi artikel ditampilkan dengan class `prose` yang warnanya diambil dari token (l
 - **2026-11-03 (revisi 12):** Semua kalimat disatukan di `src/content/`: `site.yaml` (info situs + tombol CTA) dan `pages/home.yaml` (isi hero) menggantikan `src/config/site.ts`, `src/data/home.ts`, dan `src/data/navigation.ts`. Fungsi pembaca dipindah ke `src/lib/content.ts`. Foto hero kini ditaruh sefolder dengan `home.yaml`. Sekalian diperbaiki komentar CSS yang rusak (`-*/`) sehingga `letter-spacing: 0` pada `h1` kini benar-benar berlaku.
 - **2026-11-03 (revisi 13):** Footer dibuat dengan pola variasi seperti hero (`layout/footer/`, `FooterSimple_001`, referensi fastems.com). Isinya dari `site.yaml` › `footer`. Logo navbar dipisah menjadi `ui/Logo.astro` agar dipakai bersama footer; ikon sosial di `ui/SocialIcon.astro`.
 - **2026-11-03 (revisi 14):** Media sosial footer dipindah ke kolom kanan (seperti dhl.com) dengan judul `socialsTitle` ("Ikuti Kami") dari `site.yaml`.
+- **2026-11-04 (revisi 15):** Penamaan section **distandarkan** (lihat *Standar section dengan variasi*): setiap folder punya `variants.ts` (deteksi otomatis) dan memakai helper bersama `src/lib/variants.ts`; Hero dan Footer disesuaikan. Halaman preview dipindah ke `/preview/<nama>` (`preview_001` → `/preview/colors`, `preview_002` → `/preview/hero`, `preview_003` → `/preview/fonts`), ditambah `/preview/intro`, `/preview/footer`, dan daftar `/preview`. Ditambah pembungkus `ui/Section` (`tone`, `width`, `pulldown`, pola fastems.com), token `--gradient-soft`, section **Intro** (`IntroMedia_001`: teks + video, referensi fastems.com), dan `ui/YouTube` (facade). Hero diberi ruang bawah `md:pb-36` untuk pulldown.

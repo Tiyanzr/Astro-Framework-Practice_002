@@ -1,10 +1,36 @@
 # Isi halaman utama (/). Ubah kalimat di sini, bukan di komponen.
+# Urutan section di halaman: hero → intro. Setiap section punya `variant` (= nama file variasi); bandingkan semua variasi di /preview.
 
 hero:
-  # Nama file variasi di src/components/sections/hero/. Bandingkan semua variasi di /preview_002.
+  # Variasi: src/components/sections/hero/ · bandingkan di /preview/hero
   variant: HeroImage_002
   title: Teknologi bertemu kebutuhan nyata.
   # Foto hero (opsional): taruh fotonya di folder ini, lalu hapus tanda # di 3 baris berikut.
   # image:
   #   src: ./hero.jpg
   #   alt: Deskripsi singkat foto
+
+intro:
+  # Variasi: src/components/sections/intro/ · bandingkan di /preview/intro
+  variant: IntroMedia_001
+  # Pembungkus section: tone = default | alt | dark | gradient · width = full | contained
+  # pulldown: true = panel ditarik ke atas, menumpuk di bawah hero (mulai tablet)
+  tone: gradient
+  width: contained
+  pulldown: true
+  # TODO: semua kalimat di bawah masih placeholder, ganti dengan konten final.
+  title: Integrasi sistem otomasi, dari panel hingga data produksi.
+  # Pisahkan paragraf dengan satu baris kosong.
+  description: |
+    Parametrik membantu industri merancang, memasang, dan merawat sistem kelistrikan dan otomasi: panel kontrol, PLC, SCADA, hingga integrasi data mesin ke sistem produksi.
+
+    Sebagai integrator terbuka, kami menyesuaikan solusi dengan peralatan yang sudah Anda miliki, bukan sebaliknya.
+  highlight: Satu mitra untuk seluruh rantai otomasi, dari sensor sampai laporan produksi.
+  # Media di samping teks: video YouTube atau gambar.
+  #   YouTube: id = bagian setelah `v=` di link video
+  #   Gambar:  type: image · src: ./intro.jpg (taruh di folder ini) · alt: deskripsi foto
+  media:
+    type: youtube
+    # TODO: ganti dengan video Parametrik. Sementara memakai video referensi dari fastems.com.
+    id: onHcd_bx_-o
+    title: Video profil perusahaan

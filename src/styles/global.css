@@ -62,6 +62,12 @@
   --border: color-mix(in srgb, var(--midnight) 12%, var(--white)); /* #E0E4E8 */
   --input: var(--border);
   --ring: var(--green);
+  /* Latar gradasi lembut (Section tone="gradient"), diturunkan dari palet seperti turunan lain */
+  --gradient-soft: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--blue) 10%, var(--white)),
+    color-mix(in srgb, var(--mantis) 14%, var(--white))
+  );
 }
 
 /* Section gelap sebagai aksen: `<section class="theme-dark">`. */
@@ -195,6 +201,11 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Utility latar gradasi: `bg-gradient-soft` (nilai dari token --gradient-soft di atas) */
+@utility bg-gradient-soft {
+  background-image: var(--gradient-soft);
 }
 
 /* Judul besar (h1) memakai font condensed yang sudah rapat dari sananya: letter-spacing negatif dari token

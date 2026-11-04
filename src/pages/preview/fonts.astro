@@ -1,5 +1,5 @@
 ---
-// Preview 003: perbandingan kandidat font judul. Teks biasa tetap Archivo.
+// /preview/fonts: perbandingan kandidat font judul. Teks biasa tetap Archivo.
 // Setiap blok memakai kandidat untuk semua judul. Di situs: h1 = --display-family, h2–h6 = --heading-family (global.css).
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
@@ -12,7 +12,7 @@ const fonts = [
 ];
 ---
 
-<BaseLayout title="Preview 003">
+<BaseLayout title="Preview · Font">
   {
     fonts.map((font) => (
       <section class="border-b border-border py-16">

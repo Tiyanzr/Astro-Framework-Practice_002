@@ -1,0 +1,10 @@
+---
+// Label nama variasi di halaman /preview/*, ditaruh di atas setiap variasi yang dibandingkan.
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<p class="border-y border-border bg-background-alt px-4 py-2 font-mono text-eyebrow uppercase md:px-8">{name}</p>

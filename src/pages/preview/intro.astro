@@ -1,0 +1,26 @@
+---
+// /preview/intro: semua variasi intro berurutan dengan isi yang sama (src/content/pages/home.yaml), untuk dibandingkan.
+// Setiap variasi juga ditampilkan di keempat tone, supaya terlihat cocok di latar mana saja. Pulldown dimatikan di sini.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Intro from "@/components/sections/intro/Intro.astro";
+import VariantLabel from "@/components/ui/VariantLabel.astro";
+import { introVariants } from "@/components/sections/intro/variants";
+import { getPage } from "@/lib/content";
+import { sectionTones } from "@/lib/section";
+
+const { intro } = await getPage("home");
+if (!intro) throw new Error("src/content/pages/home.yaml belum punya bagian `intro`.");
+---
+
+<BaseLayout title="Preview · Intro">
+  {
+    Object.keys(introVariants).map((name) =>
+      sectionTones.map((tone) => (
+        <div>
+          <VariantLabel name={`${name} · tone ${tone} · width ${intro.width ?? "full"}`} />
+          <Intro {...intro} variant={name} tone={tone} pulldown={false} />
+        </div>
+      )),
+    )
+  }
+</BaseLayout>
