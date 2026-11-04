@@ -64,6 +64,7 @@ Nama mengikuti konvensi shadcn, jadi komponen shadcn otomatis memakai palet ini.
 
 - **Seluruh situs memakai tema terang.** `<html>` tidak diberi class `dark` dan navbar tidak punya tombol ganti tema.
 - **Section gelap sebagai aksen** (mis. hero, CTA, footer): tambahkan `theme-dark` pada `<section>`. Token di dalamnya berganti ke kolom gelap dan latarnya ikut terpasang (midnight).
+- **Section hijau tua sebagai aksen:** `theme-green` (atau `tone: green` di `ui/Section`). Latar `green`, teks putih, teks sekunder putih 92%, highlight putih, tombol lime dengan teks midnight. Dipakai hemat, maksimal satu section hijau per halaman.
 
 ### Aturan pemakaian warna
 
@@ -80,6 +81,9 @@ Nama mengikuti konvensi shadcn, jadi komponen shadcn otomatis memakai palet ini.
 | Lime di midnight | 12.2 : 1 | ✅ Teks apa pun |
 | Mantis di midnight | 7.8 : 1 | ✅ Teks/link |
 | Green di midnight | 3.3 : 1 | ⚠️ Hanya teks besar atau isian blok |
+| Putih di green (section `theme-green`) | 5.0 : 1 | ✅ Judul & teks |
+| Putih 92% di green (`muted-foreground` hijau) | ±4.5 : 1 | ✅ Teks sekunder |
+| Lime di green | 3.7 : 1 | ⚠️ Hanya isian tombol/grafis, bukan teks |
 | Blue di midnight | 1.9 : 1 | ❌ Jangan untuk teks |
 | Midnight di lime (tombol) | 12.2 : 1 | ✅ |
 
@@ -225,7 +229,7 @@ Mengatur **latar, lebar latar, dan posisi** section, terpisah dari isinya (pola 
 
 | Prop | Nilai | Keterangan |
 |---|---|---|
-| `tone` | `default` · `alt` · `dark` · `gradient` | `bg-background` · `bg-background-alt` · `theme-dark` · `bg-gradient-soft` (gradasi blue 10% → mantis 14% dicampur putih, token `--gradient-soft`) |
+| `tone` | `default` · `alt` · `dark` · `green` · `gradient` | `bg-background` · `bg-background-alt` · `theme-dark` (midnight) · `theme-green` (hijau tua `green`, lihat *Cara memakai tema*) · `bg-gradient-soft` (gradasi blue 10% → mantis 14% dicampur putih, token `--gradient-soft`) |
 | `width` | `full` · `contained` | `full` = latar selebar layar, isi `max-w-7xl`. `contained` = latar berupa panel `max-w-7xl rounded-xl`; di HP selebar layar dikurangi gutter 16px |
 | `pulldown` | `true` / `false` | Section ditarik ke atas 96px (`md:-mt-24`) sehingga menumpuk di bagian bawah section sebelumnya. **Hanya mulai `md`**, karena di HP kartu hero bisa tinggi dan tertutup |
 
@@ -432,3 +436,4 @@ Isi artikel ditampilkan dengan class `prose` yang warnanya diambil dari token (l
 - **2026-11-03 (revisi 14):** Media sosial footer dipindah ke kolom kanan (seperti dhl.com) dengan judul `socialsTitle` ("Ikuti Kami") dari `site.yaml`.
 - **2026-11-04 (revisi 15):** Penamaan section **distandarkan** (lihat *Standar section dengan variasi*): setiap folder punya `variants.ts` (deteksi otomatis) dan memakai helper bersama `src/lib/variants.ts`; Hero dan Footer disesuaikan. Halaman preview dipindah ke `/preview/<nama>` (`preview_001` → `/preview/colors`, `preview_002` → `/preview/hero`, `preview_003` → `/preview/fonts`), ditambah `/preview/intro`, `/preview/footer`, dan daftar `/preview`. Ditambah pembungkus `ui/Section` (`tone`, `width`, `pulldown`, pola fastems.com), token `--gradient-soft`, section **Intro** (`IntroMedia_001`: teks + video, referensi fastems.com), dan `ui/YouTube` (facade). Hero diberi ruang bawah `md:pb-36` untuk pulldown.
 - **2026-11-04 (revisi 16):** Video Intro di beranda diganti **placeholder** (`media.type: placeholder`, komponen `ui/MediaPlaceholder`), tidak lagi memakai video fastems.com.
+- **2026-11-04 (revisi 17):** Ditambah tone section **`green`** (`.theme-green`, latar hijau tua `green #00804D`) dengan token turunan dari palet; otomatis ikut di `/preview/intro`.

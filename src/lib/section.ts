@@ -1,7 +1,8 @@
 // Pengaturan pembungkus section (ui/Section.astro). Daftar nilai di sini dipakai bersama oleh skema konten dan komponen.
 
-/** Latar section: default = putih, alt = abu selang-seling, dark = theme-dark, gradient = gradasi lembut dari palet. */
-export const sectionTones = ["default", "alt", "dark", "gradient"] as const;
+/** Latar section: default = putih, alt = abu selang-seling, dark = theme-dark (midnight), green = theme-green (hijau tua),
+ *  gradient = gradasi lembut dari palet. */
+export const sectionTones = ["default", "alt", "dark", "green", "gradient"] as const;
 
 /** Lebar latar: full = selebar layar, contained = panel dibatasi max-w-7xl (seperti kartu). */
 export const sectionWidths = ["full", "contained"] as const;

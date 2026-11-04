@@ -96,8 +96,35 @@
   --ring: var(--lime);
 }
 
+/* Section hijau tua sebagai aksen: `<section class="theme-green">` (Section tone="green").
+   Putih di green 5.0 : 1, teks sekunder putih 92% ±4.5 : 1. Lime hanya untuk isian tombol (3.7 : 1), bukan teks. */
+.theme-green {
+  --background: var(--green);
+  --background-alt: color-mix(in srgb, var(--white) 6%, var(--green)); /* #0F865A */
+  --foreground: var(--white);
+  --card: color-mix(in srgb, var(--white) 10%, var(--green)); /* #1A8D5F */
+  --card-foreground: var(--white);
+  --popover: var(--card);
+  --popover-foreground: var(--white);
+  --primary: var(--lime);
+  --primary-hover: color-mix(in srgb, var(--lime) 75%, var(--white)); /* #E4EC79 */
+  --primary-foreground: var(--midnight);
+  --secondary: var(--card);
+  --secondary-foreground: var(--white);
+  --muted: var(--card);
+  --muted-foreground: color-mix(in srgb, var(--white) 92%, var(--green)); /* #EBF5F1 */
+  --accent: var(--card);
+  --accent-foreground: var(--white);
+  --highlight: var(--white);
+  --destructive: #ffb4a8;
+  --border: color-mix(in srgb, var(--white) 25%, var(--green)); /* #40A07A */
+  --input: var(--border);
+  --ring: var(--lime);
+}
+
 .theme-light,
-.theme-dark {
+.theme-dark,
+.theme-green {
   background-color: var(--background);
   color: var(--foreground);
 }

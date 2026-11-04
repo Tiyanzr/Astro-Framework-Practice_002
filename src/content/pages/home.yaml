@@ -13,7 +13,7 @@ hero:
 intro:
   # Variasi: src/components/sections/intro/ · bandingkan di /preview/intro
   variant: IntroMedia_001
-  # Pembungkus section: tone = default | alt | dark | gradient · width = full | contained
+  # Pembungkus section: tone = default | alt | dark | green | gradient · width = full | contained
   # pulldown: true = panel ditarik ke atas, menumpuk di bawah hero (mulai tablet)
   tone: gradient
   width: contained
