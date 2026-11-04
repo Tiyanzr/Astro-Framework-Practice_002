@@ -100,6 +100,8 @@ const pages = defineCollection({
               z.object({ type: z.literal("youtube"), id: z.string(), title: z.string() }),
               // Path relatif dari file .yaml, contoh: ./intro.jpg
               z.object({ type: z.literal("image"), src: image(), alt: z.string() }),
+              // Kotak 16:9 bergaris selama video/gambar final belum ada
+              z.object({ type: z.literal("placeholder"), label: z.string().optional() }),
             ])
             .optional(),
         })
