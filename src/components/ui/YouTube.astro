@@ -1,0 +1,52 @@
+---
+// Video YouTube ringan (facade): awalnya hanya thumbnail + tombol play, iframe baru dimuat saat diklik.
+// Menghemat ratusan KB JavaScript YouTube di setiap kunjungan, terasa sekali di HP. Iframe memakai youtube-nocookie.com.
+interface Props {
+  /** ID video, bagian setelah `v=` di link YouTube. Contoh: youtube.com/watch?v=AbC123xyz_0 → AbC123xyz_0 */
+  id: string;
+  /** Judul video, dibacakan screen reader dan dipakai sebagai judul iframe. */
+  title: string;
+  /** Sudut tegas tanpa pembulatan (dipakai variasi tanpa pembatas, mis. IntroMedia_002). */
+  square?: boolean;
+  class?: string;
+}
+
+const { id, title, square = false, class: className } = Astro.props;
+const thumbnail = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+---
+
+<div
+  class:list={["relative aspect-video overflow-hidden bg-midnight", !square && "rounded-lg", className]}
+  data-youtube={id}
+  data-youtube-title={title}
+>
+  <button type="button" class="group absolute inset-0 size-full cursor-pointer" aria-label={`Putar video: ${title}`}>
+    <!-- scale-[1.02]: menyembunyikan sisa garis hitam letterbox bawaan thumbnail hqdefault -->
+    <img src={thumbnail} alt="" loading="lazy" decoding="async" class="size-full scale-[1.02] object-cover" />
+    <span
+      class="absolute top-1/2 left-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-content-center rounded-full bg-primary text-primary-foreground shadow-lg transition-colors duration-300 ease-out-quart group-hover:bg-primary-hover md:size-20"
+    >
+      <svg class="size-7 translate-x-0.5 md:size-8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5v14l11-7z"></path>
+      </svg>
+    </span>
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-youtube]").forEach((el) => {
+    el.querySelector("button")?.addEventListener(
+      "click",
+      () => {
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube-nocookie.com/embed/${el.dataset.youtube}?autoplay=1`;
+        iframe.title = el.dataset.youtubeTitle ?? "";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.className = "absolute inset-0 size-full";
+        el.replaceChildren(iframe);
+      },
+      { once: true },
+    );
+  });
+</script>

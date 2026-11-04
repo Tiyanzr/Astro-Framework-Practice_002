@@ -1,0 +1,21 @@
+---
+// Pintu masuk intro: memilih variasi lewat prop `variant` (= nama file tanpa .astro), lalu membungkusnya dengan ui/Section.
+// Variasi hanya mengatur susunan isi; latar, lebar, dan pulldown diatur di sini supaya sama untuk semua variasi.
+// Kalau tone/width/pulldown tidak diisi, dipakai bawaan variasi dari introDefaults (./variants.ts).
+import Section from "@/components/ui/Section.astro";
+import { pickVariant } from "@/lib/variants";
+import { introDefaults, introVariants } from "./variants";
+import type { IntroProps } from "./types";
+
+interface Props extends IntroProps {
+  variant?: string;
+}
+
+const { variant = "IntroMedia_001", tone, width, pulldown, ...content } = Astro.props;
+const Variant = pickVariant(introVariants, variant, "intro");
+const defaults = introDefaults[variant] ?? {};
+---
+
+<Section tone={tone ?? defaults.tone} width={width ?? defaults.width} pulldown={pulldown ?? defaults.pulldown}>
+  <Variant {...content} />
+</Section>

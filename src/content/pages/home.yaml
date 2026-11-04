@@ -1,10 +1,37 @@
 # Isi halaman utama (/). Ubah kalimat di sini, bukan di komponen.
+# Urutan section di halaman: hero → intro. Setiap section punya `variant` (= nama file variasi); bandingkan semua variasi di /preview.
 
 hero:
-  # Nama file variasi di src/components/sections/hero/. Bandingkan semua variasi di /preview_002.
+  # Variasi: src/components/sections/hero/ · bandingkan di /preview/hero
   variant: HeroImage_002
   title: Teknologi bertemu kebutuhan nyata.
   # Foto hero (opsional): taruh fotonya di folder ini, lalu hapus tanda # di 3 baris berikut.
   # image:
   #   src: ./hero.jpg
   #   alt: Deskripsi singkat foto
+
+intro:
+  # Variasi: src/components/sections/intro/ · bandingkan di /preview/intro
+  variant: IntroMedia_002
+  #   IntroMedia_001 = panel (width bawaan contained) · IntroMedia_002 = tanpa pembatas, selebar layar (width bawaan full)
+  # Pembungkus section: tone = default | alt | dark | green | olive | gradient · width = full | contained
+  # width boleh dihapus supaya memakai bawaan variasi. pulldown: true = ditarik ke atas, menumpuk di bawah hero (mulai tablet)
+  tone: olive
+  width: full
+  pulldown: true
+  # TODO: semua kalimat di bawah masih placeholder, ganti dengan konten final.
+  title: Integrasi sistem otomasi, dari panel hingga data produksi.
+  # Pisahkan paragraf dengan satu baris kosong.
+  description: |
+    Parametrik membantu industri merancang, memasang, dan merawat sistem kelistrikan dan otomasi: panel kontrol, PLC, SCADA, hingga integrasi data mesin ke sistem produksi.
+
+    Sebagai integrator terbuka, kami menyesuaikan solusi dengan peralatan yang sudah Anda miliki, bukan sebaliknya.
+  highlight: Satu mitra untuk seluruh rantai otomasi, dari sensor sampai laporan produksi.
+  # Media di samping teks: video YouTube, gambar, atau placeholder.
+  #   YouTube:     type: youtube · id: bagian setelah `v=` di link video · title: judul video
+  #   Gambar:      type: image · src: ./intro.jpg (taruh di folder ini) · alt: deskripsi foto
+  #   Placeholder: type: placeholder · label: teks kecil di tengah kotak
+  # TODO: ganti dengan video Parametrik kalau sudah ada (type: youtube).
+  media:
+    type: placeholder
+    label: Video profil perusahaan

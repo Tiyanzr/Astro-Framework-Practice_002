@@ -1,5 +1,5 @@
 // Pembaca konten dari src/content/. Semua kalimat ada di file .yaml/.md di sana; file ini hanya mengambilnya.
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, type CollectionEntry } from "astro:content";
 
 export type NavLink = { label: string; href: string; description?: string };
 
@@ -23,4 +23,26 @@ export async function getMainLinks(): Promise<NavLink[]> {
   return items
     .sort((a, b) => a.data.order - b.data.order)
     .map(({ data }) => ({ label: data.title, href: data.href, description: data.description }));
+}
+
+/** Semua postingan yang boleh tampil. Saat build, postingan `draft: true` disaring. Terbaru di atas. */
+export async function getPosts() {
+  const posts = await getCollection("posts", ({ data }) => import.meta.env.DEV || !data.draft);
+  return posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+}
+
+/**
+ * Artikel terkait: skor = kategori sama (+2) + jumlah tag yang sama (+1 per tag). Artikel itu sendiri tidak ikut.
+ * Kalau skornya seri, yang terbaru di atas; kalau tidak ada yang mirip, tetap diisi artikel terbaru.
+ */
+export async function getRelatedPosts(post: CollectionEntry<"posts">, limit = 3) {
+  const others = (await getPosts()).filter((p) => p.id !== post.id);
+  const score = (p: CollectionEntry<"posts">) =>
+    (post.data.category && p.data.category === post.data.category ? 2 : 0) +
+    p.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+  return others
+    .map((p) => ({ p, s: score(p) }))
+    .sort((a, b) => b.s - a.s || b.p.data.pubDate.getTime() - a.p.data.pubDate.getTime())
+    .slice(0, limit)
+    .map(({ p }) => p);
 }

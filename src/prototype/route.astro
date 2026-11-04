@@ -1,0 +1,14 @@
+---
+// Rute penampung /prototype/[...path] (hanya saat dev, didaftarkan oleh ./integration.mjs, dirender per permintaan
+// supaya ?query terbaca). Setiap file di src/prototype/pages/ menjadi satu halaman:
+// pages/hero.astro → /prototype/hero, pages/coba/x.astro → /prototype/coba/x. File baru langsung terbaca, tidak perlu restart.
+const pages = import.meta.glob<{ default: any }>("./pages/**/*.astro");
+
+const path = (Astro.params.path ?? "").replace(/\/$/, "");
+const file = [`./pages/${path}.astro`, `./pages/${path ? `${path}/` : ""}index.astro`].find((f) => f in pages);
+if (!file) return new Response(`Halaman prototype "/prototype/${path}" tidak ada di src/prototype/pages/.`, { status: 404 });
+
+const { default: Page } = await pages[file]();
+---
+
+<Page />

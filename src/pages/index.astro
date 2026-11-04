@@ -2,11 +2,13 @@
 // Halaman utama: hanya menyusun section. Isi kalimat ada di src/content/pages/home.yaml.
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Hero from "@/components/sections/hero/Hero.astro";
+import Intro from "@/components/sections/intro/Intro.astro";
 import { getPage } from "@/lib/content";
 
-const { hero } = await getPage("home");
+const { hero, intro } = await getPage("home");
 ---
 
 <BaseLayout>
   <Hero {...hero} />
+  {intro && <Intro {...intro} />}
 </BaseLayout>

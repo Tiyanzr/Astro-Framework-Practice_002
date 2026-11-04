@@ -1,7 +1,7 @@
 ---
-// Preview 001: palet warna. Navbar & menu datang dari BaseLayout.
+// /prototype/colors: palet warna.
 // Semua nilai berasal dari token di src/styles/global.css (lihat DESIGN.md).
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 
 // Nama token hanya muncul sebagai tooltip saat kursor diarahkan.
 const baseColors = ["white", "midnight"];
@@ -10,10 +10,10 @@ const mainColors = ["blue", "green", "mantis", "lime"];
 const derived = ["background-alt", "border", "muted-foreground", "primary-hover"];
 ---
 
-<BaseLayout title="Preview 001">
+<PrototypeLayout title="Warna">
   <!-- Palet -->
   <section class="py-20">
-    <div class="mx-auto max-w-7xl space-y-3 px-4 md:px-8">
+    <div class="container-page space-y-3">
       <div class="grid grid-cols-2 gap-3">
         {baseColors.map((token) => (
           <div class="h-40 rounded-lg border border-border" style={`background:var(--${token})`} title={token}></div>
@@ -34,10 +34,10 @@ const derived = ["background-alt", "border", "muted-foreground", "primary-hover"
 
   <!-- Section gelap (theme-dark): turunan yang sama, versi gelap -->
   <section class="theme-dark py-20">
-    <div class="mx-auto grid max-w-7xl grid-cols-4 gap-3 px-4 md:px-8">
+    <div class="container-page grid grid-cols-4 gap-3">
       {derived.map((token) => (
         <div class="h-20 rounded-lg border border-border" style={`background:var(--${token})`} title={`${token} (dark)`}></div>
       ))}
     </div>
   </section>
-</BaseLayout>
+</PrototypeLayout>

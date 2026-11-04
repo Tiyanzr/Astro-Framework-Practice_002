@@ -7,6 +7,9 @@ import react from "@astrojs/react";
 
 import sitemap from "@astrojs/sitemap";
 
+// src/prototype/ (halaman /prototype, variasi kandidat, konten contoh) hanya aktif saat `astro dev`, tidak ikut build.
+import prototype from "./src/prototype/integration.mjs";
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://jasalistrikbandung.com',
@@ -14,5 +17,5 @@ export default defineConfig({
   plugins: [tailwindcss()],
 },
 
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [react(), mdx(), sitemap(), prototype()],
 });

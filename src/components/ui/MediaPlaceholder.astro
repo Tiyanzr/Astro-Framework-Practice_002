@@ -1,0 +1,33 @@
+---
+// Placeholder media 16:9 selama video/gambar final belum ada. Gaya mirip placeholder hero (bergaris kotak 48px).
+// Latar = token card versi gelap (sedikit lebih terang dari midnight) supaya kotaknya tetap terlihat di section tone dark.
+// Ditulis sebagai style, karena aturan latar `.theme-dark` di global.css berada di luar @layer dan mengalahkan utility bg-*.
+// Ikon play hanya penanda, bukan tombol: placeholder tidak bisa diklik.
+interface Props {
+  /** Label kecil di tengah, mis. "Video profil perusahaan". */
+  label?: string;
+  /** Sudut tegas tanpa pembulatan (dipakai variasi tanpa pembatas, mis. IntroMedia_002). */
+  square?: boolean;
+  class?: string;
+}
+
+const { label = "Video", square = false, class: className } = Astro.props;
+---
+
+<div
+  class:list={[
+    "theme-dark relative grid aspect-video place-content-center justify-items-center gap-4 overflow-hidden bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-size-[48px_48px]",
+    !square && "rounded-lg",
+    className,
+  ]}
+  style="background-color: var(--card)"
+  role="img"
+  aria-label={`Placeholder: ${label}`}
+>
+  <span class="grid size-16 place-content-center rounded-full border-2 border-foreground/40 text-foreground/70 md:size-20" aria-hidden="true">
+    <svg class="size-7 translate-x-0.5 md:size-8" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8 5v14l11-7z"></path>
+    </svg>
+  </span>
+  <span class="font-mono text-eyebrow text-muted-foreground uppercase">{label}</span>
+</div>

@@ -1,57 +1,18 @@
 ---
-// Satu halaman per folder di src/content/posts/. URL: /posts/<nama-folder>/
-import { getCollection, render } from "astro:content";
+// Satu halaman per folder di src/content/posts/. URL: /posts/<nama-folder>/ (postingan draft hanya tampil saat dev).
+// Tampilan diatur variasi di src/components/sections/post/ (site.yaml › post.variant, atau `variant` di frontmatter).
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Post from "@/components/sections/post/Post.astro";
+import { getPosts } from "@/lib/content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("posts");
+  const posts = await getPosts();
   return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
 }
 
 const { post } = Astro.props;
-const { title, description, pubDate, updatedDate, author, category, tags } = post.data;
-const { Content } = await render(post);
-
-const formatDate = (date: Date) => date.toLocaleDateString("id-ID", { dateStyle: "long" });
-const updated = updatedDate && updatedDate.getTime() !== pubDate.getTime() ? updatedDate : undefined;
 ---
 
-<BaseLayout title={title} description={description}>
-  <article class="mx-auto max-w-3xl px-4 py-16 md:px-8 md:py-24">
-    <header class="border-b border-border pb-10">
-      {category && <p class="font-mono text-eyebrow text-primary uppercase">{category}</p>}
-      <h1 class="mt-4 text-h1 text-balance">{title}</h1>
-      <p class="mt-5 text-lead text-muted-foreground">{description}</p>
-      <dl class="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-small">
-        <div>
-          <dt class="font-mono text-eyebrow text-muted-foreground uppercase">Penulis</dt>
-          <dd class="mt-1">{author}</dd>
-        </div>
-        <div>
-          <dt class="font-mono text-eyebrow text-muted-foreground uppercase">Terbit</dt>
-          <dd class="mt-1"><time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time></dd>
-        </div>
-        {updated && (
-          <div>
-            <dt class="font-mono text-eyebrow text-muted-foreground uppercase">Diperbarui</dt>
-            <dd class="mt-1"><time datetime={updated.toISOString()}>{formatDate(updated)}</time></dd>
-          </div>
-        )}
-      </dl>
-    </header>
-
-    <div class="prose mt-10 max-w-none">
-      <Content />
-    </div>
-
-    {tags.length > 0 && (
-      <footer class="mt-16 border-t border-border pt-8">
-        <ul class="flex flex-wrap gap-2" aria-label="Tag">
-          {tags.map((tag) => (
-            <li class="rounded-sm border border-border px-2.5 py-1 text-caption text-muted-foreground">{tag}</li>
-          ))}
-        </ul>
-      </footer>
-    )}
-  </article>
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <Post post={post} />
 </BaseLayout>

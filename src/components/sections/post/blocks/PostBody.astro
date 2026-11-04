@@ -1,0 +1,14 @@
+---
+// Isi artikel dari Markdown. Semua gaya isi (judul, gambar, quote/callout, tabel) diatur sekali di global.css › .prose,
+// jadi berlaku sama di semua variasi.
+interface Props {
+  Content: any;
+  class?: string;
+}
+
+const { Content, class: className } = Astro.props;
+---
+
+<div class:list={["prose max-w-none", className]}>
+  <Content />
+</div>

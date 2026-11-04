@@ -1,0 +1,35 @@
+---
+// IntroMedia_001: teks di kiri, media (video YouTube / gambar / placeholder) di kanan (referensi: fastems.com, section setelah hero).
+// HP: teks di atas, media di bawah. Mulai lg: dua kolom sama lebar, rata tengah vertikal. Tanpa media: teks saja.
+import { Image } from "astro:assets";
+import MediaPlaceholder from "@/components/ui/MediaPlaceholder.astro";
+import YouTube from "@/components/ui/YouTube.astro";
+import type { IntroContent } from "./types";
+
+type Props = IntroContent;
+
+const { eyebrow, title, description, highlight, media } = Astro.props;
+const paragraphs = description?.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean) ?? [];
+---
+
+<div class:list={["grid gap-10", media && "lg:grid-cols-2 lg:items-center lg:gap-16"]}>
+  <div>
+    {eyebrow && <p class="font-mono text-eyebrow text-primary uppercase">{eyebrow}</p>}
+    <!-- Judul disamakan dengan judul HeroImage_002: font display (Roboto Condensed), text-h1, tanpa letter-spacing negatif. Tetap h2 karena h1 hanya satu per halaman (hero). -->
+    <h2 class:list={["font-display text-h1 tracking-normal text-balance", eyebrow && "mt-4"]}>{title}</h2>
+    {paragraphs.map((paragraph) => <p class="mt-5 max-w-prose text-body text-muted-foreground md:text-lead">{paragraph}</p>)}
+    {highlight && <p class="mt-8 max-w-prose text-h4 text-balance">{highlight}</p>}
+  </div>
+
+  {
+    media && (
+      <div>
+        {media.type === "youtube" && <YouTube id={media.id} title={media.title} />}
+        {media.type === "image" && (
+          <Image src={media.src} alt={media.alt} widths={[640, 960, 1280]} sizes="(min-width: 1024px) 50vw, 100vw" class="aspect-video w-full rounded-lg object-cover" />
+        )}
+        {media.type === "placeholder" && <MediaPlaceholder label={media.label} />}
+      </div>
+    )
+  }
+</div>

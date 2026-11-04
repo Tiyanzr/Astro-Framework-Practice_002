@@ -1,0 +1,22 @@
+---
+// Pintu masuk artikel: menyiapkan isi, daftar judul, artikel terkait, dan label, lalu memilih variasi.
+// Variasi: `variant` di frontmatter artikel, kalau kosong site.yaml › post.variant. Daftar variasi: ./variants.ts.
+import { render, type CollectionEntry } from "astro:content";
+import { getRelatedPosts, getSite } from "@/lib/content";
+import { pickVariant } from "@/lib/variants";
+import { postVariants } from "./variants";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+  /** Paksa variasi tertentu (dipakai halaman /prototype/post). */
+  variant?: string;
+}
+
+const { post, variant } = Astro.props;
+const site = await getSite();
+const { Content, headings } = await render(post);
+const related = await getRelatedPosts(post);
+const Variant = pickVariant(postVariants, variant ?? post.data.variant ?? site.post.variant, "post");
+---
+
+<Variant data={post.data} Content={Content} headings={headings} related={related} labels={site.post.labels} />
