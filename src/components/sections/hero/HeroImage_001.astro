@@ -21,7 +21,7 @@ const { eyebrow, title, description, primaryAction, secondaryAction, image, size
   <div class="absolute inset-0 -z-10 bg-linear-to-t from-black/85 via-black/40 to-black/0" aria-hidden="true"></div>
 
   <!-- md:pb-36: ruang untuk section berikutnya yang memakai pulldown (ui/Section menarik ke atas 96px) -->
-  <div class="mx-auto w-full max-w-7xl px-4 pt-32 pb-14 md:px-8 md:pb-36">
+  <div class="container-page pt-32 pb-14 md:pb-36">
     <div class="max-w-3xl">
       {eyebrow && <p class="text-eyebrow font-semibold text-white/75 uppercase">{eyebrow}</p>}
       <h1 class:list={["text-balance text-white", size === "xl" ? "text-display-xl" : "text-display", eyebrow && "mt-4"]}>{title}</h1>

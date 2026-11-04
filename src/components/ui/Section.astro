@@ -1,7 +1,7 @@
 ---
 // Pembungkus section: mengatur latar (tone), lebar latar (width), dan tarik-ke-atas (pulldown). Isi section masuk lewat <slot />.
 // Pola dari fastems.com (b-section + s-context): warna dan lebar tidak ditanam di komponen isi, jadi isi yang sama bisa dipakai di latar apa pun.
-// width="full": latar selebar layar. width="contained": latar berupa panel max-w-7xl; di HP panel selebar layar dikurangi gutter 16px.
+// width="full": latar selebar layar. width="contained": latar berupa panel selebar --page-max; di HP dikurangi --page-gutter. Jarak memakai token universal di global.css.
 // pulldown hanya aktif mulai md, karena di HP kartu hero bisa tinggi dan tertutup panel.
 import type { SectionSettings } from "@/lib/section";
 
@@ -23,14 +23,14 @@ const tones = {
 
 {
   width === "full" ? (
-    <section class:list={["py-16 md:py-24", tones[tone], pulldown && "relative z-10 md:-mt-24", className]}>
-      <div class="mx-auto max-w-7xl px-4 md:px-8">
+    <section class:list={["section-y", tones[tone], pulldown && "relative z-10 md:-mt-24", className]}>
+      <div class="container-page">
         <slot />
       </div>
     </section>
   ) : (
-    <section class:list={["px-4 py-12 md:px-8 md:py-16", pulldown && "relative z-10 md:-mt-24 md:pt-0", className]}>
-      <div class:list={["mx-auto max-w-7xl rounded-xl px-5 py-10 md:px-12 md:py-16", tones[tone]]}>
+    <section class:list={["px-(--page-gutter) py-12 md:py-16", pulldown && "relative z-10 md:-mt-24 md:pt-0", className]}>
+      <div class:list={["mx-auto max-w-(--page-max) rounded-xl px-5 py-10 md:px-12 md:py-16", tones[tone]]}>
         <slot />
       </div>
     </section>

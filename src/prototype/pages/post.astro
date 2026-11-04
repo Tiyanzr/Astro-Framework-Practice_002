@@ -1,0 +1,28 @@
+---
+// /prototype/post: coba variasi artikel. Bar atas: variasi (?v=) dan artikel (?p=).
+// Variasi produksi (src/components/sections/post/) dan kandidat (src/prototype/variants/post/) otomatis ikut.
+// Artikel: semua postingan, termasuk draft dan contoh di src/prototype/content/posts/ (bawaan: contoh-semua-elemen).
+import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
+import Post from "@/components/sections/post/Post.astro";
+import { postVariants } from "@/components/sections/post/variants";
+import { getPosts, getSite } from "@/lib/content";
+import { control, variantOptions } from "@/prototype/controls";
+
+const site = await getSite();
+const posts = await getPosts();
+const shorten = (s: string) => (s.length > 60 ? `${s.slice(0, 57)}…` : s);
+
+const variant = control(Astro.url, "v", "Variasi", variantOptions(Object.keys(postVariants)), site.post.variant);
+const article = control(
+  Astro.url,
+  "p",
+  "Artikel",
+  posts.map((x) => ({ value: x.id, label: `${shorten(x.data.title)}${x.data.draft ? " · draft" : ""}` })),
+  "contoh-semua-elemen",
+);
+const post = posts.find((x) => x.id === article.value)!;
+---
+
+<PrototypeLayout title="Artikel" controls={[variant, article]}>
+  <Post post={post} variant={variant.value} />
+</PrototypeLayout>

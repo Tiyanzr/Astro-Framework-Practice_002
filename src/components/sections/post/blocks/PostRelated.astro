@@ -1,0 +1,52 @@
+---
+// Kartu artikel terkait (dihitung di lib/content.ts › getRelatedPosts). Tidak tampil kalau tidak ada artikel lain.
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import type { PostLabels } from "../types";
+import { formatDate } from "./format";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+  labels: PostLabels;
+  class?: string;
+}
+
+const { posts, labels, class: className } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section class:list={[className]} aria-label={labels.related}>
+      <h2 class="text-h3">{labels.related}</h2>
+      <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <li>
+            <a
+              href={`/posts/${post.id}/`}
+              class="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background transition-colors duration-300 hover:border-primary"
+            >
+              {post.data.cover ? (
+                <Image
+                  src={post.data.cover}
+                  alt={post.data.coverAlt ?? ""}
+                  widths={[400, 800]}
+                  sizes="(min-width: 64rem) 24rem, (min-width: 40rem) 50vw, 100vw"
+                  class="aspect-video w-full object-cover"
+                />
+              ) : (
+                <div class="aspect-video w-full bg-background-alt" aria-hidden="true" />
+              )}
+              <div class="flex flex-1 flex-col p-5">
+                {post.data.category && <p class="font-mono text-eyebrow text-primary uppercase">{post.data.category}</p>}
+                <p class="mt-2 text-h4 text-balance transition-colors duration-300 group-hover:text-primary">{post.data.title}</p>
+                <p class="mt-auto pt-4 text-small text-muted-foreground">
+                  <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                </p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

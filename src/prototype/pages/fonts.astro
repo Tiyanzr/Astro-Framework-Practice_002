@@ -1,7 +1,8 @@
 ---
-// /preview/fonts: perbandingan kandidat font judul. Teks biasa tetap Archivo.
+// /prototype/fonts: perbandingan kandidat font judul. Teks biasa tetap Archivo.
 // Setiap blok memakai kandidat untuk semua judul. Di situs: h1 = --display-family, h2–h6 = --heading-family (global.css).
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
+import { allOption, control, selected } from "@/prototype/controls";
 
 const fonts = [
   { name: "Roboto Condensed", family: "Roboto Condensed Variable", note: "100–900 · dipakai untuk h1" },
@@ -10,13 +11,17 @@ const fonts = [
   { name: "Instrument Sans", family: "Instrument Sans Variable", note: "400–700 (judul 800 tampil sebagai 700)" },
   { name: "Archivo", family: "Archivo Variable", note: "100–900 · font judul sebelumnya" },
 ];
+
+// Bar atas: pilih font (?font=). Bawaan "Semua" = semua kandidat berjajar.
+const font = control(Astro.url, "font", "Font", [allOption, ...fonts.map((f) => f.name)]);
+const shown = fonts.filter((f) => selected(font).includes(f.name));
 ---
 
-<BaseLayout title="Preview · Font">
+<PrototypeLayout title="Font" controls={[font]}>
   {
-    fonts.map((font) => (
+    shown.map((font) => (
       <section class="border-b border-border py-16">
-        <div class="mx-auto max-w-7xl px-4 md:px-8" style={`--display-family: "${font.family}"; --heading-family: "${font.family}"`}>
+        <div class="container-page" style={`--display-family: "${font.family}"; --heading-family: "${font.family}"`}>
           <p class="font-mono text-eyebrow text-muted-foreground uppercase">
             {font.name} · {font.note}
           </p>
@@ -39,4 +44,4 @@ const fonts = [
       </section>
     ))
   }
-</BaseLayout>
+</PrototypeLayout>

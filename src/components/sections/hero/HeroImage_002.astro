@@ -20,7 +20,7 @@ const items = links ?? (await getMainLinks());
   <HeroBackground image={image} />
 
   <!-- md:pb-36: ruang untuk section berikutnya yang memakai pulldown (ui/Section menarik ke atas 96px) -->
-  <div class="mx-auto max-w-7xl px-4 py-10 md:px-8 md:pt-20 md:pb-36">
+  <div class="container-page py-10 md:pt-20 md:pb-36">
     <div class="max-w-xl rounded-sm bg-background p-6 shadow-xl shadow-black/20 md:p-10">
       <h1 class:list={["text-balance", size === "xl" ? "text-h1" : "text-h2"]}>{title}</h1>
       {description && <p class="mt-4 text-body text-muted-foreground">{description}</p>}

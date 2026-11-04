@@ -1,0 +1,45 @@
+---
+// PostArticle_002 (KANDIDAT): kepala lebar + cover selebar halaman, lalu isi dengan sidebar daftar isi yang ikut di-scroll (desktop).
+// Di HP daftar isi tampil di atas isi sebagai menu lipat. Penutup: tag, lalu artikel terkait di latar alt.
+import Section from "@/components/ui/Section.astro";
+import PostBody from "@/components/sections/post/blocks/PostBody.astro";
+import PostCover from "@/components/sections/post/blocks/PostCover.astro";
+import PostHeader from "@/components/sections/post/blocks/PostHeader.astro";
+import PostRelated from "@/components/sections/post/blocks/PostRelated.astro";
+import PostTags from "@/components/sections/post/blocks/PostTags.astro";
+import PostToc from "@/components/sections/post/blocks/PostToc.astro";
+import type { PostProps } from "@/components/sections/post/types";
+
+type Props = PostProps;
+
+const { data, Content, headings, related, labels } = Astro.props;
+---
+
+<article>
+  <div class="container-page pt-(--section-y)">
+    <PostHeader data={data} labels={labels} divider={false} class="max-w-4xl" />
+    <PostCover data={data} class="mt-10 aspect-21/9 rounded-sm" />
+  </div>
+
+  <div class="container-page grid gap-x-16 pt-12 pb-(--section-y) lg:grid-cols-[minmax(0,1fr)_16rem]">
+    <div class="max-w-3xl">
+      <details class="mb-10 rounded-sm border border-border px-5 py-4 lg:hidden">
+        <summary class="cursor-pointer font-mono text-eyebrow uppercase">{labels.toc}</summary>
+        <PostToc headings={headings} labels={labels} class="mt-4 [&>p]:hidden" />
+      </details>
+      <PostBody Content={Content} />
+      <PostTags data={data} labels={labels} class="mt-16" />
+    </div>
+    <aside class="hidden lg:block">
+      <PostToc headings={headings} labels={labels} nested class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto" />
+    </aside>
+  </div>
+
+  {
+    related.length > 0 && (
+      <Section tone="alt">
+        <PostRelated posts={related} labels={labels} />
+      </Section>
+    )
+  }
+</article>

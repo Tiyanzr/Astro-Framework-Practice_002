@@ -1,0 +1,29 @@
+---
+// /prototype/footer: coba variasi footer dengan isi yang sama (src/content/site.yaml › footer).
+// Pilih variasi di bar atas (?v=); "Semua" = semua variasi berjajar. Bawaan = variasi yang dipakai situs.
+// Variasi produksi (src/components/layout/footer/) dan kandidat (src/prototype/variants/footer/) otomatis ikut.
+import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
+import VariantLabel from "@/prototype/VariantLabel.astro";
+import { footerVariants } from "@/components/layout/footer/variants";
+import { getSite } from "@/lib/content";
+import { allOption, control, selected, variantOptions } from "@/prototype/controls";
+
+const site = await getSite();
+const { variant: active, ...footer } = site.footer;
+const variant = control(Astro.url, "v", "Variasi", [...variantOptions(Object.keys(footerVariants)), allOption], active);
+const shown = selected(variant);
+---
+
+<PrototypeLayout title="Footer" controls={[variant]}>
+  {
+    shown.map((name) => {
+      const Variant = footerVariants[name];
+      return (
+        <div>
+          {shown.length > 1 && <VariantLabel name={name} />}
+          <Variant siteName={site.name} {...footer} />
+        </div>
+      );
+    })
+  }
+</PrototypeLayout>

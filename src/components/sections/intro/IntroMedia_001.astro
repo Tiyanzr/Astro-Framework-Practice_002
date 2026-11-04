@@ -15,7 +15,8 @@ const paragraphs = description?.split(/\n\s*\n/).map((p) => p.trim()).filter(Boo
 <div class:list={["grid gap-10", media && "lg:grid-cols-2 lg:items-center lg:gap-16"]}>
   <div>
     {eyebrow && <p class="font-mono text-eyebrow text-primary uppercase">{eyebrow}</p>}
-    <h2 class:list={["text-h2 text-balance", eyebrow && "mt-4"]}>{title}</h2>
+    <!-- Judul disamakan dengan judul HeroImage_002: font display (Roboto Condensed), text-h1, tanpa letter-spacing negatif. Tetap h2 karena h1 hanya satu per halaman (hero). -->
+    <h2 class:list={["font-display text-h1 tracking-normal text-balance", eyebrow && "mt-4"]}>{title}</h2>
     {paragraphs.map((paragraph) => <p class="mt-5 max-w-prose text-body text-muted-foreground md:text-lead">{paragraph}</p>)}
     {highlight && <p class="mt-8 max-w-prose text-h4 text-balance">{highlight}</p>}
   </div>

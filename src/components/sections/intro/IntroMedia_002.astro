@@ -15,7 +15,8 @@ const paragraphs = description?.split(/\n\s*\n/).map((p) => p.trim()).filter(Boo
 
 <div>
   {eyebrow && <p class="font-mono text-eyebrow text-primary uppercase">{eyebrow}</p>}
-  <h2 class:list={["max-w-4xl text-h1 text-balance", eyebrow && "mt-4"]}>{title}</h2>
+  <!-- Judul disamakan dengan judul HeroImage_002: font display (Roboto Condensed), text-h1, tanpa letter-spacing negatif. Tetap h2 karena h1 hanya satu per halaman (hero). -->
+  <h2 class:list={["max-w-4xl font-display text-h1 tracking-normal text-balance", eyebrow && "mt-4"]}>{title}</h2>
 
   <div class:list={["mt-10 grid gap-10 md:mt-14", media && "lg:grid-cols-2 lg:gap-16"]}>
     <div>

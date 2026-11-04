@@ -1,0 +1,16 @@
+---
+// Tempat section coba-coba (bebas, tidak harus ikut standar variasi). Tidak pernah ikut build.
+// Kalau sudah matang: jadikan variasi di src/prototype/variants/<section>/ untuk dinilai, atau langsung ke src/components/sections/.
+import Section from "@/components/ui/Section.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<Section tone="alt">
+  <h2 class="text-h2">{title}</h2>
+  <p class="mt-4 max-w-prose text-muted-foreground">Isi coba-coba boleh ditulis langsung di sini, tidak perlu YAML.</p>
+</Section>
