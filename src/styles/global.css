@@ -122,9 +122,36 @@
   --ring: var(--lime);
 }
 
+/* Section olive (warna logo) sebagai aksen: `<section class="theme-olive">` (Section tone="olive").
+   Putih di olive hanya 2.5 : 1, jadi semua teks gelap: hitam 8.4 : 1, teks sekunder hitam 75% ±5.8 : 1. Tombol midnight + teks putih. */
+.theme-olive {
+  --background: var(--logo);
+  --background-alt: color-mix(in srgb, var(--black) 6%, var(--logo)); /* #A09D4E */
+  --foreground: var(--black);
+  --card: color-mix(in srgb, var(--white) 14%, var(--logo)); /* #B8B56D */
+  --card-foreground: var(--black);
+  --popover: var(--card);
+  --popover-foreground: var(--black);
+  --primary: var(--midnight);
+  --primary-hover: color-mix(in srgb, var(--midnight) 85%, var(--white)); /* #26415B */
+  --primary-foreground: var(--white);
+  --secondary: var(--card);
+  --secondary-foreground: var(--black);
+  --muted: var(--card);
+  --muted-foreground: color-mix(in srgb, var(--black) 75%, var(--logo)); /* #2B2A15 */
+  --accent: var(--card);
+  --accent-foreground: var(--black);
+  --highlight: var(--midnight);
+  --destructive: #8b1a1a;
+  --border: color-mix(in srgb, var(--black) 20%, var(--logo)); /* #888643 */
+  --input: var(--border);
+  --ring: var(--midnight);
+}
+
 .theme-light,
 .theme-dark,
-.theme-green {
+.theme-green,
+.theme-olive {
   background-color: var(--background);
   color: var(--foreground);
 }

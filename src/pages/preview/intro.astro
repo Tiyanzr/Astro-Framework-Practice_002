@@ -1,15 +1,17 @@
 ---
 // /preview/intro: semua variasi intro berurutan dengan isi yang sama (src/content/pages/home.yaml), untuk dibandingkan.
-// Setiap variasi juga ditampilkan di semua tone (lihat src/lib/section.ts), supaya terlihat cocok di latar mana saja. Pulldown dimatikan di sini.
+// Setiap variasi ditampilkan di semua tone (lihat src/lib/section.ts) dengan width bawaan variasinya. Pulldown dimatikan di sini.
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Intro from "@/components/sections/intro/Intro.astro";
 import VariantLabel from "@/components/ui/VariantLabel.astro";
-import { introVariants } from "@/components/sections/intro/variants";
+import { introDefaults, introVariants } from "@/components/sections/intro/variants";
 import { getPage } from "@/lib/content";
 import { sectionTones } from "@/lib/section";
 
 const { intro } = await getPage("home");
 if (!intro) throw new Error("src/content/pages/home.yaml belum punya bagian `intro`.");
+// Pengaturan pembungkus dari home.yaml tidak dipakai di sini, supaya setiap variasi tampil dengan bawaannya.
+const { variant: _variant, tone: _tone, width: _width, pulldown: _pulldown, ...content } = intro;
 ---
 
 <BaseLayout title="Preview · Intro">
@@ -17,8 +19,8 @@ if (!intro) throw new Error("src/content/pages/home.yaml belum punya bagian `int
     Object.keys(introVariants).map((name) =>
       sectionTones.map((tone) => (
         <div>
-          <VariantLabel name={`${name} · tone ${tone} · width ${intro.width ?? "full"}`} />
-          <Intro {...intro} variant={name} tone={tone} pulldown={false} />
+          <VariantLabel name={`${name} · tone ${tone} · width ${introDefaults[name]?.width ?? "full"}`} />
+          <Intro {...content} variant={name} tone={tone} pulldown={false} />
         </div>
       )),
     )

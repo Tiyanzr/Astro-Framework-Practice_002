@@ -13,8 +13,9 @@ hero:
 intro:
   # Variasi: src/components/sections/intro/ · bandingkan di /preview/intro
   variant: IntroMedia_001
-  # Pembungkus section: tone = default | alt | dark | green | gradient · width = full | contained
-  # pulldown: true = panel ditarik ke atas, menumpuk di bawah hero (mulai tablet)
+  #   IntroMedia_001 = panel (width bawaan contained) · IntroMedia_002 = tanpa pembatas, selebar layar (width bawaan full)
+  # Pembungkus section: tone = default | alt | dark | green | olive | gradient · width = full | contained
+  # width boleh dihapus supaya memakai bawaan variasi. pulldown: true = ditarik ke atas, menumpuk di bawah hero (mulai tablet)
   tone: gradient
   width: contained
   pulldown: true

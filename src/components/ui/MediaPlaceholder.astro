@@ -1,20 +1,26 @@
 ---
-// Placeholder media 16:9 selama video/gambar final belum ada. Gaya sama dengan placeholder hero (midnight bergaris kotak 48px).
+// Placeholder media 16:9 selama video/gambar final belum ada. Gaya mirip placeholder hero (bergaris kotak 48px).
+// Latar = token card versi gelap (sedikit lebih terang dari midnight) supaya kotaknya tetap terlihat di section tone dark.
+// Ditulis sebagai style, karena aturan latar `.theme-dark` di global.css berada di luar @layer dan mengalahkan utility bg-*.
 // Ikon play hanya penanda, bukan tombol: placeholder tidak bisa diklik.
 interface Props {
   /** Label kecil di tengah, mis. "Video profil perusahaan". */
   label?: string;
+  /** Sudut tegas tanpa pembulatan (dipakai variasi tanpa pembatas, mis. IntroMedia_002). */
+  square?: boolean;
   class?: string;
 }
 
-const { label = "Video", class: className } = Astro.props;
+const { label = "Video", square = false, class: className } = Astro.props;
 ---
 
 <div
   class:list={[
-    "theme-dark relative grid aspect-video place-content-center justify-items-center gap-4 overflow-hidden rounded-lg bg-midnight bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-size-[48px_48px]",
+    "theme-dark relative grid aspect-video place-content-center justify-items-center gap-4 overflow-hidden bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-size-[48px_48px]",
+    !square && "rounded-lg",
     className,
   ]}
+  style="background-color: var(--card)"
   role="img"
   aria-label={`Placeholder: ${label}`}
 >

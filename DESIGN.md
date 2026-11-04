@@ -65,6 +65,7 @@ Nama mengikuti konvensi shadcn, jadi komponen shadcn otomatis memakai palet ini.
 - **Seluruh situs memakai tema terang.** `<html>` tidak diberi class `dark` dan navbar tidak punya tombol ganti tema.
 - **Section gelap sebagai aksen** (mis. hero, CTA, footer): tambahkan `theme-dark` pada `<section>`. Token di dalamnya berganti ke kolom gelap dan latarnya ikut terpasang (midnight).
 - **Section hijau tua sebagai aksen:** `theme-green` (atau `tone: green` di `ui/Section`). Latar `green`, teks putih, teks sekunder putih 92%, highlight putih, tombol lime dengan teks midnight. Dipakai hemat, maksimal satu section hijau per halaman.
+- **Section olive sebagai aksen:** `theme-olive` (atau `tone: olive`). Latar warna logo `#AAA753` (token `--logo`), **semua teks gelap**: judul hitam, teks sekunder hitam 75%, highlight midnight, tombol midnight dengan teks putih. Olive tetap bukan bagian palet; hanya boleh sebagai latar section. Jangan menaruh logo di atas section olive (logo tidak terlihat).
 
 ### Aturan pemakaian warna
 
@@ -84,6 +85,10 @@ Nama mengikuti konvensi shadcn, jadi komponen shadcn otomatis memakai palet ini.
 | Putih di green (section `theme-green`) | 5.0 : 1 | ✅ Judul & teks |
 | Putih 92% di green (`muted-foreground` hijau) | ±4.5 : 1 | ✅ Teks sekunder |
 | Lime di green | 3.7 : 1 | ⚠️ Hanya isian tombol/grafis, bukan teks |
+| Hitam di olive (section `theme-olive`) | 8.4 : 1 | ✅ Judul & teks |
+| Hitam 75% di olive (`muted-foreground` olive) | ±5.8 : 1 | ✅ Teks sekunder |
+| Midnight di olive | 6.6 : 1 | ✅ Highlight, isian tombol |
+| Putih di olive | 2.5 : 1 | ❌ Jangan untuk teks |
 | Blue di midnight | 1.9 : 1 | ❌ Jangan untuk teks |
 | Midnight di lime (tombol) | 12.2 : 1 | ✅ |
 
@@ -229,7 +234,7 @@ Mengatur **latar, lebar latar, dan posisi** section, terpisah dari isinya (pola 
 
 | Prop | Nilai | Keterangan |
 |---|---|---|
-| `tone` | `default` · `alt` · `dark` · `green` · `gradient` | `bg-background` · `bg-background-alt` · `theme-dark` (midnight) · `theme-green` (hijau tua `green`, lihat *Cara memakai tema*) · `bg-gradient-soft` (gradasi blue 10% → mantis 14% dicampur putih, token `--gradient-soft`) |
+| `tone` | `default` · `alt` · `dark` · `green` · `olive` · `gradient` | `bg-background` · `bg-background-alt` · `theme-dark` (midnight) · `theme-green` (hijau tua `green`) · `theme-olive` (warna logo, teks hitam; lihat *Cara memakai tema*) · `bg-gradient-soft` (gradasi blue 10% → mantis 14% dicampur putih, token `--gradient-soft`) |
 | `width` | `full` · `contained` | `full` = latar selebar layar, isi `max-w-7xl`. `contained` = latar berupa panel `max-w-7xl rounded-xl`; di HP selebar layar dikurangi gutter 16px |
 | `pulldown` | `true` / `false` | Section ditarik ke atas 96px (`md:-mt-24`) sehingga menumpuk di bagian bawah section sebelumnya. **Hanya mulai `md`**, karena di HP kartu hero bisa tinggi dan tertutup |
 
@@ -280,7 +285,8 @@ src/components/sections/intro/
 ├── Intro.astro            ← pintu masuk: memilih variasi + membungkus dengan ui/Section
 ├── variants.ts            ← deteksi otomatis semua file Intro*_*.astro
 ├── types.ts               ← IntroContent (isi) + SectionSettings (pembungkus)
-└── IntroMedia_001.astro   ← teks kiri + media kanan
+├── IntroMedia_001.astro   ← panel: teks kiri + media kanan (width bawaan contained)
+└── IntroMedia_002.astro   ← tanpa pembatas: judul besar di atas, teks + media di bawah (width bawaan full)
 ```
 
 Isi di `src/content/pages/home.yaml` › `intro`:
@@ -288,22 +294,26 @@ Isi di `src/content/pages/home.yaml` › `intro`:
 | Prop | Wajib | Keterangan |
 |---|---|---|
 | `variant` | | Nama file variasi, default `IntroMedia_001` |
-| `tone` / `width` / `pulldown` | | Pengaturan pembungkus, lihat [Pembungkus section](#pembungkus-section--srccomponentsuisectionastro). Beranda: `gradient`, `contained`, `true` |
+| `tone` / `width` / `pulldown` | | Pengaturan pembungkus, lihat [Pembungkus section](#pembungkus-section--srccomponentsuisectionastro). Kalau dikosongkan, dipakai **bawaan variasi** (`introDefaults` di `variants.ts`). Beranda: `gradient`, `contained`, `true` |
 | `eyebrow` | | Label kecil di atas judul |
 | `title` | ✅ | Judul (`h2`) |
 | `description` | | Paragraf pengantar. Pisahkan paragraf dengan satu baris kosong (pakai `description: \|` di YAML) |
 | `highlight` | | Satu kalimat penutup berukuran `text-h4` |
 | `media` | | `{ type: youtube, id, title }`, `{ type: image, src, alt }` (`src` relatif dari file `.yaml`), atau `{ type: placeholder, label? }`. Tanpa media: teks saja, satu kolom |
 
-**IntroMedia_001:** HP = teks di atas, media di bawah. Mulai `lg` = dua kolom sama lebar, rata tengah vertikal, jarak `gap-16`. Judul `text-h2`, paragraf `text-body` → `md:text-lead` warna `muted-foreground`, `highlight` `text-h4`. Media `aspect-video rounded-lg`.
+**IntroMedia_001:** HP = teks di atas, media di bawah. Mulai `lg` = dua kolom sama lebar, rata tengah vertikal, jarak `gap-16`. Judul `text-h2`, paragraf `text-body` → `md:text-lead` warna `muted-foreground`, `highlight` `text-h4`. Media `aspect-video rounded-lg`. Bawaan: `width: contained`.
+
+**IntroMedia_002** (tanpa pembatas): warna dasar polos selebar layar, tanpa panel dan tanpa sudut membulat. Judul `text-h1` (elemen `h2`, maks. `max-w-4xl`) membentang di atas; di bawahnya baris dua kolom mulai `lg`: paragraf + `highlight` di kiri, media bersudut tegas (`square`) di kanan, rata atas. HP: semua bertumpuk, media paling bawah. Bawaan: `width: full`. Cocok dengan tone `default`, `dark`, `green`, dan `olive`.
+
+**Pengaturan bawaan per variasi:** `introDefaults` di `variants.ts` menyimpan `tone`/`width`/`pulldown` bawaan setiap variasi. Nilai di `home.yaml` selalu menang; hapus barisnya untuk memakai bawaan. `/preview/intro` selalu memakai bawaan variasi.
 
 ### Video YouTube — `src/components/ui/YouTube.astro`
 
-**Facade:** awalnya hanya thumbnail (`i.ytimg.com/vi/<id>/hqdefault.jpg`) dan tombol play bulat `bg-primary`; iframe `youtube-nocookie.com` baru dimuat saat tombol diklik (langsung autoplay). Menghemat ratusan KB JavaScript YouTube di setiap kunjungan. Props: `id` (bagian setelah `v=` di link YouTube) dan `title` (dibacakan screen reader).
+**Facade:** awalnya hanya thumbnail (`i.ytimg.com/vi/<id>/hqdefault.jpg`) dan tombol play bulat `bg-primary`; iframe `youtube-nocookie.com` baru dimuat saat tombol diklik (langsung autoplay). Menghemat ratusan KB JavaScript YouTube di setiap kunjungan. Props: `id` (bagian setelah `v=` di link YouTube), `title` (dibacakan screen reader), dan `square` (sudut tegas, tanpa `rounded-lg`).
 
 ### Placeholder media — `src/components/ui/MediaPlaceholder.astro`
 
-Kotak `aspect-video rounded-lg` bergaya sama dengan placeholder hero (midnight bergaris kotak 48px, `theme-dark`), ikon play bergaris dan `label` kecil `font-mono uppercase` di tengah. Dipakai selama video/gambar final belum ada, supaya layout tetap terlihat seperti versi final. Bukan tombol: tidak bisa diklik.
+Kotak `aspect-video` (`rounded-lg`, atau sudut tegas dengan prop `square`) bergaris kotak 48px seperti placeholder hero, latar token `card` versi gelap (sedikit lebih terang dari midnight, supaya tetap terlihat di tone dark), ikon play bergaris dan `label` kecil `font-mono uppercase` di tengah. Dipakai selama video/gambar final belum ada, supaya layout tetap terlihat seperti versi final. Bukan tombol: tidak bisa diklik.
 
 ### Tombol — `src/components/ui/Button.astro`
 
@@ -437,3 +447,4 @@ Isi artikel ditampilkan dengan class `prose` yang warnanya diambil dari token (l
 - **2026-11-04 (revisi 15):** Penamaan section **distandarkan** (lihat *Standar section dengan variasi*): setiap folder punya `variants.ts` (deteksi otomatis) dan memakai helper bersama `src/lib/variants.ts`; Hero dan Footer disesuaikan. Halaman preview dipindah ke `/preview/<nama>` (`preview_001` → `/preview/colors`, `preview_002` → `/preview/hero`, `preview_003` → `/preview/fonts`), ditambah `/preview/intro`, `/preview/footer`, dan daftar `/preview`. Ditambah pembungkus `ui/Section` (`tone`, `width`, `pulldown`, pola fastems.com), token `--gradient-soft`, section **Intro** (`IntroMedia_001`: teks + video, referensi fastems.com), dan `ui/YouTube` (facade). Hero diberi ruang bawah `md:pb-36` untuk pulldown.
 - **2026-11-04 (revisi 16):** Video Intro di beranda diganti **placeholder** (`media.type: placeholder`, komponen `ui/MediaPlaceholder`), tidak lagi memakai video fastems.com.
 - **2026-11-04 (revisi 17):** Ditambah tone section **`green`** (`.theme-green`, latar hijau tua `green #00804D`) dengan token turunan dari palet; otomatis ikut di `/preview/intro`.
+- **2026-11-04 (revisi 18):** Ditambah **`IntroMedia_002`** (tanpa pembatas, warna dasar polos selebar layar, media bersudut tegas), tone **`olive`** (`.theme-olive`, warna logo dengan teks hitam), prop `square` di `ui/YouTube` dan `ui/MediaPlaceholder`, serta **pengaturan bawaan per variasi** (`introDefaults`). Latar placeholder media diganti token `card` gelap supaya terlihat di tone dark.
