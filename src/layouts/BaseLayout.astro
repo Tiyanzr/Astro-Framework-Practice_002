@@ -1,5 +1,6 @@
 ---
 // Kerangka semua halaman: <head>, navbar, isi halaman di <slot />, lalu footer.
+// `bare`: tanpa navbar dan footer (dipakai halaman /prototype lewat src/prototype/PrototypeLayout.astro).
 import "@/styles/global.css";
 import Navbar from "@/components/layout/Navbar.astro";
 import Footer from "@/components/layout/footer/Footer.astro";
@@ -8,10 +9,11 @@ import { getSite } from "@/lib/content";
 interface Props {
   title?: string;
   description?: string;
+  bare?: boolean;
 }
 
 const site = await getSite();
-const { title, description = site.description } = Astro.props;
+const { title, description = site.description, bare = false } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : site.name;
 ---
 
@@ -26,10 +28,11 @@ const pageTitle = title ? `${title} — ${site.name}` : site.name;
   </head>
   <!-- flex + min-h-screen: footer tetap di dasar layar walaupun isi halaman pendek -->
   <body class="flex min-h-screen flex-col">
-    <Navbar />
-    <main class="flex-1 pt-16">
+    {!bare && <Navbar />}
+    <!-- pt-16: ruang untuk navbar yang fixed -->
+    <main class:list={["flex-1", !bare && "pt-16"]}>
       <slot />
     </main>
-    <Footer />
+    {!bare && <Footer />}
   </body>
 </html>

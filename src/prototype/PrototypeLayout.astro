@@ -1,0 +1,80 @@
+---
+// Layout semua halaman /prototype. Navbar dan footer situs tidak dipakai; sebagai gantinya ada dua bar alat yang selalu terlihat:
+// - bar atas (sticky): hanya combo box pilihan (variasi, tone, artikel, ...) dari prop `controls` (lihat ./controls.ts).
+//   Halaman tanpa `controls` tidak punya bar atas.
+// - bar bawah (fixed): hanya tombol kembali ke daftar /prototype (tidak ada di halaman daftar itu sendiri)
+// Kedua bar putih polos (bg-background) dengan garis tipis pemisah. `title` hanya dipakai untuk judul tab browser.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { Control } from "./controls";
+
+interface Props {
+  title: string;
+  controls?: Control[];
+}
+
+const { title, controls = [] } = Astro.props;
+const isIndex = Astro.url.pathname.replace(/\/$/, "") === "/prototype";
+---
+
+<BaseLayout title={`Prototype · ${title}`} bare>
+  {
+    controls.length > 0 && (
+      <header class="sticky top-0 z-50 border-b border-border bg-background">
+        <form method="get" class="flex min-h-12 flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 md:px-8" data-prototype-controls>
+          {/* Panah dropdown bawaan browser diganti ikon sendiri (appearance-none + pr-8), supaya teks panjang
+              terpotong dengan "…" sebelum panah, tidak menabraknya. Lebar maksimum 18rem, di HP selebar layar. */}
+          {controls.map((c) => (
+            <span class="relative w-full min-w-0 sm:w-auto sm:max-w-72">
+              <select
+                name={c.name}
+                aria-label={c.label}
+                title={c.options.find((o) => o.value === c.value)?.label ?? c.label}
+                class="w-full cursor-pointer appearance-none truncate rounded-sm border border-border bg-background py-1 pr-8 pl-2 text-small hover:border-primary focus:border-primary"
+              >
+                {c.options.map((o) => (
+                  <option value={o.value} selected={o.value === c.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+              <svg class="pointer-events-none absolute top-1/2 right-2.5 size-3.5 -translate-y-1/2" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.75" />
+              </svg>
+            </span>
+          ))}
+          <noscript>
+            <button class="rounded-sm border border-border px-2 py-1 text-small">Terapkan</button>
+          </noscript>
+        </form>
+      </header>
+    )
+  }
+
+  <slot />
+
+  {
+    !isIndex && (
+      <>
+        <!-- Ruang untuk bar bawah (fixed), supaya ujung section terakhir tidak tertutup -->
+        <div class="h-12" aria-hidden="true" />
+        <footer class="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background">
+          <div class="flex h-12 items-center px-4 md:px-8">
+            <a href="/prototype" class="flex items-center gap-2 text-small font-semibold transition-colors duration-300 hover:text-primary">
+              <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M16 10H4m5-5-5 5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" />
+              </svg>
+              Daftar prototype
+            </a>
+          </div>
+        </footer>
+      </>
+    )
+  }
+</BaseLayout>
+
+<script>
+  // Ganti pilihan → halaman langsung dimuat ulang dengan pilihan baru di URL.
+  for (const select of document.querySelectorAll<HTMLSelectElement>("[data-prototype-controls] select")) {
+    select.addEventListener("change", () => select.form?.submit());
+  }
+</script>

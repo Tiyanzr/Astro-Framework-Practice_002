@@ -1,0 +1,17 @@
+---
+// PostArticle_001: satu kolom sempit (max-w-3xl) di tengah. Kepala → isi → tag. Tanpa cover, daftar isi, dan artikel terkait.
+import PostBody from "./blocks/PostBody.astro";
+import PostHeader from "./blocks/PostHeader.astro";
+import PostTags from "./blocks/PostTags.astro";
+import type { PostProps } from "./types";
+
+type Props = PostProps;
+
+const { data, Content, labels } = Astro.props;
+---
+
+<article class="section-y mx-auto max-w-3xl px-(--page-gutter)">
+  <PostHeader data={data} labels={labels} />
+  <PostBody Content={Content} class="mt-10" />
+  <PostTags data={data} labels={labels} class="mt-16" />
+</article>

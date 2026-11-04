@@ -1,0 +1,25 @@
+---
+// Gambar sampul artikel (frontmatter `cover`). Tidak tampil kalau artikel tidak punya cover.
+import { Image } from "astro:assets";
+import type { PostData } from "../types";
+
+interface Props {
+  data: PostData;
+  class?: string;
+}
+
+const { data, class: className } = Astro.props;
+---
+
+{
+  data.cover && (
+    <Image
+      src={data.cover}
+      alt={data.coverAlt ?? ""}
+      widths={[640, 1024, 1600]}
+      sizes="(min-width: 80rem) 80rem, 100vw"
+      class:list={["w-full object-cover", className]}
+      loading="eager"
+    />
+  )
+}

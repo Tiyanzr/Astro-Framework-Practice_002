@@ -32,3 +32,16 @@ footer:
       href: "#"
     - platform: linkedin
       href: "#"
+
+# Halaman artikel (/posts/<slug>/)
+post:
+  # Nama file variasi di src/components/sections/post/. Satu artikel boleh menimpanya lewat `variant:` di frontmatter.
+  variant: PostArticle_001
+  # Teks kecil di halaman artikel
+  labels:
+    author: Penulis
+    published: Terbit
+    updated: Diperbarui
+    tags: Tag
+    toc: Daftar isi
+    related: Artikel terkait

@@ -163,6 +163,8 @@ const front = [
   `tags: ${yaml((meta.tags ?? "").split(",").map((t) => t.trim()).filter(Boolean))}`,
   images[0] && `cover: ./${images[0].name}`,
   images[0] && `coverAlt: ${yaml(images[0].alt)}`,
+  "# Belum tayang: hapus baris di bawah ini setelah dicek di `astro dev`.",
+  "draft: true",
   "---",
 ]
   .filter(Boolean)
@@ -172,5 +174,5 @@ fs.writeFileSync(path.join(dest, "index.md"), `${front}\n\n${md}\n`);
 
 console.log(`✓ ${title}`);
 console.log(`  → ${dest}${path.sep}index.md (${images.length} gambar)`);
-console.log(`  URL: /posts/${slug}/`);
+console.log(`  URL: /posts/${slug}/ (draft: hanya tampil di astro dev sampai baris draft dihapus)`);
 for (const w of warnings) console.log(`  ! ${w}`);

@@ -1,0 +1,37 @@
+---
+// Kepala artikel: kategori, judul, deskripsi, lalu penulis + tanggal. Garis bawah bisa dimatikan lewat `divider={false}`.
+import type { PostData, PostLabels } from "../types";
+import { formatDate, updatedDate } from "./format";
+
+interface Props {
+  data: PostData;
+  labels: PostLabels;
+  divider?: boolean;
+  class?: string;
+}
+
+const { data, labels, divider = true, class: className } = Astro.props;
+const { category, title, description, author, pubDate } = data;
+const updated = updatedDate(pubDate, data.updatedDate);
+const meta = [
+  { label: labels.author, value: author },
+  { label: labels.published, value: formatDate(pubDate), datetime: pubDate.toISOString() },
+  ...(updated ? [{ label: labels.updated, value: formatDate(updated), datetime: updated.toISOString() }] : []),
+];
+---
+
+<header class:list={[divider && "border-b border-border pb-10", className]}>
+  {category && <p class="font-mono text-eyebrow text-primary uppercase">{category}</p>}
+  <h1 class="mt-4 text-h1 text-balance">{title}</h1>
+  <p class="mt-5 text-lead text-muted-foreground">{description}</p>
+  <dl class="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-small">
+    {
+      meta.map((item) => (
+        <div>
+          <dt class="font-mono text-eyebrow text-muted-foreground uppercase">{item.label}</dt>
+          <dd class="mt-1">{item.datetime ? <time datetime={item.datetime}>{item.value}</time> : item.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</header>
