@@ -6,15 +6,17 @@ interface Props {
   id: string;
   /** Judul video, dibacakan screen reader dan dipakai sebagai judul iframe. */
   title: string;
+  /** Sudut tegas tanpa pembulatan (dipakai variasi tanpa pembatas, mis. IntroMedia_002). */
+  square?: boolean;
   class?: string;
 }
 
-const { id, title, class: className } = Astro.props;
+const { id, title, square = false, class: className } = Astro.props;
 const thumbnail = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 ---
 
 <div
-  class:list={["relative aspect-video overflow-hidden rounded-lg bg-midnight", className]}
+  class:list={["relative aspect-video overflow-hidden bg-midnight", !square && "rounded-lg", className]}
   data-youtube={id}
   data-youtube-title={title}
 >
