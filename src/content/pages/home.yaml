@@ -26,11 +26,11 @@ intro:
 
     Sebagai integrator terbuka, kami menyesuaikan solusi dengan peralatan yang sudah Anda miliki, bukan sebaliknya.
   highlight: Satu mitra untuk seluruh rantai otomasi, dari sensor sampai laporan produksi.
-  # Media di samping teks: video YouTube atau gambar.
-  #   YouTube: id = bagian setelah `v=` di link video
-  #   Gambar:  type: image · src: ./intro.jpg (taruh di folder ini) · alt: deskripsi foto
+  # Media di samping teks: video YouTube, gambar, atau placeholder.
+  #   YouTube:     type: youtube · id: bagian setelah `v=` di link video · title: judul video
+  #   Gambar:      type: image · src: ./intro.jpg (taruh di folder ini) · alt: deskripsi foto
+  #   Placeholder: type: placeholder · label: teks kecil di tengah kotak
+  # TODO: ganti dengan video Parametrik kalau sudah ada (type: youtube).
   media:
-    type: youtube
-    # TODO: ganti dengan video Parametrik. Sementara memakai video referensi dari fastems.com.
-    id: onHcd_bx_-o
-    title: Video profil perusahaan
+    type: placeholder
+    label: Video profil perusahaan

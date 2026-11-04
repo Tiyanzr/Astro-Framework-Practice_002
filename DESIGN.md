@@ -289,13 +289,17 @@ Isi di `src/content/pages/home.yaml` › `intro`:
 | `title` | ✅ | Judul (`h2`) |
 | `description` | | Paragraf pengantar. Pisahkan paragraf dengan satu baris kosong (pakai `description: \|` di YAML) |
 | `highlight` | | Satu kalimat penutup berukuran `text-h4` |
-| `media` | | `{ type: youtube, id, title }` atau `{ type: image, src, alt }` (`src` relatif dari file `.yaml`). Tanpa media: teks saja, satu kolom |
+| `media` | | `{ type: youtube, id, title }`, `{ type: image, src, alt }` (`src` relatif dari file `.yaml`), atau `{ type: placeholder, label? }`. Tanpa media: teks saja, satu kolom |
 
 **IntroMedia_001:** HP = teks di atas, media di bawah. Mulai `lg` = dua kolom sama lebar, rata tengah vertikal, jarak `gap-16`. Judul `text-h2`, paragraf `text-body` → `md:text-lead` warna `muted-foreground`, `highlight` `text-h4`. Media `aspect-video rounded-lg`.
 
 ### Video YouTube — `src/components/ui/YouTube.astro`
 
 **Facade:** awalnya hanya thumbnail (`i.ytimg.com/vi/<id>/hqdefault.jpg`) dan tombol play bulat `bg-primary`; iframe `youtube-nocookie.com` baru dimuat saat tombol diklik (langsung autoplay). Menghemat ratusan KB JavaScript YouTube di setiap kunjungan. Props: `id` (bagian setelah `v=` di link YouTube) dan `title` (dibacakan screen reader).
+
+### Placeholder media — `src/components/ui/MediaPlaceholder.astro`
+
+Kotak `aspect-video rounded-lg` bergaya sama dengan placeholder hero (midnight bergaris kotak 48px, `theme-dark`), ikon play bergaris dan `label` kecil `font-mono uppercase` di tengah. Dipakai selama video/gambar final belum ada, supaya layout tetap terlihat seperti versi final. Bukan tombol: tidak bisa diklik.
 
 ### Tombol — `src/components/ui/Button.astro`
 
@@ -427,3 +431,4 @@ Isi artikel ditampilkan dengan class `prose` yang warnanya diambil dari token (l
 - **2026-11-03 (revisi 13):** Footer dibuat dengan pola variasi seperti hero (`layout/footer/`, `FooterSimple_001`, referensi fastems.com). Isinya dari `site.yaml` › `footer`. Logo navbar dipisah menjadi `ui/Logo.astro` agar dipakai bersama footer; ikon sosial di `ui/SocialIcon.astro`.
 - **2026-11-03 (revisi 14):** Media sosial footer dipindah ke kolom kanan (seperti dhl.com) dengan judul `socialsTitle` ("Ikuti Kami") dari `site.yaml`.
 - **2026-11-04 (revisi 15):** Penamaan section **distandarkan** (lihat *Standar section dengan variasi*): setiap folder punya `variants.ts` (deteksi otomatis) dan memakai helper bersama `src/lib/variants.ts`; Hero dan Footer disesuaikan. Halaman preview dipindah ke `/preview/<nama>` (`preview_001` → `/preview/colors`, `preview_002` → `/preview/hero`, `preview_003` → `/preview/fonts`), ditambah `/preview/intro`, `/preview/footer`, dan daftar `/preview`. Ditambah pembungkus `ui/Section` (`tone`, `width`, `pulldown`, pola fastems.com), token `--gradient-soft`, section **Intro** (`IntroMedia_001`: teks + video, referensi fastems.com), dan `ui/YouTube` (facade). Hero diberi ruang bawah `md:pb-36` untuk pulldown.
+- **2026-11-04 (revisi 16):** Video Intro di beranda diganti **placeholder** (`media.type: placeholder`, komponen `ui/MediaPlaceholder`), tidak lagi memakai video fastems.com.
