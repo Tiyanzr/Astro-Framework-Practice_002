@@ -1,0 +1,22 @@
+---
+// /preview/footer: semua variasi footer berurutan dengan isi yang sama (src/content/site.yaml › footer), untuk dibandingkan.
+// File variasi baru di src/components/layout/footer/ otomatis ikut tampil. Footer asli situs tetap ada di dasar halaman.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import VariantLabel from "@/components/ui/VariantLabel.astro";
+import { footerVariants } from "@/components/layout/footer/variants";
+import { getSite } from "@/lib/content";
+
+const site = await getSite();
+const { variant: _active, ...footer } = site.footer;
+---
+
+<BaseLayout title="Preview · Footer">
+  {
+    Object.entries(footerVariants).map(([name, Variant]) => (
+      <div>
+        <VariantLabel name={name} />
+        <Variant siteName={site.name} {...footer} />
+      </div>
+    ))
+  }
+</BaseLayout>

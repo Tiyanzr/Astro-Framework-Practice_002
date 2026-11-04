@@ -1,0 +1,36 @@
+---
+// /preview: daftar semua halaman preview (perbandingan token dan variasi section). Hanya untuk prototyping.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const previews = [
+  { href: "/preview/colors", title: "Warna", description: "Palet, turunan, dan versi section gelap" },
+  { href: "/preview/fonts", title: "Font", description: "Kandidat font judul" },
+  { href: "/preview/hero", title: "Hero", description: "Semua variasi hero" },
+  { href: "/preview/intro", title: "Intro", description: "Semua variasi intro di keempat tone" },
+  { href: "/preview/footer", title: "Footer", description: "Semua variasi footer" },
+];
+---
+
+<BaseLayout title="Preview">
+  <section class="mx-auto max-w-3xl px-4 py-16 md:px-8 md:py-24">
+    <p class="font-mono text-eyebrow text-primary uppercase">Prototyping</p>
+    <h1 class="mt-4 text-h1">Preview</h1>
+    <ul class="mt-10 divide-y divide-border border-y border-border">
+      {
+        previews.map((preview) => (
+          <li>
+            <a href={preview.href} class="flex items-center gap-4 px-2 py-5 transition-colors duration-300 ease-out-quart hover:bg-background-alt md:px-3">
+              <span class="flex-1">
+                <span class="block text-h4 text-primary">{preview.title}</span>
+                <span class="mt-0.5 block text-small text-muted-foreground">{preview.description}</span>
+              </span>
+              <svg class="size-5 shrink-0 text-primary" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="m7.5 4 6 6-6 6" stroke="currentColor" stroke-width="1.5" />
+              </svg>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

@@ -1,17 +1,12 @@
 ---
-// Pintu masuk footer: variasi dipilih lewat `footer.variant` di src/content/site.yaml (= nama file tanpa .astro).
-// Semua file Footer<Gaya>_<NNN>.astro di folder ini terdeteksi otomatis — variasi baru cukup ditambah sebagai file.
+// Pintu masuk footer: variasi dipilih lewat `footer.variant` di src/content/site.yaml (= nama file tanpa .astro). Daftar variasi: ./variants.ts.
 import { getSite } from "@/lib/content";
-
-const files = import.meta.glob<{ default: any }>("./Footer*_*.astro", { eager: true });
-const variants = Object.fromEntries(Object.entries(files).map(([path, mod]) => [path.slice(2, -6), mod.default]));
+import { pickVariant } from "@/lib/variants";
+import { footerVariants } from "./variants";
 
 const site = await getSite();
 const { variant, ...footer } = site.footer;
-const Variant = variants[variant];
-if (!Variant) {
-  throw new Error(`Variasi footer "${variant}" tidak ada. Pilihan: ${Object.keys(variants).join(", ")}`);
-}
+const Variant = pickVariant(footerVariants, variant, "footer");
 ---
 
 <Variant siteName={site.name} {...footer} />

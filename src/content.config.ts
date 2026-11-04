@@ -2,6 +2,7 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { sectionTones, sectionWidths } from "./lib/section";
 
 // 1 postingan = 1 folder: src/content/posts/<slug>/index.md + gambar-gambarnya di folder yang sama.
 // URL postingan diambil dari nama folder: /posts/<slug>/
@@ -82,6 +83,27 @@ const pages = defineCollection({
         // Path relatif dari file .yaml, contoh: ./hero.jpg
         image: z.object({ src: image(), alt: z.string() }).optional(),
       }),
+      intro: z
+        .object({
+          variant: z.string().default("IntroMedia_001"),
+          // Pembungkus section (ui/Section.astro)
+          tone: z.enum(sectionTones).optional(),
+          width: z.enum(sectionWidths).optional(),
+          pulldown: z.boolean().optional(),
+          eyebrow: z.string().optional(),
+          title: z.string(),
+          // Pisahkan paragraf dengan satu baris kosong
+          description: z.string().optional(),
+          highlight: z.string().optional(),
+          media: z
+            .discriminatedUnion("type", [
+              z.object({ type: z.literal("youtube"), id: z.string(), title: z.string() }),
+              // Path relatif dari file .yaml, contoh: ./intro.jpg
+              z.object({ type: z.literal("image"), src: image(), alt: z.string() }),
+            ])
+            .optional(),
+        })
+        .optional(),
     }),
 });
 
