@@ -10,11 +10,24 @@ export async function getSite() {
   return entry.data;
 }
 
+export type PageData = CollectionEntry<"pages">["data"];
+/** Satu item di daftar `sections` sebuah halaman. */
+export type PageSection = PageData["sections"][number];
+export type SectionType = PageSection["type"];
+
 /** Isi satu halaman (src/content/pages/<id>.yaml). */
 export async function getPage(id: string) {
   const entry = await getEntry("pages", id);
   if (!entry) throw new Error(`src/content/pages/${id}.yaml tidak ditemukan.`);
   return entry.data;
+}
+
+/** Section pertama berjenis `type` di sebuah halaman (dipakai halaman /prototype sebagai isi contoh). */
+export async function getSection<T extends SectionType>(pageId: string, type: T) {
+  const page = await getPage(pageId);
+  const section = page.sections.find((s): s is Extract<PageSection, { type: T }> => s.type === type);
+  if (!section) throw new Error(`src/content/pages/${pageId}.yaml belum punya section \`type: ${type}\`.`);
+  return section;
 }
 
 /** Item menu utama (src/content/menu/*.yaml), urut sesuai `order`. */

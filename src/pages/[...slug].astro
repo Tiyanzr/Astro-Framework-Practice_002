@@ -1,0 +1,18 @@
+---
+// Semua halaman dari src/content/pages/*.yaml (nama file = URL): home.yaml → /, produk.yaml → /produk.
+// Halaman baru cukup dengan menambah file YAML; susunan section diatur oleh `sections` di file itu.
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Sections from "@/components/sections/Sections.astro";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+  return pages.map((page) => ({ params: { slug: page.id === "home" ? undefined : page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout title={page.data.title} description={page.data.description}>
+  <Sections sections={page.data.sections} />
+</BaseLayout>

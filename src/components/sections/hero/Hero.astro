@@ -8,8 +8,9 @@ interface Props extends HeroProps {
   variant?: string;
 }
 
-const { variant = "HeroImage_001", ...props } = Astro.props;
-const Variant = pickVariant(heroVariants, variant, "hero");
+// Saat build, variasi yang belum disetujui diganti HeroBasic_001 (tanpa desain), lihat lib/variants.ts.
+const { variant = "HeroBasic_001", ...props } = Astro.props;
+const Variant = pickVariant(heroVariants, variant, "hero", "HeroBasic_001");
 ---
 
 <Variant {...props} />

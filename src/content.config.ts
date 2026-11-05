@@ -57,7 +57,7 @@ const site = defineCollection({
     lang: z.string().default("id"),
     cta: link,
     footer: z.object({
-      variant: z.string().default("FooterSimple_001"),
+      variant: z.string().default("FooterBasic_001"),
       company: z.string(),
       address: z.array(z.string()).default([]),
       email: z.string().optional(),
@@ -72,7 +72,7 @@ const site = defineCollection({
         .default([]),
     }),
     post: z.object({
-      variant: z.string().default("PostArticle_001"),
+      variant: z.string().default("PostBasic_001"),
       labels: z.object({
         author: z.string(),
         published: z.string(),
@@ -85,45 +85,66 @@ const site = defineCollection({
   }),
 });
 
-// Isi halaman: 1 halaman = 1 file .yaml di src/content/pages/ (home.yaml = halaman utama).
+// Isi halaman: 1 halaman = 1 file .yaml di src/content/pages/. Nama file = URL:
+// home.yaml → /, produk.yaml → /produk, produk/plc.yaml → /produk/plc.
+// Susunan halaman = daftar `sections`, tampil berurutan dari atas ke bawah. Setiap item memilih jenis section lewat `type`.
+// Saat dev, halaman contoh di src/prototype/content/pages/ ikut terbaca; saat build tidak.
+// Menambah JENIS section baru: tambahkan skemanya di bawah (dengan `type` sendiri), lalu daftarkan
+// komponennya di src/components/sections/Sections.astro.
+const pagePatterns = ["content/pages/**/*.yaml", ...(import.meta.env.DEV ? ["prototype/content/pages/**/*.yaml"] : [])];
 const pages = defineCollection({
-  loader: glob({ pattern: "*.yaml", base: "./src/content/pages" }),
-  schema: ({ image }) =>
-    z.object({
-      hero: z.object({
-        variant: z.string().default("HeroImage_001"),
-        eyebrow: z.string().optional(),
-        title: z.string(),
-        description: z.string().optional(),
-        primaryAction: link.optional(),
-        secondaryAction: link.optional(),
-        // Path relatif dari file .yaml, contoh: ./hero.jpg
-        image: z.object({ src: image(), alt: z.string() }).optional(),
-      }),
-      intro: z
-        .object({
-          variant: z.string().default("IntroMedia_001"),
-          // Pembungkus section (ui/Section.astro)
-          tone: z.enum(sectionTones).optional(),
-          width: z.enum(sectionWidths).optional(),
-          pulldown: z.boolean().optional(),
-          eyebrow: z.string().optional(),
-          title: z.string(),
-          // Pisahkan paragraf dengan satu baris kosong
-          description: z.string().optional(),
-          highlight: z.string().optional(),
-          media: z
-            .discriminatedUnion("type", [
-              z.object({ type: z.literal("youtube"), id: z.string(), title: z.string() }),
-              // Path relatif dari file .yaml, contoh: ./intro.jpg
-              z.object({ type: z.literal("image"), src: image(), alt: z.string() }),
-              // Kotak 16:9 bergaris selama video/gambar final belum ada
-              z.object({ type: z.literal("placeholder"), label: z.string().optional() }),
-            ])
-            .optional(),
-        })
-        .optional(),
-    }),
+  loader: glob({
+    pattern: pagePatterns,
+    base: "./src",
+    generateId: ({ entry }) => entry.replace(/^(prototype\/)?content\/pages\//, "").replace(/\.yaml$/, ""),
+  }),
+  schema: ({ image }) => {
+    const media = z.discriminatedUnion("type", [
+      z.object({ type: z.literal("youtube"), id: z.string(), title: z.string() }),
+      // Path relatif dari file .yaml, contoh: ./intro.jpg
+      z.object({ type: z.literal("image"), src: image(), alt: z.string() }),
+      // Kotak 16:9 bergaris selama video/gambar final belum ada
+      z.object({ type: z.literal("placeholder"), label: z.string().optional() }),
+    ]);
+
+    const hero = z.object({
+      type: z.literal("hero"),
+      variant: z.string().default("HeroBasic_001"),
+      eyebrow: z.string().optional(),
+      title: z.string(),
+      description: z.string().optional(),
+      // Tombol, jumlah bebas. Yang pertama = tombol utama, sisanya tombol sekunder.
+      actions: z.array(link).default([]),
+      // Daftar link (HeroImage_002). Kosongkan untuk memakai item menu utama (src/content/menu/).
+      links: z.array(link.extend({ description: z.string().optional() })).optional(),
+      // xl = judul terbesar (beranda), default = lebih kecil untuk halaman lain
+      size: z.enum(["xl", "default"]).optional(),
+      // Path relatif dari file .yaml, contoh: ./hero.jpg
+      image: z.object({ src: image(), alt: z.string() }).optional(),
+    });
+
+    const intro = z.object({
+      type: z.literal("intro"),
+      variant: z.string().default("IntroBasic_001"),
+      // Pembungkus section (ui/Section.astro)
+      tone: z.enum(sectionTones).optional(),
+      width: z.enum(sectionWidths).optional(),
+      pulldown: z.boolean().optional(),
+      eyebrow: z.string().optional(),
+      title: z.string(),
+      // Pisahkan paragraf dengan satu baris kosong
+      description: z.string().optional(),
+      highlight: z.string().optional(),
+      media: media.optional(),
+    });
+
+    return z.object({
+      // Judul tab browser & SEO. Kosong = nama situs (site.yaml).
+      title: z.string().optional(),
+      description: z.string().optional(),
+      sections: z.array(z.discriminatedUnion("type", [hero, intro])).default([]),
+    });
+  },
 });
 
 export const collections = { posts, menu, site, pages };

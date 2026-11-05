@@ -1,0 +1,33 @@
+# Halaman contoh (hanya saat astro dev, tidak ikut build) → http://localhost:4321/contoh-halaman
+# Menunjukkan halaman kedua dengan susunan berbeda dari beranda: hero dengan 3 tombol, lalu dua intro dengan tone berbeda.
+# Salin file ini ke src/content/pages/<nama>.yaml untuk membuat halaman sungguhan.
+
+title: Contoh halaman
+description: Halaman contoh untuk menguji susunan section dari YAML.
+
+sections:
+  - type: hero
+    variant: HeroImage_001
+    size: default
+    eyebrow: Contoh
+    title: Halaman kedua dengan susunan sendiri.
+    description: Hero yang sama dengan beranda bisa dipakai di sini dengan isi dan jumlah tombol yang berbeda.
+    actions:
+      - { label: Tombol utama, href: "#" }
+      - { label: Tombol kedua, href: "#" }
+      - { label: Tombol ketiga, href: "#" }
+
+  - type: intro
+    variant: IntroMedia_001
+    tone: alt
+    title: Intro pertama, tone alt.
+    description: Section boleh dipakai lebih dari sekali dalam satu halaman.
+
+  - type: intro
+    variant: IntroMedia_002
+    tone: green
+    title: Intro kedua, tone green.
+    highlight: Urutan section mengikuti urutan di file YAML.
+    media:
+      type: placeholder
+      label: Gambar contoh

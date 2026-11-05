@@ -1,12 +1,12 @@
 ---
 // HeroImage_001: foto penuh selebar layar, gradasi gelap dari bawah, teks putih di kiri bawah.
 import Button from "@/components/ui/Button.astro";
-import HeroBackground from "./HeroBackground.astro";
-import type { HeroProps } from "./types";
+import HeroBackground from "@/components/sections/hero/HeroBackground.astro";
+import type { HeroProps } from "@/components/sections/hero/types";
 
 type Props = HeroProps;
 
-const { eyebrow, title, description, primaryAction, secondaryAction, image, size = "xl" } = Astro.props;
+const { eyebrow, title, description, actions = [], image, size = "xl" } = Astro.props;
 ---
 
 <!-- theme-dark: teks, tombol, dan garis memakai token versi gelap di atas foto -->
@@ -27,18 +27,14 @@ const { eyebrow, title, description, primaryAction, secondaryAction, image, size
       <h1 class:list={["text-balance text-white", size === "xl" ? "text-display-xl" : "text-display", eyebrow && "mt-4"]}>{title}</h1>
       {description && <p class="mt-6 max-w-2xl text-lead text-white/80">{description}</p>}
       {
-        (primaryAction || secondaryAction) && (
+        actions.length > 0 && (
           <div class="mt-10 flex flex-wrap gap-3">
-            {primaryAction && (
-              <Button href={primaryAction.href} size="lg">
-                {primaryAction.label}
+            {/* Tombol pertama = utama, sisanya sekunder. Jumlahnya mengikuti `actions` di YAML halaman. */}
+            {actions.map((action, i) => (
+              <Button href={action.href} variant={i === 0 ? "primary" : "secondary"} size="lg">
+                {action.label}
               </Button>
-            )}
-            {secondaryAction && (
-              <Button href={secondaryAction.href} variant="secondary" size="lg">
-                {secondaryAction.label}
-              </Button>
-            )}
+            ))}
           </div>
         )
       }
