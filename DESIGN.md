@@ -223,6 +223,33 @@ src/components/layout/footer/
 
 ## Section
 
+### Susunan halaman — `src/content/pages/*.yaml`
+
+Setiap halaman = 1 file YAML, dan **nama file = URL** (`home.yaml` → `/`, `produk.yaml` → `/produk`, `produk/plc.yaml` → `/produk/plc`). Satu rute `src/pages/[...slug].astro` membuat semua halaman ini otomatis, jadi **halaman baru cukup dengan menambah file YAML**, tanpa file `.astro` baru.
+
+Isi halaman adalah daftar **`sections`** yang tampil berurutan dari atas ke bawah. Setiap item memilih jenis section lewat `type`, lalu variasinya lewat `variant`:
+
+```yaml
+title: Produk                    # opsional: judul tab, kosong = nama situs
+description: ...                 # opsional: deskripsi SEO
+sections:
+  - type: hero
+    variant: HeroImage_001
+    title: Produk kami
+    actions:                     # jumlah tombol bebas, per halaman
+      - { label: Minta Penawaran, href: /kontak }
+  - type: intro
+    variant: IntroMedia_001
+    tone: alt
+    title: ...
+```
+
+- **Tukar urutan** = pindahkan bloknya. **Section yang sama boleh dipakai lebih dari sekali.**
+- **Isi selalu per halaman.** Variasi yang sama di dua halaman bisa punya isi dan jumlah tombol berbeda.
+- `src/components/sections/Sections.astro` memetakan `type` ke pintu masuk section (`hero` → `Hero.astro`, `intro` → `Intro.astro`).
+- **Jenis section baru** (mis. `layanan`): tambahkan skemanya di `src/content.config.ts` (`pages` › `sections`, dengan `type: z.literal("layanan")`), lalu daftarkan pintu masuknya di `components` pada `Sections.astro`.
+- Contoh halaman kedua (hanya dev): `src/prototype/content/pages/contoh-halaman.yaml` → `/contoh-halaman` (hero 3 tombol + dua intro dengan tone berbeda). Halaman di folder itu tidak ikut build.
+
 ### Standar section dengan variasi
 
 Semua section yang punya variasi (hero, intro, footer, dan section berikutnya) memakai susunan yang sama:
@@ -239,7 +266,7 @@ src/components/sections/<nama>/        (footer: src/components/layout/footer/)
 |---|---|
 | Nama folder | huruf kecil: `hero`, `intro`, `footer` |
 | Nama variasi | `<Nama><Gaya>_<NNN>`. Gaya = bentuk dasarnya (`Image` = foto penuh, `Media` = teks + video/gambar, `Simple`); nomor 3 digit mulai `_001`. Gaya baru = nama gaya baru, mulai lagi dari `_001` |
-| Isi | dari `src/content/pages/<halaman>.yaml` › `<nama>` (footer: `site.yaml` › `footer`), selalu dengan kolom `variant` |
+| Isi | item di `sections` pada `src/content/pages/<halaman>.yaml` dengan `type: <nama>` (footer: `site.yaml` › `footer`), selalu dengan kolom `variant` |
 | Perbandingan | `/prototype/<nama>`: semua variasi (produksi + kandidat) tampil berurutan dengan isi yang sama. Daftar semua halaman prototype di `/prototype` |
 | Kandidat | variasi yang belum disetujui ditaruh di `src/prototype/variants/<nama>/`, bukan di folder section (lihat [Produksi vs prototype](#produksi-vs-prototype)) |
 | Helper | `src/lib/variants.ts`: `collectVariants()` (dipakai `variants.ts`) dan `pickVariant()` (dipakai pintu masuk, pesan error menyebut pilihan yang ada) |
@@ -276,7 +303,7 @@ src/components/sections/hero/
 
 **Penamaan:** `Hero<Gaya>_<NNN>`. Gaya = bentuk dasarnya (`Image` = foto penuh selebar layar); nomor = variasi dari gaya itu. Gaya baru (mis. teks kiri, gambar kanan) memakai nama gaya baru, mulai dari `_001`.
 
-**Ganti variasi:** ubah `hero.variant` di `src/content/pages/home.yaml`. Semua variasi bisa dibandingkan di `/prototype/hero` dengan isi yang sama; **menambah variasi = menambah file** `Hero<Gaya>_<NNN>.astro`, dan otomatis ikut tampil di sana. Setelah ada yang terpilih, cukup hapus file variasi yang tidak dipakai.
+**Ganti variasi:** ubah `variant` pada item `type: hero` di YAML halaman (mis. `src/content/pages/home.yaml`). Semua variasi bisa dibandingkan di `/prototype/hero` dengan isi yang sama; **menambah variasi = menambah file** `Hero<Gaya>_<NNN>.astro`, dan otomatis ikut tampil di sana. Setelah ada yang terpilih, cukup hapus file variasi yang tidak dipakai.
 
 | Prop | Wajib | Keterangan |
 |---|---|---|
@@ -284,10 +311,10 @@ src/components/sections/hero/
 | `title` | ✅ | Judul (`h1`) |
 | `eyebrow` | | Label kecil di atas judul (HeroImage_001) |
 | `description` | | Paragraf pembuka |
-| `primaryAction` / `secondaryAction` | | `{ label, href }` → tombol (HeroImage_001) |
+| `actions` | | Daftar tombol `{ label, href }`, **jumlah bebas**; yang pertama = tombol utama, sisanya sekunder (HeroImage_001) |
 | `image` | | `{ src, alt }` (import dari `src/assets/hero/`). **Tanpa gambar = placeholder** midnight bergaris kotak 48px |
 | `size` | | `"xl"` (default, halaman utama) atau `"default"` (halaman lain, lebih pendek) |
-| `links` | | Daftar link HeroImage_002. **Kosongkan** agar otomatis memakai item menu dari `src/content/menu/` |
+| `links` | | Daftar link HeroImage_002 `{ label, href, description? }`, **per halaman**. **Kosongkan** agar otomatis memakai item menu dari `src/content/menu/` |
 
 **HeroImage_001:** gradasi `black/85` → transparan dari bawah, `theme-dark` (tombol lime), tinggi min. 520px / 640px.
 
@@ -308,7 +335,7 @@ src/components/sections/intro/
 └── IntroMedia_002.astro   ← tanpa pembatas: judul besar di atas, teks + media di bawah (width bawaan full)
 ```
 
-Isi di `src/content/pages/home.yaml` › `intro`:
+Isi = item `type: intro` di `sections` pada YAML halaman (mis. `src/content/pages/home.yaml`):
 
 | Prop | Wajib | Keterangan |
 |---|---|---|
@@ -342,9 +369,10 @@ src/components/sections/post/
 │   ├── PostToc.astro       ← daftar isi dari judul ## (dan ###), menandai judul yang sedang dibaca
 │   ├── PostTags.astro      ← tag
 │   └── PostRelated.astro   ← kartu artikel terkait
-└── PostArticle_001.astro   ← satu kolom sempit (tampilan awal)
+└── PostBasic_001.astro     ← PRODUKSI: bare minimum, HTML polos tanpa desain
 
 src/prototype/variants/post/
+├── PostArticle_001.astro   ← KANDIDAT: satu kolom sempit
 └── PostArticle_002.astro   ← KANDIDAT: kepala lebar + cover, sidebar daftar isi sticky, artikel terkait
 ```
 
@@ -402,7 +430,7 @@ Tujuannya: menambah konten = menambah file, tanpa mengubah kode komponen. Pola i
 src/
 ├── content/                    ← SEMUA kalimat & konten ada di sini (tidak ada teks di kode)
 │   ├── site.yaml               ← nama situs, deskripsi, URL, bahasa, tombol CTA navbar, isi footer
-│   ├── pages/home.yaml         ← isi halaman utama (hero, intro: masing-masing dengan variant); 1 halaman = 1 file
+│   ├── pages/*.yaml            ← 1 halaman = 1 file, nama file = URL (home.yaml = /); isinya daftar `sections`
 │   ├── menu/*.yaml             ← 1 item menu = 1 file (title, description, href, order)
 │   └── posts/<slug>/           ← 1 postingan = 1 folder: index.md + gambar-gambarnya
 ├── content.config.ts           ← skema setiap koleksi konten
@@ -412,20 +440,39 @@ src/
 ├── layouts/BaseLayout.astro    ← <head>, tema, Navbar, <main><slot/></main>
 ├── components/
 │   ├── layout/Navbar.astro     ← bagian yang muncul di semua halaman
-│   ├── layout/footer/          ← Footer.astro + variants.ts + FooterSimple_001, ... (standar section dengan variasi)
-│   ├── sections/hero/          ← 1 folder per section yang punya variasi (Hero.astro + variants.ts + HeroImage_001, _002, ...)
-│   ├── sections/intro/         ← Intro.astro + variants.ts + IntroMedia_001, ...
-│   ├── sections/post/          ← Post.astro + variants.ts + blocks/ + PostArticle_001 (halaman artikel)
+│   ├── layout/footer/          ← Footer.astro + variants.ts + FooterBasic_001 (standar section dengan variasi)
+│   ├── sections/hero/          ← 1 folder per section yang punya variasi (Hero.astro + variants.ts + HeroBasic_001)
+│   ├── sections/intro/         ← Intro.astro + variants.ts + IntroBasic_001
+│   ├── sections/Sections.astro ← menampilkan daftar `sections` halaman (type → pintu masuk section)
+│   ├── sections/post/          ← Post.astro + variants.ts + blocks/ + PostBasic_001 (halaman artikel)
 │   └── ui/                     ← komponen kecil: Button, Logo, SocialIcon, Section (pembungkus), YouTube, MediaPlaceholder; shadcn juga menaruh komponennya di sini
 ├── assets/                     ← gambar yang dioptimasi lewat astro:assets
 ├── styles/global.css           ← semua token desain
 ├── pages/                      ← rute PRODUKSI; isinya hanya menyusun section di dalam BaseLayout
-│   ├── index.astro
+│   ├── [...slug].astro         ← SEMUA halaman dari content/pages/*.yaml (susunan section dari YAML)
 │   └── posts/[id].astro        ← halaman otomatis untuk setiap folder di content/posts
 └── prototype/                  ← PROTOTYPE: hanya saat `astro dev`, tidak pernah ikut build (lihat Produksi vs prototype)
 ```
 
 ## Produksi vs prototype
+
+> **Status saat ini (2026-11-05): belum ada desain resmi dari atasan.** Semua desain (HeroImage_001/_002, IntroMedia_001/_002, FooterSimple_001, PostArticle_001/_002) berstatus **kandidat** di `src/prototype/variants/`. Produksi hanya berisi versi **Basic**, jadi fokusnya fungsionalitas arsitektur, bukan tampilan.
+
+### Versi Basic (bare minimum)
+
+Setiap section punya satu variasi `<Nama>Basic_001` di folder produksinya: HTML polos (judul, paragraf, daftar link, gambar), **tanpa warna dan tanpa desain**, hanya `container-page` + `section-y` supaya tidak menempel ke tepi. Gunanya membuktikan bahwa semua data dari YAML/Markdown sampai ke halaman.
+
+| Section | Basic | Menampilkan |
+|---|---|---|
+| hero | `HeroBasic_001` | eyebrow, judul, deskripsi, `actions`, `links` (atau menu), gambar |
+| intro | `IntroBasic_001` | eyebrow, judul, paragraf, highlight, media (link YouTube / gambar / teks placeholder) |
+| footer | `FooterBasic_001` | nama situs, alamat, email, link sosial, copyright |
+| post | `PostBasic_001` | kepala, cover, daftar isi, isi Markdown (tanpa `.prose`), tag, artikel terkait |
+
+- **Saat dev:** halaman memakai variasi yang ditulis di YAML (boleh kandidat), jadi desain bisa dilihat di beranda maupun `/prototype/<section>`.
+- **Saat build:** variasi kandidat diganti otomatis dengan Basic-nya, termasuk pengaturan desain pembungkus (`tone`, `width`, `pulldown` diabaikan). YAML tidak perlu diubah: begitu desain disetujui dan dipindah ke folder produksi, build langsung memakainya.
+- Bawaan `variant` di skema (kalau tidak diisi) = Basic.
+- Navbar belum memakai sistem variasi, jadi masih tampil dengan desainnya sekarang.
 
 Project dibagi dua wilayah yang tidak bercampur. **Produksi** = semua yang tayang di web. **Prototype** = tempat mencoba dan menilai; isinya hanya hidup saat `astro dev` dan **tidak pernah ikut `astro build`** (diatur `src/prototype/integration.mjs`, didaftarkan di `astro.config.mjs`).
 
@@ -456,7 +503,7 @@ src/prototype/
 | Variasi ditolak | Hapus filenya dari `src/prototype/variants/` |
 | Menerbitkan artikel | `npm run import:notion -- "<folder>"` → masuk `src/content/posts/<slug>/` dengan `draft: true` (tampil saat dev saja). Setelah dicek, hapus baris `draft` lalu build |
 
-**Pengaman:** kalau YAML produksi menunjuk variasi yang masih kandidat, `astro build` gagal dengan pesan *"… pindahkan dulu ke folder section produksi"*. Nama variasi yang sama tidak boleh ada di produksi dan prototype sekaligus. Hasil `dist/` hanya berisi halaman produksi dan artikel yang bukan draft.
+**Pengaman:** kalau YAML produksi menunjuk variasi yang masih kandidat, `astro build` **memakai versi Basic** section itu (lihat di bawah) dan menulis peringatan di log: *"[hero] variasi "HeroImage_002" belum disetujui … → build memakai HeroBasic_001"*. Tanpa versi Basic, build gagal dengan pesan *"… pindahkan dulu ke folder section produksi"*. Nama variasi yang sama tidak boleh ada di produksi dan prototype sekaligus. Hasil `dist/` hanya berisi halaman produksi dan artikel yang bukan draft.
 
 Catatan: Tailwind memindai semua file di `src/`, jadi class yang hanya dipakai di prototype tetap ikut di CSS produksi (ukurannya kecil, tidak memengaruhi tampilan).
 
@@ -482,7 +529,7 @@ Catatan: Tailwind memindai semua file di `src/`, jadi class yang hanya dipakai d
 |---|---|---|
 | `posts` | `src/content/posts/<slug>/index.md` | `title`, `description`, `pubDate`, `updatedDate?`, `author`, `category?`, `tags`, `cover?` (path relatif), `coverAlt?`, `draft` (default false), `variant?` |
 | `site` | `src/content/site.yaml` | `name`, `description`, `url`, `lang`, `cta` (`label`, `href`), `footer` (lihat bagian Footer), `post` (`variant`, `labels`, lihat bagian Artikel) |
-| `pages` | `src/content/pages/<id>.yaml` | `hero` (`variant`, `title`, `eyebrow?`, `description?`, `primaryAction?`, `secondaryAction?`, `image?` = `src` relatif + `alt`) · `intro?` (`variant`, `tone?`, `width?`, `pulldown?`, `eyebrow?`, `title`, `description?`, `highlight?`, `media?`) |
+| `pages` | `src/content/pages/**/*.yaml` (dev: + `src/prototype/content/pages/`) | `title?`, `description?`, `sections[]`: `type: hero` (`variant`, `title`, `eyebrow?`, `description?`, `actions[]`, `links?`, `size?`, `image?` = `src` relatif + `alt`) · `type: intro` (`variant`, `tone?`, `width?`, `pulldown?`, `eyebrow?`, `title`, `description?`, `highlight?`, `media?`) |
 | `menu` | `src/content/menu/*.yaml` | `title`, `description?`, `href`, `order` — dipakai panel menu navbar & HeroImage_002 |
 | `services` (rencana) | `src/content/services/*.md` | — |
 | `projects` (rencana) | `src/content/projects/*.md` | — |
@@ -545,3 +592,5 @@ Isi artikel ditampilkan dengan class `prose` yang warnanya diambil dari token (l
 - **2026-11-04 (revisi 6):** Halaman `/prototype` kini memakai `PrototypeLayout` (`BaseLayout` dengan prop `bare`): tanpa navbar dan footer, supaya yang tampil murni section yang dicoba.
 - **2026-11-04 (revisi 7):** `PrototypeLayout` diberi **bar atas sticky** berisi combo box (variasi, tone, artikel, font; tersimpan di URL, opsi "Semua" untuk perbandingan berjajar) dan **bar bawah fixed** berisi tombol kembali ke `/prototype`. Halaman hero, intro, footer, post, dan fonts kini menampilkan satu pilihan (bawaan = yang dipakai situs), bukan selalu semua variasi.
 - **2026-11-04 (revisi 8):** Bar prototype dibuat **putih** (bukan theme-dark). Bar atas kini **hanya berisi combo box** (judul halaman dihapus; opsi menjelaskan dirinya sendiri: "Semua variasi", "Tone olive"), bar bawah hanya tombol kembali.
+- **2026-11-05:** **Susunan halaman pindah ke YAML.** `src/content/pages/*.yaml` kini berisi daftar `sections` (`type` + `variant` + isi), dirender `Sections.astro` lewat satu rute `src/pages/[...slug].astro` (nama file = URL; `index.astro` dihapus). Halaman baru = file YAML baru; urutan dan jumlah section bebas. Hero: `primaryAction`/`secondaryAction` diganti `actions` (jumlah bebas), `links` HeroImage_002 bisa diisi per halaman. Contoh halaman kedua di `src/prototype/content/pages/` (hanya dev).
+- **2026-11-05 (revisi 2):** Belum ada desain resmi, jadi **semua desain dikembalikan menjadi kandidat** di `src/prototype/variants/` (HeroImage_001/_002, IntroMedia_001/_002, FooterSimple_001, PostArticle_001). Produksi kini hanya berisi versi **Basic** tanpa desain (`HeroBasic_001`, `IntroBasic_001`, `FooterBasic_001`, `PostBasic_001`). `resolveVariant()` di `lib/variants.ts`: saat build, variasi kandidat otomatis diganti Basic (dengan peringatan di log) dan tone/width/pulldown diabaikan; saat dev desain kandidat tetap tampil.

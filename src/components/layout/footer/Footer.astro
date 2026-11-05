@@ -6,7 +6,8 @@ import { footerVariants } from "./variants";
 
 const site = await getSite();
 const { variant, ...footer } = site.footer;
-const Variant = pickVariant(footerVariants, variant, "footer");
+// Saat build, variasi yang belum disetujui diganti FooterBasic_001 (tanpa desain), lihat lib/variants.ts.
+const Variant = pickVariant(footerVariants, variant, "footer", "FooterBasic_001");
 ---
 
 <Variant siteName={site.name} {...footer} />

@@ -1,9 +1,10 @@
 ---
 // HeroImage_002: foto penuh selebar layar, kartu putih di kiri berisi judul + daftar link.
-// Daftar link otomatis diambil dari src/content/menu/*.yaml, jadi jumlah barisnya mengikuti jumlah file.
+// Daftar link: `links` di YAML halaman kalau diisi; kalau kosong, item menu utama (src/content/menu/*.yaml).
+// Jumlah barisnya mengikuti jumlah item.
 import { getMainLinks } from "@/lib/content";
-import HeroBackground from "./HeroBackground.astro";
-import type { HeroProps } from "./types";
+import HeroBackground from "@/components/sections/hero/HeroBackground.astro";
+import type { HeroProps } from "@/components/sections/hero/types";
 
 type Props = HeroProps;
 

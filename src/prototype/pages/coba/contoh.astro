@@ -4,9 +4,9 @@
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import Hero from "@/components/sections/hero/Hero.astro";
 import ContohSection from "@/prototype/sections/ContohSection.astro";
-import { getPage } from "@/lib/content";
+import { getSection } from "@/lib/content";
 
-const { hero } = await getPage("home");
+const { type: _type, ...hero } = await getSection("home", "hero");
 ---
 
 <PrototypeLayout title="Contoh">

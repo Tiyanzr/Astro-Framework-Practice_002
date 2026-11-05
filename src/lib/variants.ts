@@ -27,14 +27,33 @@ export function collectVariants<T>(modules: Modules<T>, section: string): Record
   return Object.fromEntries([...approved, ...candidates].sort(([a], [b]) => a.localeCompare(b)));
 }
 
-/** Ambil satu variasi. Kalau namanya salah, pesan error menyebut semua pilihan yang ada. */
-export function pickVariant<T>(variants: Record<string, T>, name: string, section: string): T {
-  const variant = variants[name];
-  if (!variant) {
-    throw new Error(
-      `Variasi ${section} "${name}" tidak ada. Pilihan: ${Object.keys(variants).join(", ")}. ` +
-        `Kalau variasi ini masih kandidat di src/prototype/variants/, pindahkan dulu ke folder section produksi.`,
-    );
+const warned = new Set<string>();
+
+/**
+ * Ambil satu variasi. Hasil: komponen + nama variasi yang benar-benar dipakai.
+ * - Saat dev: nama harus ada (produksi atau kandidat). Kalau salah, error menyebut semua pilihan.
+ * - Saat build: kandidat tidak ikut, jadi variasi yang belum disetujui diganti `fallback` (versi Basic, tanpa desain)
+ *   dan dicatat sebagai peringatan di log build. Tanpa fallback → error.
+ */
+export function resolveVariant<T>(variants: Record<string, T>, name: string, section: string, fallback?: string) {
+  if (variants[name]) return { Variant: variants[name], name, isFallback: false };
+  if (!import.meta.env.DEV && fallback && variants[fallback]) {
+    const key = `${section}:${name}`;
+    if (!warned.has(key)) {
+      warned.add(key);
+      console.warn(
+        `[${section}] variasi "${name}" belum disetujui (masih kandidat di src/prototype/variants/, atau salah ketik) → build memakai ${fallback}.`,
+      );
+    }
+    return { Variant: variants[fallback], name: fallback, isFallback: true };
   }
-  return variant;
+  throw new Error(
+    `Variasi ${section} "${name}" tidak ada. Pilihan: ${Object.keys(variants).join(", ")}. ` +
+      `Kalau variasi ini masih kandidat di src/prototype/variants/, pindahkan dulu ke folder section produksi.`,
+  );
+}
+
+/** Versi singkat resolveVariant() kalau hanya butuh komponennya. */
+export function pickVariant<T>(variants: Record<string, T>, name: string, section: string, fallback?: string): T {
+  return resolveVariant(variants, name, section, fallback).Variant;
 }

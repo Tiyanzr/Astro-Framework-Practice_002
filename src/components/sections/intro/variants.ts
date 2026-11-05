@@ -6,6 +6,7 @@ export const introVariants = collectVariants(import.meta.glob<{ default: any }>(
 
 /** Pengaturan pembungkus bawaan per variasi. Nilai di home.yaml (tone, width, pulldown) selalu menang. */
 export const introDefaults: Record<string, SectionSettings> = {
+  IntroBasic_001: { width: "full" },
   IntroMedia_001: { width: "contained" },
   IntroMedia_002: { width: "full" },
 };

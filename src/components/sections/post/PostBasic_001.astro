@@ -1,0 +1,58 @@
+---
+// PostBasic_001: versi bare minimum (tanpa desain). Hanya memastikan semua data artikel tampil dan berfungsi:
+// kepala, cover, isi Markdown, daftar isi, tag, dan artikel terkait.
+// Dipakai produksi selama belum ada desain artikel yang disetujui (kandidat desain: src/prototype/variants/post/).
+// Semua HTML polos, termasuk isi artikel (tanpa .prose). Gambar tetap tidak melebihi layar berkat gaya dasar Tailwind.
+import { Image } from "astro:assets";
+import { formatDate } from "./blocks/format";
+import type { PostProps } from "./types";
+
+type Props = PostProps;
+
+const { data, Content, headings, related, labels } = Astro.props;
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<article class="container-page section-y">
+  {data.category && <p>{data.category}</p>}
+  <h1>{data.title}</h1>
+  <p>{data.description}</p>
+  <p>
+    {labels.author}: {data.author} · {labels.published}: <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
+  </p>
+  {data.cover && <Image src={data.cover} alt={data.coverAlt ?? ""} widths={[640, 1280]} sizes="100vw" />}
+
+  {
+    toc.length > 0 && (
+      <nav aria-label={labels.toc}>
+        <p>{labels.toc}</p>
+        <ol>
+          {toc.map((h) => (
+            <li>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )
+  }
+
+  <Content />
+
+  {data.tags.length > 0 && <p>{labels.tags}: {data.tags.join(", ")}</p>}
+
+  {
+    related.length > 0 && (
+      <nav aria-label={labels.related}>
+        <p>{labels.related}</p>
+        <ul>
+          {related.map((post) => (
+            <li>
+              <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+</article>

@@ -1,0 +1,26 @@
+---
+// Menampilkan daftar `sections` dari YAML halaman, berurutan dari atas ke bawah.
+// Setiap item memilih komponen lewat `type`. Menambah JENIS section baru = tambah skemanya di
+// src/content.config.ts (pages › sections) lalu daftarkan pintu masuknya di `components` di bawah.
+import type { PageSection, SectionType } from "@/lib/content";
+import Hero from "./hero/Hero.astro";
+import Intro from "./intro/Intro.astro";
+
+const components: Record<SectionType, any> = {
+  hero: Hero,
+  intro: Intro,
+};
+
+interface Props {
+  sections: PageSection[];
+}
+
+const { sections } = Astro.props;
+---
+
+{
+  sections.map(({ type, ...props }) => {
+    const Component = components[type];
+    return <Component {...props} />;
+  })
+}

@@ -1,15 +1,15 @@
 ---
-// /prototype/hero: coba variasi hero dengan isi yang sama (src/content/pages/home.yaml).
+// /prototype/hero: coba variasi hero dengan isi yang sama (hero pertama di src/content/pages/home.yaml).
 // Pilih variasi di bar atas (?v=); "Semua" = semua variasi berjajar. Bawaan = variasi yang dipakai beranda.
 // Variasi produksi (src/components/sections/hero/) dan kandidat (src/prototype/variants/hero/) otomatis ikut.
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import Hero from "@/components/sections/hero/Hero.astro";
 import VariantLabel from "@/prototype/VariantLabel.astro";
 import { heroVariants } from "@/components/sections/hero/variants";
-import { getPage } from "@/lib/content";
+import { getSection } from "@/lib/content";
 import { allOption, control, selected, variantOptions } from "@/prototype/controls";
 
-const { hero } = await getPage("home");
+const { type: _type, ...hero } = await getSection("home", "hero");
 const variant = control(Astro.url, "v", "Variasi", [...variantOptions(Object.keys(heroVariants)), allOption], hero.variant);
 const shown = selected(variant);
 ---

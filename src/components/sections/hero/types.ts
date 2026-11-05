@@ -12,8 +12,8 @@ export interface HeroProps {
   eyebrow?: string;
   title: string;
   description?: string;
-  primaryAction?: HeroAction;
-  secondaryAction?: HeroAction;
+  /** Tombol, jumlah bebas. Yang pertama = tombol utama, sisanya tombol sekunder (HeroImage_001). */
+  actions?: HeroAction[];
   image?: { src: ImageMetadata; alt: string };
   /** Halaman utama memakai ukuran judul terbesar; halaman lain cukup `display` dan hero lebih pendek. */
   size?: "xl" | "default";

@@ -1,0 +1,42 @@
+---
+// HeroBasic_001: versi bare minimum (tanpa desain). Hanya memastikan semua isi hero dari YAML tampil dan berfungsi.
+// Dipakai produksi selama belum ada desain hero yang disetujui (kandidat desain: src/prototype/variants/hero/).
+import { Image } from "astro:assets";
+import { getMainLinks } from "@/lib/content";
+import type { HeroProps } from "./types";
+
+type Props = HeroProps;
+
+const { eyebrow, title, description, actions = [], image, links } = Astro.props;
+const items = links ?? (await getMainLinks());
+---
+
+<section class="container-page section-y">
+  {eyebrow && <p>{eyebrow}</p>}
+  <h1>{title}</h1>
+  {description && <p>{description}</p>}
+  {
+    actions.length > 0 && (
+      <ul>
+        {actions.map((action) => (
+          <li>
+            <a href={action.href}>{action.label}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    items.length > 0 && (
+      <ul>
+        {items.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+            {item.description && <> — {item.description}</>}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {image && <Image src={image.src} alt={image.alt} widths={[640, 1280]} sizes="100vw" />}
+</section>

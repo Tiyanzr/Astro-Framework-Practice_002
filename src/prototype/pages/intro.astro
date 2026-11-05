@@ -1,18 +1,16 @@
 ---
-// /prototype/intro: coba variasi intro dengan isi yang sama (src/content/pages/home.yaml).
+// /prototype/intro: coba variasi intro dengan isi yang sama (intro pertama di src/content/pages/home.yaml).
 // Bar atas: variasi (?v=) dan tone (?tone=). "Semua" = semua pilihan berjajar. Width mengikuti bawaan variasi, pulldown dimatikan.
 // Bawaan = variasi + tone yang dipakai beranda. Variasi produksi dan kandidat (src/prototype/variants/intro/) otomatis ikut.
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import Intro from "@/components/sections/intro/Intro.astro";
 import VariantLabel from "@/prototype/VariantLabel.astro";
 import { introDefaults, introVariants } from "@/components/sections/intro/variants";
-import { getPage } from "@/lib/content";
+import { getSection } from "@/lib/content";
 import { sectionTones } from "@/lib/section";
 import { allOption, control, selected, variantOptions } from "@/prototype/controls";
 
-const { intro } = await getPage("home");
-if (!intro) throw new Error("src/content/pages/home.yaml belum punya bagian `intro`.");
-const { variant: homeVariant, tone: homeTone, width: _width, pulldown: _pulldown, ...content } = intro;
+const { type: _type, variant: homeVariant, tone: homeTone, width: _width, pulldown: _pulldown, ...content } = await getSection("home", "intro");
 
 const variant = control(Astro.url, "v", "Variasi", [...variantOptions(Object.keys(introVariants)), allOption], homeVariant);
 const tone = control(Astro.url, "tone", "Tone", [...sectionTones.map((t) => ({ value: t, label: `Tone ${t}` })), allOption], homeTone ?? introDefaults[variant.value]?.tone ?? "default");
