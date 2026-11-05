@@ -7,7 +7,7 @@ import react from "@astrojs/react";
 
 import sitemap from "@astrojs/sitemap";
 
-// src/prototype/ (halaman /prototype, variasi kandidat, konten contoh) hanya aktif saat `astro dev`, tidak ikut build.
+// src/prototype/ (halaman /prototype dan konten contoh) hanya aktif saat `astro dev`, tidak ikut build.
 import prototype from "./src/prototype/integration.mjs";
 
 // https://astro.build/config

@@ -17,7 +17,7 @@ const site = await getSite();
 const { Content, headings } = await render(post);
 const related = await getRelatedPosts(post);
 // Saat build, variasi yang belum disetujui diganti PostBasic_001 (tanpa desain), lihat lib/variants.ts.
-const Variant = pickVariant(postVariants, variant ?? post.data.variant ?? site.post.variant, "post", "PostBasic_001");
+const Variant = await pickVariant(postVariants, variant ?? post.data.variant ?? site.post.variant, "post", "PostBasic_001");
 ---
 
 <Variant data={post.data} Content={Content} headings={headings} related={related} labels={site.post.labels} />

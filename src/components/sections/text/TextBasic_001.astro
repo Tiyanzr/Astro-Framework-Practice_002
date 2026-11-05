@@ -1,0 +1,12 @@
+---
+// TextBasic_001: versi bare minimum (tanpa desain). Judul section + paragraf.
+import BasicHeading from "../BasicHeading.astro";
+import type { TextProps } from "./types";
+
+type Props = TextProps;
+
+const { paragraphs, ...heading } = Astro.props;
+---
+
+<BasicHeading {...heading} />
+{paragraphs.map((p) => <p>{p}</p>)}

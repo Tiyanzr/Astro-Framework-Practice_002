@@ -1,6 +1,6 @@
 ---
 // /prototype/post: coba variasi artikel. Bar atas: variasi (?v=) dan artikel (?p=).
-// Variasi produksi (src/components/sections/post/) dan kandidat (src/prototype/variants/post/) otomatis ikut.
+// Semua variasi di src/components/sections/post/ otomatis ikut, diberi tanda status (src/content/variants.yaml).
 // Artikel: semua postingan, termasuk draft dan contoh di src/prototype/content/posts/ (bawaan: contoh-semua-elemen).
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import Post from "@/components/sections/post/Post.astro";
@@ -12,7 +12,7 @@ const site = await getSite();
 const posts = await getPosts();
 const shorten = (s: string) => (s.length > 60 ? `${s.slice(0, 57)}…` : s);
 
-const variant = control(Astro.url, "v", "Variasi", variantOptions(Object.keys(postVariants)), site.post.variant);
+const variant = control(Astro.url, "v", "Variasi", await variantOptions(Object.keys(postVariants), "post"), site.post.variant);
 const article = control(
   Astro.url,
   "p",

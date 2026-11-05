@@ -1,18 +1,18 @@
 ---
-// Navbar solid + menu pop-up. Isi menu dari src/content/menu/*.yaml, tombol CTA dari src/content/site.yaml.
+// NavbarPanel_001: navbar putih fixed + menu panel geser dari kanan. Isi dari Navbar.astro (menu + CTA).
 // data-state="open|closed" pada #site-menu mengatur semua animasi lewat group-data (lihat DESIGN.md › Navbar).
 import Logo from "@/components/ui/Logo.astro";
-import { getMainLinks, getSite } from "@/lib/content";
+import type { NavbarProps } from "@/components/layout/navbar/types";
 
-const site = await getSite();
-const ctaLink = site.cta;
-const mainLinks = await getMainLinks();
+type Props = NavbarProps;
+
+const { siteName, cta: ctaLink, links: mainLinks } = Astro.props;
 ---
 
 <div id="site-menu" class="group/menu" data-state="closed">
   <header class="fixed inset-x-0 top-0 z-50 border-b border-border bg-background">
     <div class="container-page flex h-16 items-center justify-between gap-6">
-      <Logo label={site.name} />
+      <Logo label={siteName} />
       <div class="flex items-center gap-2">
         <a
           href={ctaLink.href}
@@ -37,6 +37,8 @@ const mainLinks = await getMainLinks();
       </div>
     </div>
   </header>
+  <!-- Ruang setinggi navbar (fixed), supaya isi halaman tidak tertutup -->
+  <div class="h-16" aria-hidden="true"></div>
 
   <!-- Latar gelap di belakang panel -->
   <div
@@ -60,6 +62,7 @@ const mainLinks = await getMainLinks();
               <path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" />
             </svg>
           </a>
+          <!-- Sub-menu (children di src/content/menu/) sengaja tidak ditampilkan di panel ini: hanya judul utama. -->
         </li>
       ))}
     </ul>

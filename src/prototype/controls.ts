@@ -1,6 +1,6 @@
 // Pilihan (combo box) di bar atas halaman /prototype. Nilainya disimpan di URL (?v=..., ?tone=..., ?p=...),
 // jadi tautan bisa dibagikan dan tombol back browser tetap jalan.
-import { candidateNames } from "@/lib/variants";
+import { variantStatus, type VariantStatus } from "@/lib/variants";
 
 export type Option = { value: string; label: string };
 export type Control = { name: string; label: string; options: Option[]; value: string };
@@ -24,9 +24,12 @@ export function control(url: URL, name: string, label: string, options: (string 
   return { name, label, options: opts, value };
 }
 
-/** Opsi nama variasi; kandidat (src/prototype/variants/) diberi tanda. */
-export const variantOptions = (names: string[]): Option[] =>
-  names.map((n) => ({ value: n, label: candidateNames.has(n) ? `${n} · kandidat` : n }));
+/** Tanda status di belakang nama variasi (status dari src/content/variants.yaml). */
+export const statusLabel: Record<VariantStatus, string> = { basic: "basic", approved: "disetujui", draft: "draft" };
+
+/** Opsi nama variasi untuk combo box, diberi tanda status, mis. "HeroImage_002 · draft". */
+export const variantOptions = async (names: string[], section: string): Promise<Option[]> =>
+  Promise.all(names.map(async (n) => ({ value: n, label: `${n} · ${statusLabel[await variantStatus(section, n)]}` })));
 
 /** Daftar yang ditampilkan: semua opsi kalau "Semua" dipilih, kalau tidak hanya yang dipilih. */
 export const selected = (c: Control) => (c.value === ALL ? c.options.filter((o) => o.value !== ALL).map((o) => o.value) : [c.value]);

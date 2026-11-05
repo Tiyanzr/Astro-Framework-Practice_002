@@ -33,8 +33,8 @@ const posts = defineCollection({
     }),
 });
 
-// Menu utama: 1 item = 1 file .yaml di src/content/menu/. Dipakai panel menu navbar dan hero bergaya kartu menu.
-// Tambah item = tambah file; urutan diatur `order`.
+// Menu utama: 1 item = 1 file .yaml di src/content/menu/. Dipakai navbar dan hero bergaya kartu menu.
+// Tambah item = tambah file; urutan diatur `order`. Sub-menu: daftar `children` di file item induknya.
 const menu = defineCollection({
   loader: glob({ pattern: "*.yaml", base: "./src/content/menu" }),
   schema: z.object({
@@ -42,6 +42,28 @@ const menu = defineCollection({
     description: z.string().optional(),
     href: z.string(),
     order: z.number().default(0),
+    children: z.array(z.object({ title: z.string(), href: z.string() })).default([]),
+  }),
+});
+
+// Showcase produk: 1 kategori = 1 file .yaml di src/content/products/, berisi daftar produknya.
+// Tambah kategori = tambah file; tambah produk = tambah item di `items`. Urutan kategori diatur `order`.
+const products = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "./src/content/products" }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string().optional(),
+    order: z.number().default(0),
+    items: z
+      .array(
+        z.object({
+          name: z.string(),
+          description: z.string().optional(),
+          // Link ke halaman produk (boleh ke situs luar)
+          href: z.string().optional(),
+        }),
+      )
+      .default([]),
   }),
 });
 
@@ -56,6 +78,16 @@ const site = defineCollection({
     url: z.string(),
     lang: z.string().default("id"),
     cta: link,
+    // Kontak perusahaan: dipakai section `contact` (dan bisa dipakai footer).
+    contact: z.object({
+      email: z.string().optional(),
+      phone: z.string().optional(),
+      address: z.array(z.string()).default([]),
+      hours: z.string().optional(),
+    }),
+    navbar: z.object({
+      variant: z.string().default("NavbarBasic_001"),
+    }),
     footer: z.object({
       variant: z.string().default("FooterBasic_001"),
       company: z.string(),
@@ -123,6 +155,90 @@ const pages = defineCollection({
       image: z.object({ src: image(), alt: z.string() }).optional(),
     });
 
+    // Pembungkus section (ui/Section.astro), dipakai section yang dibungkus: intro, cards, catalog, posts, text, cta, contact.
+    const wrapper = {
+      tone: z.enum(sectionTones).optional(),
+      width: z.enum(sectionWidths).optional(),
+    };
+    // Judul + pengantar opsional di atas isi section.
+    const heading = {
+      eyebrow: z.string().optional(),
+      title: z.string().optional(),
+      description: z.string().optional(),
+    };
+
+    // Kartu: dari halaman anak (`from: iot` → semua file di pages/iot/, urut `order`) atau daftar manual `items`.
+    const cards = z.object({
+      type: z.literal("cards"),
+      variant: z.string().default("CardsBasic_001"),
+      ...wrapper,
+      ...heading,
+      from: z.string().optional(),
+      items: z.array(z.object({ title: z.string(), description: z.string().optional(), href: z.string().optional() })).default([]),
+    });
+
+    // Showcase produk dari koleksi `products`. `categories` = id file yang ditampilkan (kosong = semua);
+    // `limit` = jumlah produk per kategori (kosong = semua).
+    const catalog = z.object({
+      type: z.literal("catalog"),
+      variant: z.string().default("CatalogBasic_001"),
+      ...wrapper,
+      ...heading,
+      categories: z.array(z.string()).optional(),
+      limit: z.number().optional(),
+      more: link.optional(),
+    });
+
+    // Daftar artikel (terbaru di atas). `limit` kosong = semua, `category` = saring per kategori.
+    const posts = z.object({
+      type: z.literal("posts"),
+      variant: z.string().default("PostsBasic_001"),
+      ...wrapper,
+      ...heading,
+      limit: z.number().optional(),
+      category: z.string().optional(),
+      more: link.optional(),
+    });
+
+    // Teks bebas. `body` = paragraf, pisahkan dengan satu baris kosong.
+    const text = z.object({
+      type: z.literal("text"),
+      variant: z.string().default("TextBasic_001"),
+      ...wrapper,
+      ...heading,
+      body: z.string().optional(),
+    });
+
+    // Ajakan bertindak, biasanya di akhir halaman.
+    const cta = z.object({
+      type: z.literal("cta"),
+      variant: z.string().default("CtaBasic_001"),
+      ...wrapper,
+      ...heading,
+      actions: z.array(link).default([]),
+    });
+
+    // Info kontak (dari site.yaml › contact) + formulir. Label formulir ditulis di sini.
+    const contact = z.object({
+      type: z.literal("contact"),
+      variant: z.string().default("ContactBasic_001"),
+      ...wrapper,
+      ...heading,
+      form: z
+        .object({
+          fields: z.array(
+            z.object({
+              name: z.string(),
+              label: z.string(),
+              type: z.enum(["text", "email", "tel", "textarea"]).default("text"),
+              required: z.boolean().default(false),
+            }),
+          ),
+          submit: z.string(),
+        })
+        .optional(),
+    });
+
     const intro = z.object({
       type: z.literal("intro"),
       variant: z.string().default("IntroBasic_001"),
@@ -139,12 +255,24 @@ const pages = defineCollection({
     });
 
     return z.object({
-      // Judul tab browser & SEO. Kosong = nama situs (site.yaml).
+      // Judul tab browser & SEO. Kosong = nama situs (site.yaml). Juga dipakai sebagai judul kartu (section `cards` › from).
       title: z.string().optional(),
       description: z.string().optional(),
-      sections: z.array(z.discriminatedUnion("type", [hero, intro])).default([]),
+      // Ringkasan + urutan saat halaman ini tampil sebagai kartu di halaman induknya.
+      summary: z.string().optional(),
+      order: z.number().default(0),
+      sections: z.array(z.discriminatedUnion("type", [hero, intro, cards, catalog, posts, text, cta, contact])).default([]),
     });
   },
 });
 
-export const collections = { posts, menu, site, pages };
+// Status variasi: satu file src/content/variants.yaml berisi variasi yang sudah disetujui per section.
+// Variasi yang tidak tercantum = draft (lihat src/lib/variants.ts).
+const variants = defineCollection({
+  loader: glob({ pattern: "variants.yaml", base: "./src/content" }),
+  schema: z.object({
+    approved: z.record(z.string(), z.array(z.string())).default({}),
+  }),
+});
+
+export const collections = { posts, menu, products, site, pages, variants };

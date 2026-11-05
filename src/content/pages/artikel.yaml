@@ -1,0 +1,10 @@
+# /artikel: daftar semua artikel (src/content/posts/), terbaru di atas.
+title: Artikel
+
+sections:
+  - type: hero
+    title: Title
+    description: Description
+
+  - type: posts
+    title: Title

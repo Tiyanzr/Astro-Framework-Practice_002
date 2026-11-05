@@ -1,0 +1,22 @@
+---
+// Pintu masuk daftar artikel (`type: posts`). Artikel dari src/content/posts/ (tanpa draft saat build), terbaru di atas.
+// `limit` = jumlah artikel (kosong = semua), `category` = saring per kategori.
+// Daftar variasi: ./variants.ts. Saat build, variasi draft diganti PostsBasic_001.
+import { getPosts } from "@/lib/content";
+import WrappedVariant from "../WrappedVariant.astro";
+import { postsVariants } from "./variants";
+
+const { variant = "PostsBasic_001", limit, category, ...props } = Astro.props;
+const all = (await getPosts()).filter((p) => !category || p.data.category === category);
+const posts = (limit ? all.slice(0, limit) : all).map(({ id, data }) => ({
+  title: data.title,
+  description: data.description,
+  href: `/posts/${id}/`,
+  pubDate: data.pubDate,
+  category: data.category,
+  cover: data.cover,
+  coverAlt: data.coverAlt,
+}));
+---
+
+<WrappedVariant section="posts" variants={postsVariants} variant={variant} fallback="PostsBasic_001" posts={posts} {...props} />

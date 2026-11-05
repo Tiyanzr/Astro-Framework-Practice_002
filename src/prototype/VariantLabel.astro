@@ -1,17 +1,27 @@
 ---
 // Label nama variasi di halaman /prototype/*, ditaruh di atas setiap variasi yang dibandingkan.
-// Variasi kandidat (src/prototype/variants/) otomatis diberi tanda KANDIDAT.
-import { candidateNames } from "@/lib/variants";
+// Status otomatis dari src/content/variants.yaml: Draft (kuning), Disetujui (hijau), Basic (garis).
+import { variantStatus } from "@/lib/variants";
+import { statusLabel } from "./controls";
 
 interface Props {
+  section: string;
   name: string;
+  /** Keterangan tambahan, mis. "tone dark · width full". */
+  note?: string;
 }
 
-const { name } = Astro.props;
-const candidate = candidateNames.has(name.split(" ")[0]);
+const { section, name, note } = Astro.props;
+const status = await variantStatus(section, name);
+const badge = {
+  draft: "bg-lime text-black",
+  approved: "bg-primary text-primary-foreground",
+  basic: "border border-border",
+}[status];
 ---
 
-<p class="flex items-center gap-3 border-y border-border bg-background-alt px-4 py-2 font-mono text-eyebrow uppercase md:px-8">
+<p class="flex flex-wrap items-center gap-3 border-y border-border bg-background-alt px-4 py-2 font-mono text-eyebrow uppercase md:px-8">
   {name}
-  {candidate && <span class="rounded-sm bg-lime px-1.5 py-0.5 text-black">Kandidat</span>}
+  <span class:list={["rounded-sm px-1.5 py-0.5", badge]}>{statusLabel[status]}</span>
+  {note && <span class="text-muted-foreground">{note}</span>}
 </p>

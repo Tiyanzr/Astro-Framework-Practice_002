@@ -1,0 +1,14 @@
+---
+// Pintu masuk section kartu (`type: cards`). Isi kartu:
+// - `from: <induk>` → otomatis dari halaman anak (src/content/pages/<induk>/*.yaml: title + summary, urut order), atau
+// - `items` → daftar manual di YAML.
+// Daftar variasi: ./variants.ts. Saat build, variasi draft diganti CardsBasic_001.
+import { getChildPages } from "@/lib/content";
+import WrappedVariant from "../WrappedVariant.astro";
+import { cardsVariants } from "./variants";
+
+const { variant = "CardsBasic_001", from, items = [], ...props } = Astro.props;
+const cards = from ? await getChildPages(from) : items;
+---
+
+<WrappedVariant section="cards" variants={cardsVariants} variant={variant} fallback="CardsBasic_001" items={cards} {...props} />

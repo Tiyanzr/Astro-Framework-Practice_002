@@ -1,0 +1,8 @@
+title: IoT
+description: Description
+href: /iot
+order: 2
+# Sub-menu: 1 baris = 1 halaman anak
+children:
+  - { title: Manufaktur, href: /iot/manufaktur }
+  - { title: Energi, href: /iot/energi }

@@ -1,54 +1,67 @@
 # Halaman utama (/). Ubah kalimat di sini, bukan di komponen.
-# Halaman lain: buat file baru di folder ini, nama file = URL (produk.yaml → /produk).
+# Halaman lain: buat file baru di folder ini, nama file = URL (produk.yaml → /produk, iot/energi.yaml → /iot/energi).
 #
 # `sections` = susunan halaman, tampil berurutan dari atas ke bawah. Tukar urutan = pindahkan bloknya;
 # section yang sama boleh dipakai lebih dari sekali. Setiap item:
-#   type    = jenis section: hero | intro
-#   variant = nama file variasi; bandingkan semua variasi di /prototype/<type>
-
-# Opsional (beranda memakai nama & deskripsi situs dari site.yaml). Untuk halaman lain isi misalnya:
-# title: Produk
-# description: Deskripsi singkat halaman untuk mesin pencari.
+#   type    = jenis section: hero | intro | cards | catalog | posts | text | cta | contact
+#   variant = nama file variasi (boleh dikosongkan = versi Basic); bandingkan variasi di /prototype/<type>
+# TODO: semua teks masih placeholder.
 
 sections:
   - type: hero
-    # Variasi: src/components/sections/hero/
     variant: HeroImage_002
-    title: Teknologi bertemu kebutuhan nyata.
-    # Tombol (HeroImage_001), jumlah bebas; yang pertama = tombol utama. Contoh:
-    # actions:
-    #   - { label: Lihat Layanan, href: /layanan }
-    #   - { label: Hubungi Kami, href: /kontak }
-    # Daftar link di kartu (HeroImage_002). Kosong = item menu utama (src/content/menu/). Contoh:
-    # links:
-    #   - { label: Software, href: /software, description: CAD, CAM, PLM }
-    # Foto hero (opsional): taruh fotonya di folder ini, lalu hapus tanda # di 3 baris berikut.
+    title: Title
+    description: Description
+    # Tombol (HeroImage_001/Basic), jumlah bebas; yang pertama = tombol utama.
+    actions:
+      - { label: Software, href: /software }
+      - { label: Kontak, href: /kontak }
+    # Daftar link di kartu (HeroImage_002). Kosong = item menu utama (src/content/menu/).
+    # Foto hero (opsional): taruh fotonya di folder ini, lalu isi:
     # image:
     #   src: ./hero.jpg
     #   alt: Deskripsi singkat foto
 
   - type: intro
-    # Variasi: src/components/sections/intro/
     variant: IntroMedia_002
-    #   IntroMedia_001 = panel (width bawaan contained) · IntroMedia_002 = tanpa pembatas, selebar layar (width bawaan full)
-    # Pembungkus section: tone = default | alt | dark | green | olive | gradient · width = full | contained
-    # width boleh dihapus supaya memakai bawaan variasi. pulldown: true = ditarik ke atas, menumpuk di bawah hero (mulai tablet)
+    # tone = default | alt | dark | green | olive | gradient · width = full | contained · pulldown = menumpuk di bawah hero
     tone: dark
     width: full
     pulldown: true
-    # TODO: semua kalimat di bawah masih placeholder, ganti dengan konten final.
-    title: Integrasi sistem otomasi, dari panel hingga data produksi.
-    # Pisahkan paragraf dengan satu baris kosong.
+    title: Title
     description: |
-      Parametrik membantu industri merancang, memasang, dan merawat sistem kelistrikan dan otomasi: panel kontrol, PLC, SCADA, hingga integrasi data mesin ke sistem produksi.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-      Sebagai integrator terbuka, kami menyesuaikan solusi dengan peralatan yang sudah Anda miliki, bukan sebaliknya.
-    highlight: Satu mitra untuk seluruh rantai otomasi, dari sensor sampai laporan produksi.
-    # Media di samping teks: video YouTube, gambar, atau placeholder.
-    #   YouTube:     type: youtube · id: bagian setelah `v=` di link video · title: judul video
-    #   Gambar:      type: image · src: ./intro.jpg (taruh di folder ini) · alt: deskripsi foto
-    #   Placeholder: type: placeholder · label: teks kecil di tengah kotak
-    # TODO: ganti dengan video Parametrik kalau sudah ada (type: youtube).
+      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    highlight: Highlight
     media:
       type: placeholder
-      label: Video profil perusahaan
+      label: Video
+
+  # Kartu manual: 3 pilar ke halaman utama masing-masing.
+  - type: cards
+    title: Title
+    description: Description
+    items:
+      - { title: Software, description: Description, href: /software }
+      - { title: IoT, description: Description, href: /iot }
+      - { title: Layanan, description: Description, href: /layanan }
+
+  # Ringkasan showcase: 2 produk pertama dari setiap kategori.
+  - type: catalog
+    title: Title
+    description: Description
+    limit: 2
+    more: { label: Software, href: /software }
+
+  # 3 artikel terbaru.
+  - type: posts
+    title: Title
+    limit: 3
+    more: { label: Artikel, href: /artikel }
+
+  - type: cta
+    title: Title
+    description: Description
+    actions:
+      - { label: Kontak, href: /kontak }
