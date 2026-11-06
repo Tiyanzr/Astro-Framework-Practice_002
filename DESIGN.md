@@ -3,6 +3,7 @@
 > Dokumen hidup. Semua nilai di sini sudah terpasang sebagai token di [`src/styles/global.css`](src/styles/global.css).
 > Contoh visualnya bisa dilihat di halaman `/prototype` (hanya saat `astro dev`): warna, font, dan semua variasi section. Struktur folder ada di bagian [Struktur file](#struktur-file), pemisahan produksi dan prototype di [Status variasi & prototype](#status-variasi--prototype).
 > Kalau mengubah token, ubah di `global.css` **dan** catat di sini.
+> Ringkasan proyek, cara kerja, status terakhir, dan rencana ke depan: [AGENTS.md](AGENTS.md).
 
 ## Ringkasan
 
@@ -482,7 +483,7 @@ src/
 
 ## Status variasi & prototype
 
-> **Status saat ini (2026-11-05): belum ada desain resmi dari atasan.** Semua desain (NavbarPanel_001, HeroImage_001/_002, IntroMedia_001/_002, FooterSimple_001, PostArticle_001/_002) berstatus **draft**. Hasil build memakai versi **Basic** (teks saja), jadi fokusnya fungsionalitas arsitektur, bukan tampilan.
+> **Status saat ini (2026-11-06): belum ada desain resmi dari atasan; fokusnya fungsionalitas arsitektur.** Variasi yang dipakai situs disetujui untuk demo: `NavbarPanel_001`, `HeroImage_002`, `IntroMedia_002`, `FooterSimple_001`, `PostArticle_001`. Draft: `HeroImage_001`, `IntroMedia_001`, `PostArticle_002`. Section baru (cards, catalog, posts, text, cta, contact) baru punya versi Basic.
 
 ### Satu tempat untuk semua variasi
 
@@ -645,3 +646,4 @@ Isi artikel ditampilkan dengan class `prose` yang warnanya diambil dari token (l
 - **2026-11-05 (revisi 4):** YAML dikembalikan ke desain kandidat supaya dev tetap berdesain; build tetap memakai Basic (fallback otomatis).
 - **2026-11-05 (revisi 5):** **Mockup arsitektur ala parametris.com.** 6 jenis section baru (semua versi Basic): `cards` (manual atau otomatis dari halaman anak), `catalog` (koleksi baru `products`), `posts`, `text`, `cta`, `contact` (`site.yaml › contact`, formulir mockup). Menu mendukung sub-menu (`children`). Halaman: `/software`, `/iot` (+2 anak), `/layanan` (+2 anak), `/tentang`, `/kontak`, `/artikel`. Semua teks placeholder (*Title*, *Description*, lorem ipsum); label menu = nama halaman tujuan. 4 artikel dummy `article-title-1..4`; artikel kelistrikan dipindah ke `src/prototype/content/posts/`.
 - **2026-11-05 (revisi 6):** **Variasi kembali ke folder section-nya**, status dicatat di `src/content/variants.yaml` (`approved` per section; selain itu = **draft**, Basic selalu boleh). Folder `src/prototype/variants/` dan modul `prototype:variants` dihapus. Istilah "kandidat" diganti "draft". Ditambah halaman tracking `/prototype/variants` (semua variasi, status, dipakai di mana, link preview).
+- **2026-11-06:** Variasi yang dipakai situs **disetujui** di `variants.yaml` untuk demo (NavbarPanel_001, HeroImage_002, IntroMedia_002, FooterSimple_001, PostArticle_001), sehingga hasil build sama dengan dev. Dokumentasi serah-terima (tujuan, cara kerja, arsitektur, resep, status, rencana, jebakan) ditulis di `AGENTS.md`.

@@ -6,14 +6,14 @@
 # Semua variasi beserta statusnya bisa dilihat di /prototype/variants (hanya saat dev).
 
 approved:
-  navbar: []
-  hero: []
-  intro: []
+  navbar: [NavbarPanel_001]
+  hero: [HeroImage_002]
+  intro: [IntroMedia_002]
   cards: []
   catalog: []
   posts: []
   text: []
   cta: []
   contact: []
-  footer: []
-  post: []
+  footer: [FooterSimple_001]
+  post: [PostArticle_001]
