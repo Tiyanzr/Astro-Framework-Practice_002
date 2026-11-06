@@ -1,6 +1,8 @@
 # build output
 dist/
 rar/
+# pengecualian: dist/ di export situs asli dari klien (bahan migrasi), bukan hasil build Astro
+!src/assets/Parametris_Complete_Source_v8/Parametris_Complete_Source_v8/dist/
 
 # generated types
 .astro/

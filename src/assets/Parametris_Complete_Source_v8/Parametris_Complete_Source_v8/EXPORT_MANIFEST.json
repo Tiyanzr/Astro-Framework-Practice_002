@@ -1,0 +1,347 @@
+{
+  "site": "https://www.parametris.com",
+  "version": 8,
+  "commit_sha": "e312c8c2a1d553602c27aa08c5ff3e368e5eef09",
+  "tracked_files": [
+    {
+      "path": ".openai/hosting.json",
+      "bytes": 106,
+      "sha256": "d99146592f528318e23591220f8632ce4ad18f50a3e5f409bb08a64bb5e88e07"
+    },
+    {
+      "path": "dist/about/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/app.js",
+      "bytes": 13831,
+      "sha256": "dc9928ceba0251af1c0839b033322896b2d511e885e18b5ed17a0ab651ac4177"
+    },
+    {
+      "path": "dist/assets/08-iot-manufacturing-v2.png",
+      "bytes": 3240501,
+      "sha256": "a13fe7aea42b456de77f0be2a6ffb16578039f5262bd51053863a2fe79b15946"
+    },
+    {
+      "path": "dist/assets/08-iot-manufacturing.png",
+      "bytes": 1389351,
+      "sha256": "b0167faf1d36d26e0ad5765e3f040cdb7ed1cd8e7a861e4d2a3dd69193d277ad"
+    },
+    {
+      "path": "dist/assets/09-iot-healthcare-v2.png",
+      "bytes": 3211313,
+      "sha256": "11f06c06d54ea9b4fdf9f68d5ec5d7c6b8b7c18899a4759ae388393c3fbb0f4f"
+    },
+    {
+      "path": "dist/assets/09-iot-healthcare.png",
+      "bytes": 1356692,
+      "sha256": "9de9fcf33c70ac08784cf93abaa03a0bdc553877e0070e879b81176950afc491"
+    },
+    {
+      "path": "dist/assets/10-iot-energy-v2.png",
+      "bytes": 4144616,
+      "sha256": "1f271a34718cec83828581141167ac740795336f47cef1b224217a7fc2a73249"
+    },
+    {
+      "path": "dist/assets/10-iot-energy.png",
+      "bytes": 1584489,
+      "sha256": "dd0a0d2ef316c1ea39e085df04b875331dc2097a11766ddffca30efa647542f5"
+    },
+    {
+      "path": "dist/assets/11-iot-smart-city-v2.png",
+      "bytes": 3954073,
+      "sha256": "7f22f535490ab7b11286f232ea73f4c5aaccf7bccdcf9182df22d3fd3df12b5f"
+    },
+    {
+      "path": "dist/assets/11-iot-smart-city.png",
+      "bytes": 1578431,
+      "sha256": "80c8c5fa094b8ae779328c0750448aaf732b59b4798f5dbcff611665d097740f"
+    },
+    {
+      "path": "dist/assets/12-service-training.png",
+      "bytes": 1716930,
+      "sha256": "f47a60f80849619db3ea6d05baa252298a8af31c7cac7686128b3cc012552119"
+    },
+    {
+      "path": "dist/assets/13-service-consulting.png",
+      "bytes": 1562816,
+      "sha256": "3492e74bc749d7211ff7d05568e7c4d4a1b4a807fd23271844f3b54f6f65873f"
+    },
+    {
+      "path": "dist/assets/14-service-engineering.png",
+      "bytes": 1014670,
+      "sha256": "df93b7bc0ad43670c16957153c92c85537810650e10286ab9ebe469680be1f9b"
+    },
+    {
+      "path": "dist/assets/all-services-background.png",
+      "bytes": 2028646,
+      "sha256": "822f6a30c431223c0b30ec0e92f54cf254e50adb2354cfd75c020d4484faa33f"
+    },
+    {
+      "path": "dist/assets/alm.jpg",
+      "bytes": 48286,
+      "sha256": "6f3ebc69a9e533ba927d7ba8a24d218337b3445e4e5f384a4c2b39340735641d"
+    },
+    {
+      "path": "dist/assets/ar.jpg",
+      "bytes": 60074,
+      "sha256": "0b2c85322d0e03da9432dade6a942ea2799a66518e661c41d490925dd7a27c54"
+    },
+    {
+      "path": "dist/assets/cad.jpg",
+      "bytes": 28824,
+      "sha256": "762f9082365df51f5dc274a7db62a6061194b1a0763d6ecf0958c16dc8a1ec9e"
+    },
+    {
+      "path": "dist/assets/cae.jpg",
+      "bytes": 103423,
+      "sha256": "00b9046baac6cbd1e48194f59c98ec33c5c3a57d4f1b913cbd76c861a853ad7d"
+    },
+    {
+      "path": "dist/assets/cam.jpg",
+      "bytes": 69808,
+      "sha256": "890edecac8b9b88f386bed88bad08cfda18ea7abb208395dac9004e8f3d72e33"
+    },
+    {
+      "path": "dist/assets/city.jpg",
+      "bytes": 187372,
+      "sha256": "3c1a746e5598cb5797424eec12add7f49a1289f1d19ae98ae9635aedc01c3452"
+    },
+    {
+      "path": "dist/assets/consulting.jpg",
+      "bytes": 187112,
+      "sha256": "ad96bdc4f276860674c0c0cfd5869a1b341fea8f5eacc65ae2b834fea06f938d"
+    },
+    {
+      "path": "dist/assets/energy.png",
+      "bytes": 370473,
+      "sha256": "8fb3ed1a4a48beefc43e4b984f4b85621a231aab07ee8bc1c62a10b6d825d469"
+    },
+    {
+      "path": "dist/assets/engineering.jpg",
+      "bytes": 261784,
+      "sha256": "7658977e27204db8191c5450c4ac849213d549a59efa45f9a6470b6e6b099047"
+    },
+    {
+      "path": "dist/assets/healthcare.jpg",
+      "bytes": 96343,
+      "sha256": "5af869dcef6fe3290cc31a545d38551e55affd020677f5e90754f5d3150be5d7"
+    },
+    {
+      "path": "dist/assets/hero.jpg",
+      "bytes": 253304,
+      "sha256": "dc7f451fb546099321e6b7e91573cf9f1862106ae32a96ae74cb85e8588e0ef2"
+    },
+    {
+      "path": "dist/assets/icons/LICENSE.txt",
+      "bytes": 3208,
+      "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+    },
+    {
+      "path": "dist/assets/icons/badge-check.svg",
+      "bytes": 380,
+      "sha256": "a717c693fdba4f6032f69484c877e9a54865de6509b2fc79d13e73cb640dfe3d"
+    },
+    {
+      "path": "dist/assets/icons/calendar-check.svg",
+      "bytes": 315,
+      "sha256": "2f24acf9bc9870d4c6d63ba369260fa5e110eabe5596e73414b85d2f14818094"
+    },
+    {
+      "path": "dist/assets/icons/chart-no-axes-combined.svg",
+      "bytes": 365,
+      "sha256": "40d624cec98e5bc1d32454ac94a2d7279a70282f1d5490aaabcfc986d0b33f01"
+    },
+    {
+      "path": "dist/assets/icons/compass.svg",
+      "bytes": 319,
+      "sha256": "dd52da189a8ee61d78f9a22ac251b5955608fbc6d6c43bda66acfd8b1f7063be"
+    },
+    {
+      "path": "dist/assets/icons/database.svg",
+      "bytes": 293,
+      "sha256": "768e121c5162658cb1ead13f5cced0dfb2ae3173bf60544418b5b43b42aaac18"
+    },
+    {
+      "path": "dist/assets/icons/factory.svg",
+      "bytes": 441,
+      "sha256": "6974f7a8553c494cc2960feec3ab395a4c3ef5f46f6dbecb10b231b37741b9dc"
+    },
+    {
+      "path": "dist/assets/icons/file-check.svg",
+      "bytes": 366,
+      "sha256": "fd50289ae50cfad96b46dacace8f9628bb7f3c1a30cc354bc524a5c81b1bf868"
+    },
+    {
+      "path": "dist/assets/icons/gauge.svg",
+      "bytes": 246,
+      "sha256": "0e942dca19eaaea89c1261b050b8585b32794df0912ddbea9e22549327121cd4"
+    },
+    {
+      "path": "dist/assets/icons/graduation-cap.svg",
+      "bytes": 376,
+      "sha256": "f01c00e7928c5671122a4f07179c8b415bdb575699c5844648cab5738aa19fab"
+    },
+    {
+      "path": "dist/assets/icons/heart-handshake.svg",
+      "bytes": 535,
+      "sha256": "54c89ea7b4878416eddf3e63eb2d9e1f5a340e0a5420839450a4e405cb41e82f"
+    },
+    {
+      "path": "dist/assets/icons/heart.svg",
+      "bytes": 345,
+      "sha256": "d2477f5d20e156d1c9f2b5b7121f1c116da77a6e57734c1e8e7069f49d745e31"
+    },
+    {
+      "path": "dist/assets/icons/monitor-smartphone.svg",
+      "bytes": 349,
+      "sha256": "d3ae3051619652c2c4151b006d53a0e3f4e2e78b48a3971be59da4b47d3497e3"
+    },
+    {
+      "path": "dist/assets/icons/panels-top-left.svg",
+      "bytes": 271,
+      "sha256": "b22bef37eacc5004802e3d0e615ed466123d93a1bdfd37287e8b21f7e74b1324"
+    },
+    {
+      "path": "dist/assets/icons/scan-line.svg",
+      "bytes": 346,
+      "sha256": "a2e87ae54136bd5464c4fedda7d4d4744572ea4d2f2ff593db306bc73da8fe48"
+    },
+    {
+      "path": "dist/assets/icons/settings.svg",
+      "bytes": 554,
+      "sha256": "1f4a44af0f19f0aa3b951049ee60372a366d556f74f071fb8ea5f4da259d06b8"
+    },
+    {
+      "path": "dist/assets/icons/shield-check.svg",
+      "bytes": 383,
+      "sha256": "4dd9096fa02e376bd0262adb165f8e88e4ca5fe93c252187d90b06a968759675"
+    },
+    {
+      "path": "dist/assets/icons/sliders-horizontal.svg",
+      "bytes": 362,
+      "sha256": "48831b6887b5acafb5c854803f588342bc352613f7aaec0ebc6bbe662fed7542"
+    },
+    {
+      "path": "dist/assets/icons/target.svg",
+      "bytes": 278,
+      "sha256": "5e8d639120b48d022df9672d28b577f14da17897d32168e6a2125873640223c4"
+    },
+    {
+      "path": "dist/assets/icons/timer.svg",
+      "bytes": 291,
+      "sha256": "6533526787ef8df656777ae1c264ac7d711430afec0fed28c9a00c1da37922df"
+    },
+    {
+      "path": "dist/assets/icons/users.svg",
+      "bytes": 343,
+      "sha256": "5ad4b936812ff5daf658902769665427043a1d4a172942c8a0e324385029bbfb"
+    },
+    {
+      "path": "dist/assets/logo.png",
+      "bytes": 15905,
+      "sha256": "4b0d399af7bafd76204a90f7ee16058345b1b74acff52fbbeaf42e365048c7f4"
+    },
+    {
+      "path": "dist/assets/manufacturing.png",
+      "bytes": 3442,
+      "sha256": "728fd7801e919b74558094af0aa1031cdc6e302262345d04fd1fb879e69b3d7e"
+    },
+    {
+      "path": "dist/assets/plm.jpg",
+      "bytes": 38952,
+      "sha256": "3962d6146eb092fe867b24f08bf7e1c4a4603becc5f805940a06a990433a58c9"
+    },
+    {
+      "path": "dist/assets/training.jpg",
+      "bytes": 220476,
+      "sha256": "e4f677301e0614828e5e2e4e25242112ef55eedd9a7f5393eecbea24bec92db2"
+    },
+    {
+      "path": "dist/consulting/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/contact/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/data.js",
+      "bytes": 23353,
+      "sha256": "8820e7c7dda9aa09ace09e07a8897990b7749ecff31019728b33b85b8dbc9694"
+    },
+    {
+      "path": "dist/energy/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/engineering/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/healthcare/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/iot/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/manufacturing/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/products.js",
+      "bytes": 5394,
+      "sha256": "75d3a180aefcb38d6223b38b02559299631d4819960fbe15b095f80bb08eb0a6"
+    },
+    {
+      "path": "dist/services/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/smart-city/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/software/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "dist/style.css",
+      "bytes": 13871,
+      "sha256": "7884ff2543e9c0d8cca3b78b6b155b1c60f1ab102aa373cd1d63e7a7bf1c1c8a"
+    },
+    {
+      "path": "dist/training/index.html",
+      "bytes": 1070,
+      "sha256": "29b75f04354ddd8c6a27331c208b252b430c49dbbb4a0d0a2b147db8eb6b9f8d"
+    },
+    {
+      "path": "generate.py",
+      "bytes": 3501,
+      "sha256": "64e064f6c14a7b5441fa4a00bd06ba174d9a73f2b076cf439a5e09c99d9c3f3a"
+    },
+    {
+      "path": "validate.cjs",
+      "bytes": 1236,
+      "sha256": "0942f4593f1d25ade3a246fb104ff3311f7cf999237ea654b67910c31df05a44"
+    }
+  ]
+}
