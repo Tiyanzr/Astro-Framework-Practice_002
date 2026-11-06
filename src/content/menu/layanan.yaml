@@ -1,7 +1,0 @@
-title: Layanan
-description: Description
-href: /layanan
-order: 3
-children:
-  - { title: Pelatihan, href: /layanan/pelatihan }
-  - { title: Konsultasi, href: /layanan/konsultasi }
