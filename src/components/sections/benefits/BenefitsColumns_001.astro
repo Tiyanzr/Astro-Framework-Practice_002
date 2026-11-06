@@ -1,0 +1,35 @@
+---
+// BenefitsColumns_001 (referensi: parametris.com, .training-methods "METODE PELAKSANAAN"): dua kolom besar dipisah garis atas,
+// masing-masing ikon + judul + penjelasan + rincian istilah–penjelasan (entries). 1 kolom di HP.
+import Icon from "@/components/ui/Icon.astro";
+import SplitHeading from "../SplitHeading.astro";
+import type { BenefitsProps } from "./types";
+
+type Props = BenefitsProps;
+
+const { items, note, ...heading } = Astro.props;
+---
+
+<SplitHeading {...heading} />
+<ul class="grid grid-cols-1 gap-7 md:grid-cols-2 md:gap-[70px]">
+  {
+    items.map((item) => (
+      <li class="border-t border-border pt-[30px]">
+        {item.icon && <Icon name={item.icon} class="mb-5 size-[38px] text-primary md:size-[42px]" />}
+        <h3 class="m-0 text-ref-h3-lg">{item.title}</h3>
+        {item.description && <p class="mt-3 text-muted-foreground">{item.description}</p>}
+        {item.entries.length > 0 && (
+          <dl class="mt-6">
+            {item.entries.map((entry) => (
+              <>
+                <dt class="mt-[22px] text-[17px] font-semibold first:mt-0">{entry.term}</dt>
+                <dd class="mt-[7px] leading-[1.7] text-muted-foreground">{entry.detail}</dd>
+              </>
+            ))}
+          </dl>
+        )}
+      </li>
+    ))
+  }
+</ul>
+{note && <p class="mt-[30px] max-w-[900px] text-muted-foreground">{note}</p>}

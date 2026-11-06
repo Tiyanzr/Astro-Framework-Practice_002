@@ -1,0 +1,91 @@
+---
+// ContactDirect_001 (referensi: parametris.com, .contact-layout halaman Kontak): kontak langsung tanpa formulir.
+// Kiri (lebih lebar): eyebrow, email besar, email tambahan berlabel, tombol (yang pertama terisi), nomor tambahan berlabel.
+// Kanan: label alamat + alamat (baris pertama sebagai judul), dipisah garis kiri; di HP turun ke bawah dengan garis atas.
+// Formulir (`form`) diabaikan di variasi ini.
+import Button from "@/components/ui/Button.astro";
+import { telHref, type ContactProps } from "./types";
+
+type Props = ContactProps;
+
+const { eyebrow, title, accent, description, contact, actions = [], addressLabel } = Astro.props;
+const [addressTitle, ...addressLines] = contact.address;
+const external = (href: string) => (href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {});
+---
+
+<div class="grid grid-cols-1 gap-[35px] md:grid-cols-[1.7fr_1fr] md:gap-[60px]">
+  <div>
+    {eyebrow && <p class="text-eyebrow font-semibold uppercase">{eyebrow}</p>}
+    {(title || accent) && <h2 class="mt-5 text-ref-h3-lg">{[title, accent].filter(Boolean).join(" ")}</h2>}
+    {
+      contact.email && (
+        <a href={`mailto:${contact.email}`} class="my-5 block text-ref-contact [overflow-wrap:anywhere] hover:text-primary">
+          {contact.email}
+        </a>
+      )
+    }
+    {description && <p class="text-muted-foreground">{description}</p>}
+    {
+      contact.emails.map((e) => (
+        <p class="text-muted-foreground">
+          {e.label}:{" "}
+          <a href={`mailto:${e.email}`} class="text-foreground hover:text-primary">
+            {e.email}
+          </a>
+        </p>
+      ))
+    }
+    {
+      actions.length > 0 && (
+        <div class="my-[25px] flex flex-wrap gap-3.5">
+          {actions.map((action, i) => (
+            <Button href={action.href} variant={i === 0 ? "solid" : "outline"} size="lg" square class="text-small" {...external(action.href)}>
+              {action.label}
+            </Button>
+          ))}
+        </div>
+      )
+    }
+    {
+      contact.phones.length > 0 && (
+        <p class="text-muted-foreground">
+          {contact.phones.map((p, i) => (
+            <>
+              {i > 0 && <br />}
+              {p.label}: {p.number}
+            </>
+          ))}
+        </p>
+      )
+    }
+    {
+      contact.phone && !actions.some((a) => a.href.startsWith("tel:")) && (
+        <p class="text-muted-foreground">
+          <a href={telHref(contact.phone)} class="hover:text-primary">
+            {contact.phone}
+          </a>
+        </p>
+      )
+    }
+    {contact.hours && <p class="text-muted-foreground">{contact.hours}</p>}
+  </div>
+
+  {
+    contact.address.length > 0 && (
+      <address class="border-t border-border pt-[25px] not-italic md:border-t-0 md:border-l md:pt-0 md:pl-[45px]">
+        {addressLabel && <p class="text-eyebrow font-semibold uppercase">{addressLabel}</p>}
+        <h3 class="mt-5 mb-3.5 text-ref-h3">{addressTitle}</h3>
+        {addressLines.length > 0 && (
+          <p class="text-muted-foreground">
+            {addressLines.map((line, i) => (
+              <>
+                {i > 0 && <br />}
+                {line}
+              </>
+            ))}
+          </p>
+        )}
+      </address>
+    )
+  }
+</div>

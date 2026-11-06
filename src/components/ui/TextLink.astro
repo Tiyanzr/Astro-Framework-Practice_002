@@ -1,0 +1,21 @@
+---
+// Link teks bergaris bawah (gaya parametris.com: "Semua solusi software", "Jelajahi").
+// Tanpa `href` tampil sebagai <span>, untuk dipakai di dalam kartu yang seluruhnya sudah berupa link.
+interface Props {
+  href?: string;
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+const Tag = href ? "a" : "span";
+---
+
+<Tag
+  href={href}
+  class:list={[
+    "inline-block border-b border-current pb-1 text-small font-semibold transition-colors duration-300 ease-out-quart hover:text-primary",
+    className,
+  ]}
+>
+  <slot />
+</Tag>

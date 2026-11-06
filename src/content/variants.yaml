@@ -1,19 +1,25 @@
-# Status variasi: daftar variasi yang SUDAH DISETUJUI, per section (nama = nama folder section).
+# Status variasi: daftar variasi yang SUDAH DISETUJUI (pass), per section (nama = nama folder section).
 # - Variasi yang tidak tercantum di sini = DRAFT: tetap bisa dipakai & dilihat saat `astro dev`,
 #   tetapi saat build otomatis diganti versi Basic-nya (teks saja).
-# - Variasi <Nama>Basic_<NNN> selalu boleh dipakai, tidak perlu dicantumkan.
-# - Menyetujui variasi = tambahkan namanya di section yang sesuai, mis. hero: [HeroImage_002]
+# - Variasi <Nama>Basic_<NNN> selalu boleh dipakai (base), tidak perlu dicantumkan.
+# - Menyetujui variasi = tambahkan namanya di section yang sesuai, mis. hero: [HeroText_001]
 # Semua variasi beserta statusnya bisa dilihat di /prototype/variants (hanya saat dev).
+#
+# 2026-11-06: pass = variasi bergaya parametris.com (acuan situs sekarang). Desain sebelumnya
+# (NavbarPanel_001, HeroImage_002, IntroMedia_002, FooterSimple_001) kembali draft.
 
 approved:
-  navbar: [NavbarPanel_001]
-  hero: [HeroImage_002]
-  intro: [IntroMedia_002]
-  cards: []
-  catalog: []
-  posts: []
+  navbar: [NavbarDropdown_001]
+  hero: [HeroText_001, HeroText_002]
+  intro: []
+  media: [MediaBanner_001, MediaFigure_001]
+  cards: [CardsGallery_001, CardsGallery_002]
+  catalog: [CatalogGrid_001]
+  features: [FeaturesRows_001]
+  benefits: [BenefitsIcons_001, BenefitsTags_001, BenefitsColumns_001]
+  posts: [PostsGrid_001]
   text: []
-  cta: []
-  contact: []
-  footer: [FooterSimple_001]
+  cta: [CtaClosing_001]
+  contact: [ContactDirect_001]
+  footer: [FooterColumns_001]
   post: [PostArticle_001]

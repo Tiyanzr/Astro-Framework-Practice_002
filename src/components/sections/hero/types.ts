@@ -10,7 +10,11 @@ export interface HeroAction {
 
 export interface HeroProps {
   eyebrow?: string;
+  /** Teks kecil kanan atas (HeroText_*), boleh link, mis. { label: "Beranda", href: "/" }. */
+  aside?: { label: string; href?: string };
   title: string;
+  /** Lanjutan judul di baris baru dengan warna aksen (HeroText_*). */
+  accent?: string;
   description?: string;
   /** Tombol, jumlah bebas. Yang pertama = tombol utama, sisanya tombol sekunder (HeroImage_001). */
   actions?: HeroAction[];

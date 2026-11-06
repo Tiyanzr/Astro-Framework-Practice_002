@@ -1,0 +1,33 @@
+---
+// BenefitsIcons_001 (referensi: parametris.com, .benefit-grid "MANFAAT & KEUNGGULAN" dan .training-focus):
+// grid ikon garis (aksen) + judul + penjelasan. 3 kolom; tepat 4 item → 4 kolom mulai lg; 1 kolom di HP.
+// Item tanpa penjelasan tetap rapi (hanya ikon + judul), seperti "Cakupan custom training".
+import Icon from "@/components/ui/Icon.astro";
+import SplitHeading from "../SplitHeading.astro";
+import type { BenefitsProps } from "./types";
+
+type Props = BenefitsProps;
+
+const { items, note, ...heading } = Astro.props;
+const four = items.length === 4;
+---
+
+<SplitHeading {...heading} />
+<ul
+  class:list={[
+    "grid grid-cols-1 gap-[34px] md:grid-cols-3 md:gap-x-12 md:gap-y-[45px]",
+    !heading.title && !heading.accent && "mt-[30px] md:mt-[38px]",
+    four && "lg:grid-cols-4 lg:gap-8",
+  ]}
+>
+  {
+    items.map((item) => (
+      <li class="min-w-0">
+        {item.icon && <Icon name={item.icon} class="mb-[17px] size-[38px] text-primary md:mb-[23px] md:size-[42px]" />}
+        <h3 class="m-0 mb-[13px] text-ref-h3">{item.title}</h3>
+        {item.description && <p class="m-0 max-w-[370px] leading-[1.7] text-muted-foreground">{item.description}</p>}
+      </li>
+    ))
+  }
+</ul>
+{note && <p class="mt-[30px] max-w-[900px] text-muted-foreground">{note}</p>}

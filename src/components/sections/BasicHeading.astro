@@ -1,14 +1,15 @@
 ---
-// Judul section untuk variasi Basic (teks polos): eyebrow, judul (h2), pengantar. Semua opsional.
+// Judul section untuk variasi Basic (teks polos): eyebrow, judul (h2) + lanjutan `accent`, pengantar. Semua opsional.
 interface Props {
   eyebrow?: string;
   title?: string;
+  accent?: string;
   description?: string;
 }
 
-const { eyebrow, title, description } = Astro.props;
+const { eyebrow, title, accent, description } = Astro.props;
 ---
 
 {eyebrow && <p>{eyebrow}</p>}
-{title && <h2>{title}</h2>}
+{(title || accent) && <h2>{[title, accent].filter(Boolean).join(" ")}</h2>}
 {description && <p>{description}</p>}

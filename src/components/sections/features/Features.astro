@@ -1,0 +1,10 @@
+---
+// Pintu masuk daftar kapabilitas/fitur (`type: features`): judul + penjelasan per baris, diisi `items` di YAML halaman.
+// Daftar variasi: ./variants.ts. Saat build, variasi draft diganti FeaturesBasic_001.
+import WrappedVariant from "../WrappedVariant.astro";
+import { featuresVariants } from "./variants";
+
+const { variant = "FeaturesBasic_001", ...props } = Astro.props;
+---
+
+<WrappedVariant section="features" variants={featuresVariants} variant={variant} fallback="FeaturesBasic_001" {...props} />

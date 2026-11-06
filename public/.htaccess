@@ -1,10 +1,10 @@
    ErrorDocument 404 /404.html
 
-   # Paksa HTTPS dan satu versi domain (tanpa www)
+   # Paksa HTTPS dan satu versi domain (dengan www, sama seperti parametris.com)
    RewriteEngine On
    RewriteCond %{HTTPS} off [OR]
-   RewriteCond %{HTTP_HOST} ^www\.jasalistrikbandung\.com$ [NC]
-   RewriteRule ^ https://jasalistrikbandung.com%{REQUEST_URI} [L,R=301]
+   RewriteCond %{HTTP_HOST} ^parametris\.com$ [NC]
+   RewriteRule ^ https://www.parametris.com%{REQUEST_URI} [L,R=301]
 
    <IfModule mod_headers.c>
      <FilesMatch "^_astro/">

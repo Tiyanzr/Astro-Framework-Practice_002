@@ -1,0 +1,63 @@
+# /manufacturing — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Manufaktur"
+description: "Sistem pemantauan dan integrasi IoT yang disesuaikan dengan kebutuhan mesin industri dan proses produksi, untuk memantau utilitas mesin serta aktivitas produksi."
+parent: iot
+summary: "Pemantauan mesin dan proses produksi."
+order: 1
+image:
+  src: ./illustration.png
+  alt: "Manufaktur"
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "SOLUSI IOT / MANUFAKTUR"
+    aside: { label: "Beranda", href: / }
+    title: "Manufaktur terhubung."
+    accent: "Produksi terpantau."
+    description: "Sistem pemantauan dan integrasi IoT yang disesuaikan dengan kebutuhan mesin industri dan proses produksi, untuk memantau utilitas mesin serta aktivitas produksi."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: media
+    variant: MediaFigure_001
+    image:
+      src: ./illustration.png
+      alt: "SOLUSI IOT / MANUFAKTUR"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Pemantauan & kontrol jarak jauh"
+        description: "Pantau dan kendalikan mesin serta proses industri dari berbagai lokasi."
+      - title: "Preventive & predictive maintenance"
+        description: "Identifikasi potensi kegagalan sebelum terjadi untuk mengurangi downtime."
+      - title: "Optimasi rantai pasok"
+        description: "Tingkatkan pengelolaan inventaris dan logistik melalui data real-time."
+      - title: "Keamanan & kepatuhan"
+        description: "Dukung keamanan sistem dan kesesuaian dengan standar industri."
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "MANFAAT & KEUNGGULAN"
+    items:
+      - title: "Smart manufacturing"
+        icon: factory
+        description: "Satukan pemantauan, kontrol real-time, otomatisasi, dan analisis data produksi."
+      - title: "Pelaporan elektronik tanpa kertas"
+        icon: file-check
+        description: "Gunakan pelaporan elektronik yang efisien dan terintegrasi."
+      - title: "Dashboard terpusat"
+        icon: panels-top-left
+        description: "Pantau dan kendalikan proses produksi melalui dashboard terpusat."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

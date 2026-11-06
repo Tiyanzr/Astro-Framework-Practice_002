@@ -12,7 +12,8 @@ import prototype from "./src/prototype/integration.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://jasalistrikbandung.com',
+  // Domain resmi: dipakai sitemap, URL kanonik, dan Open Graph (samakan dengan src/content/site.yaml › url)
+  site: 'https://www.parametris.com',
   vite: {
   plugins: [tailwindcss()],
 },

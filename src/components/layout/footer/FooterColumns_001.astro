@@ -1,0 +1,85 @@
+---
+// FooterColumns_001 (referensi: parametris.com, footer): tiga kolom di latar putih.
+// Kiri: logo, nama perusahaan, `tagline`. Tengah: `exploreTitle` + item menu utama. Kanan: `contactTitle` + email, telepon, `location`.
+// Bawah (dipisah garis): copyright (kiri) + media sosial sebagai link teks (kanan). Di HP: logo selebar penuh, dua kolom di bawahnya.
+import Logo from "@/components/ui/Logo.astro";
+import type { FooterProps } from "./types";
+
+type Props = FooterProps;
+
+const { siteName, company, tagline, email, phone, location, exploreTitle, contactTitle, socials, links } = Astro.props;
+const year = new Date().getFullYear();
+// Nama platform untuk link teks (enum di skema site.yaml › footer › socials)
+const platformName: Record<string, string> = {
+  facebook: "Facebook",
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  youtube: "YouTube",
+  x: "X",
+  tiktok: "TikTok",
+  whatsapp: "WhatsApp",
+};
+const tel = phone?.replace(/[^+\d]/g, "");
+const linkClass = "mt-3 block text-[15px] transition-colors duration-300 hover:text-primary";
+---
+
+<footer class="container-page">
+  <div class="grid grid-cols-2 gap-[35px] pt-[65px] pb-[60px] md:grid-cols-[2fr_1fr_1.4fr] md:gap-[50px]">
+    <div class="col-span-full md:col-span-1">
+      <Logo label={siteName} class="h-7 md:h-9" />
+      <p class="mt-4 text-small text-muted-foreground">{company}</p>
+      {tagline && <p class="mt-3 max-w-[300px] text-small text-muted-foreground">{tagline}</p>}
+    </div>
+
+    {
+      links.length > 0 && (
+        <div>
+          {exploreTitle && <p class="mb-5 text-eyebrow font-semibold uppercase">{exploreTitle}</p>}
+          {links.map((link) => (
+            <a href={link.href} class={linkClass}>
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      (email || phone || location) && (
+        <div>
+          {contactTitle && <p class="mb-5 text-eyebrow font-semibold uppercase">{contactTitle}</p>}
+          {email && (
+            <a href={`mailto:${email}`} class={linkClass}>
+              {email}
+            </a>
+          )}
+          {phone && (
+            <a href={`tel:${tel}`} class={linkClass}>
+              {phone}
+            </a>
+          )}
+          {location && (
+            <a href={location.href} class={linkClass}>
+              {location.label}
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  <div class="flex flex-col justify-between gap-[25px] border-t border-border py-6 text-[12px] text-muted-foreground md:flex-row">
+    <span>© {year} {company}</span>
+    {
+      socials.length > 0 && (
+        <div class="flex gap-5">
+          {socials.map((social) => (
+            <a href={social.href} target="_blank" rel="noopener noreferrer" class="transition-colors duration-300 hover:text-primary">
+              {platformName[social.platform] ?? social.platform}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</footer>

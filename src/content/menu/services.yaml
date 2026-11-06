@@ -1,0 +1,7 @@
+title: Layanan
+href: /services
+order: 3
+children:
+  - { title: Pelatihan, href: /training }
+  - { title: Konsultasi, href: /consulting }
+  - { title: Layanan engineering, href: /engineering }

@@ -47,21 +47,30 @@ export async function getMainLinks(): Promise<NavLink[]> {
 export const pageHref = (id: string) => (id === "home" ? "/" : `/${id}`);
 
 /**
- * Halaman anak langsung dari `parent` (mis. "iot" → pages/iot/*.yaml, tidak termasuk cucu), urut `order`.
+ * Halaman anak langsung dari `parent`, urut `order`: halaman ber-`parent: <induk>` (URL datar, mis. /manufacturing),
+ * atau halaman di dalam folder induknya (pages/iot/<nama>/, tidak termasuk cucu).
  * Dipakai section `cards` › from, jadi menambah halaman anak = otomatis menambah kartu.
  */
 export async function getChildPages(parent: string) {
-  const prefix = `${parent.replace(/\/$/, "")}/`;
-  const pages = await getCollection("pages", ({ id }) => id.startsWith(prefix) && !id.slice(prefix.length).includes("/"));
+  const name = parent.replace(/\/$/, "");
+  const prefix = `${name}/`;
+  const pages = await getCollection(
+    "pages",
+    ({ id, data }) => data.parent === name || (id.startsWith(prefix) && !id.slice(prefix.length).includes("/")),
+  );
   return pages
     .sort((a, b) => a.data.order - b.data.order)
-    .map(({ id, data }) => ({ title: data.title ?? id, description: data.summary, href: pageHref(id) }));
+    .map(({ id, data }) => ({ title: data.title ?? id, description: data.summary, href: pageHref(id), image: data.image }));
 }
 
-/** Kategori produk (src/content/products/*.yaml), urut `order`. `ids` = hanya kategori tertentu, sesuai urutan ids. */
+/**
+ * Kategori produk (src/content/products/*.yaml), urut `order`. `ids` = hanya kategori tertentu, sesuai urutan ids.
+ * Tanpa `ids`, kategori di subfolder (mis. contoh prototype `referensi/cad`) tidak ikut, supaya "semua kategori" tetap
+ * berarti kategori situs.
+ */
 export async function getProductCategories(ids?: string[]) {
   const all = (await getCollection("products")).sort((a, b) => a.data.order - b.data.order);
-  if (!ids?.length) return all;
+  if (!ids?.length) return all.filter((c) => !c.id.includes("/"));
   return ids.map((id) => {
     const found = all.find((c) => c.id === id);
     if (!found) throw new Error(`Kategori produk "${id}" tidak ada di src/content/products/.`);

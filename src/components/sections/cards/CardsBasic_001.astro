@@ -5,7 +5,7 @@ import type { CardsProps } from "./types";
 
 type Props = CardsProps;
 
-const { items, ...heading } = Astro.props;
+const { items, linkLabel: _linkLabel, more, ...heading } = Astro.props;
 ---
 
 <BasicHeading {...heading} />
@@ -19,3 +19,4 @@ const { items, ...heading } = Astro.props;
     ))
   }
 </ul>
+{more && <p><a href={more.href}>{more.label}</a></p>}

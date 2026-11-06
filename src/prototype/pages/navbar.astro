@@ -10,14 +10,16 @@ import Navbar from "@/components/layout/navbar/Navbar.astro";
 import VariantLabel from "@/prototype/VariantLabel.astro";
 import { navbarVariants } from "@/components/layout/navbar/variants";
 import { getSite } from "@/lib/content";
-import { allOption, control, selected, variantOptions } from "@/prototype/controls";
+import { allOption, control, paletteClass, paletteControl, selected, sitePalette, variantOptions } from "@/prototype/controls";
 
 const site = await getSite();
 const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions(Object.keys(navbarVariants), "navbar")), allOption], site.navbar.variant);
+const palette = paletteControl(Astro.url, await sitePalette());
 const shown = selected(variant);
 ---
 
-<PrototypeLayout title="Navbar" controls={[variant]}>
+<PrototypeLayout title="Navbar" controls={[variant, palette]}>
+  <div class:list={[paletteClass(palette)]}>
   {
     shown.map((name) => (
       <div>
@@ -28,4 +30,5 @@ const shown = selected(variant);
       </div>
     ))
   }
+  </div>
 </PrototypeLayout>

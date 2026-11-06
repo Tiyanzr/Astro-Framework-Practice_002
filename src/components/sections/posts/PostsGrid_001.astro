@@ -1,0 +1,33 @@
+---
+// PostsGrid_001 (referensi: parametris.com, .articles "ARTIKEL & WAWASAN"): artikel 2 kolom (1 di HP), masing-masing
+// dipisah garis atas: kategori (eyebrow), judul, link teks `linkLabel`. Section ini sendiri diberi garis atas seperti referensi.
+import TextLink from "@/components/ui/TextLink.astro";
+import SplitHeading from "../SplitHeading.astro";
+import type { PostsProps } from "./types";
+
+type Props = PostsProps;
+
+const { posts, more, linkLabel, ...heading } = Astro.props;
+---
+
+<div class="-mt-(--section-y) border-t border-border pt-(--section-y)">
+  <SplitHeading {...heading} more={more} />
+  <ul class="grid grid-cols-1 gap-[35px] md:grid-cols-2 md:gap-[60px]">
+    {
+      posts.map((post) => (
+        <li>
+          <a
+            href={post.href}
+            target={post.href.startsWith("http") ? "_blank" : undefined}
+            rel={post.href.startsWith("http") ? "noopener noreferrer" : undefined}
+            class="group block border-t border-border pt-[25px]"
+          >
+            {post.category && <span class="text-eyebrow font-semibold uppercase">{post.category}</span>}
+            <h3 class="mt-5 mb-[30px] max-w-[470px] text-ref-h3 transition-colors duration-300 group-hover:text-primary">{post.title}</h3>
+            {linkLabel && <TextLink>{linkLabel}</TextLink>}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

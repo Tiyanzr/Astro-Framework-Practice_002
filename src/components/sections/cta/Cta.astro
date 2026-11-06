@@ -1,10 +1,10 @@
 ---
 // Pintu masuk ajakan bertindak (`type: cta`), biasanya di akhir halaman.
-// Daftar variasi: ./variants.ts. Saat build, variasi draft diganti CtaBasic_001.
+// Daftar variasi + pengaturan pembungkus bawaan per variasi: ./variants.ts. Saat build, variasi draft diganti CtaBasic_001.
 import WrappedVariant from "../WrappedVariant.astro";
-import { ctaVariants } from "./variants";
+import { ctaDefaults, ctaVariants } from "./variants";
 
 const { variant = "CtaBasic_001", ...props } = Astro.props;
 ---
 
-<WrappedVariant section="cta" variants={ctaVariants} variant={variant} fallback="CtaBasic_001" {...props} />
+<WrappedVariant section="cta" variants={ctaVariants} variant={variant} fallback="CtaBasic_001" defaults={ctaDefaults} {...props} />

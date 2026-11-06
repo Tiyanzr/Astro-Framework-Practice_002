@@ -1,0 +1,62 @@
+# /consulting — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Konsultasi"
+description: "Konsultasi engineering yang disesuaikan untuk membantu perusahaan mencapai tujuannya melalui arahan ahli, peningkatan produk, dan perhatian terhadap keberlanjutan."
+parent: services
+summary: "Arahan ahli untuk kebutuhan dan tantangan bisnis Anda."
+order: 2
+image:
+  src: ./illustration.png
+  alt: "Konsultasi"
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "LAYANAN / KONSULTASI"
+    aside: { label: "Beranda", href: / }
+    title: "Pahami tantangan."
+    accent: "Tentukan solusi."
+    description: "Konsultasi engineering yang disesuaikan untuk membantu perusahaan mencapai tujuannya melalui arahan ahli, peningkatan produk, dan perhatian terhadap keberlanjutan."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: media
+    variant: MediaFigure_001
+    image:
+      src: ./illustration.png
+      alt: "LAYANAN / KONSULTASI"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Arahan strategis & teknis"
+        description: "Bekerja bersama pelanggan untuk memahami kebutuhan khusus, menangani tantangan bisnis, dan menyusun solusi yang sesuai."
+      - title: "Dukungan dokumentasi & sertifikasi"
+        description: "Layanan konsultasi untuk mendukung kebutuhan dokumentasi dan kesiapan sertifikasi."
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "MANFAAT & KEUNGGULAN"
+    items:
+      - title: "Arahan ahli"
+        icon: compass
+        description: "Dapatkan arahan teknis dan strategis untuk menghadapi tantangan bisnis."
+      - title: "Solusi sesuai kebutuhan"
+        icon: sliders-horizontal
+        description: "Kembangkan pendekatan berdasarkan kebutuhan spesifik perusahaan."
+      - title: "Peningkatan efisiensi"
+        icon: gauge
+        description: "Identifikasi solusi untuk memperbaiki proses dan efisiensi operasional."
+      - title: "Keunggulan kompetitif"
+        icon: target
+        description: "Dukung tujuan bisnis melalui wawasan, peningkatan produk, dan solusi yang sesuai."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

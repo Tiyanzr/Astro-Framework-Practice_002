@@ -1,0 +1,4 @@
+# Item menu utama. 1 item = 1 file, urutan = order. Sumber: header parametris.com.
+title: Beranda
+href: /
+order: 1

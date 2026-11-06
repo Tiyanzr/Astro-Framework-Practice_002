@@ -1,0 +1,7 @@
+# Item tanpa halaman sendiri (href kosong): hanya judul dropdown berisi sub-menu (NavbarDropdown_001).
+title: Produk
+href: ""
+order: 2
+children:
+  - { title: Software, href: /software }
+  - { title: Internet of Things, href: /iot }

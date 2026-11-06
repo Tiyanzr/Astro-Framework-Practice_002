@@ -2,21 +2,34 @@
 // ContactBasic_001: versi bare minimum (tanpa desain). Info kontak sebagai teks/link + formulir HTML polos.
 // Formulir masih mockup: tombol kirim tidak mengirim ke mana pun (nanti bisa memakai Netlify Forms).
 import BasicHeading from "../BasicHeading.astro";
-import type { ContactProps } from "./types";
+import { telHref, type ContactProps } from "./types";
 
 type Props = ContactProps;
 
-const { contact, form, ...heading } = Astro.props;
-const tel = contact.phone?.replace(/[^+\d]/g, "");
+const { contact, form, actions = [], addressLabel, ...heading } = Astro.props;
 ---
 
 <BasicHeading {...heading} />
 <address class="not-italic">
+  {addressLabel && <p>{addressLabel}</p>}
   {contact.address.map((line) => <p>{line}</p>)}
-  {contact.phone && <p><a href={`tel:${tel}`}>{contact.phone}</a></p>}
+  {contact.phone && <p><a href={telHref(contact.phone)}>{contact.phone}</a></p>}
+  {contact.phones.map((p) => <p>{p.label}: {p.number}</p>)}
   {contact.email && <p><a href={`mailto:${contact.email}`}>{contact.email}</a></p>}
+  {contact.emails.map((e) => <p>{e.label}: <a href={`mailto:${e.email}`}>{e.email}</a></p>)}
   {contact.hours && <p>{contact.hours}</p>}
 </address>
+{
+  actions.length > 0 && (
+    <ul>
+      {actions.map((action) => (
+        <li>
+          <a href={action.href}>{action.label}</a>
+        </li>
+      ))}
+    </ul>
+  )
+}
 {
   form && (
     <form method="post" onsubmit="event.preventDefault()">

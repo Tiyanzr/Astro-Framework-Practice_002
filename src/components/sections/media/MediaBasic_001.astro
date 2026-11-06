@@ -1,0 +1,15 @@
+---
+// MediaBasic_001: versi bare minimum (tanpa desain). Gambar + eyebrow + judul sebagai teks polos.
+import { Image } from "astro:assets";
+import type { MediaProps } from "./types";
+
+type Props = MediaProps;
+
+const { image, eyebrow, title, accent } = Astro.props;
+---
+
+<section class="container-page section-y">
+  {eyebrow && <p>{eyebrow}</p>}
+  {(title || accent) && <h2>{[title, accent].filter(Boolean).join(" ")}</h2>}
+  <Image src={image.src} alt={image.alt} widths={[640, 1280]} sizes="100vw" />
+</section>

@@ -1,0 +1,70 @@
+# /engineering — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Layanan engineering"
+description: "Dukungan engineering dari konsep awal hingga implementasi, termasuk desain, penerapan, dan pemeliharaan. Solusi disesuaikan untuk memaksimalkan teknologi desain dalam proyek dan alur kerja Anda."
+parent: services
+summary: "Dari desain dan prototipe hingga implementasi."
+order: 3
+image:
+  src: ./illustration.png
+  alt: "Layanan engineering"
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "LAYANAN / ENGINEERING"
+    aside: { label: "Beranda", href: / }
+    title: "Dari gagasan."
+    accent: "Menjadi kenyataan."
+    description: "Dukungan engineering dari konsep awal hingga implementasi, termasuk desain, penerapan, dan pemeliharaan. Solusi disesuaikan untuk memaksimalkan teknologi desain dalam proyek dan alur kerja Anda."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: media
+    variant: MediaFigure_001
+    image:
+      src: ./illustration.png
+      alt: "LAYANAN / ENGINEERING"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Integrasi sistem"
+        description: "Integrasi sistem yang kompleks untuk mendukung performa dan fungsi yang optimal."
+      - title: "Pemeliharaan & dukungan"
+        description: "Pemeliharaan dan dukungan berkelanjutan agar sistem bekerja dengan lancar dan efisien."
+      - title: "Rapid prototyping"
+        description: "Pengembangan prototipe dengan 3D printing, CNC machining, dan teknik fabrikasi lainnya."
+      - title: "Iterasi desain & analisis"
+        description: "Penyempurnaan prototipe berdasarkan masukan dan hasil pengujian."
+      - title: "Prototipe fungsional"
+        description: "Prototipe yang berfungsi untuk pengujian dan validasi di kondisi nyata."
+      - title: "Pemilihan material & komponen"
+        description: "Panduan pemilihan material dan komponen untuk mendukung performa dan ketahanan."
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "MANFAAT & KEUNGGULAN"
+    items:
+      - title: "Percepatan ke pasar"
+        icon: timer
+        description: "Percepat pengembangan melalui rapid prototyping dan iterasi desain."
+      - title: "Efisiensi biaya"
+        icon: chart-no-axes-combined
+        description: "Uji dan sempurnakan konsep melalui prototipe sebelum implementasi akhir."
+      - title: "Kualitas tinggi"
+        icon: badge-check
+        description: "Dukung performa dan ketahanan melalui pengujian serta pemilihan material."
+      - title: "Solusi sesuai kebutuhan"
+        icon: sliders-horizontal
+        description: "Sesuaikan desain dan solusi engineering dengan kebutuhan proyek Anda."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

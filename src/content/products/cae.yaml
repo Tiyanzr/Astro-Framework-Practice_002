@@ -1,0 +1,16 @@
+# Kategori software CAE. Tambah produk = tambah item. Sumber: parametris.com (export v8 › products.js).
+title: "CAE"
+summary: "Simulasi, analisis, dan validasi desain."
+order: 3
+image:
+  src: ./cae.jpg
+  alt: "CAE"
+items:
+  - { name: "Creo Structural Analysis", href: "https://www.ptc.com/en/technologies/cad/simulation-and-analysis/structural-analysis" }
+  - { name: "Creo Thermal Analysis", href: "https://www.ptc.com/en/technologies/cad/simulation-and-analysis/thermal-analysis" }
+  - { name: "Creo Motion Analysis", href: "https://www.ptc.com/-/media/Files/PDFs/CAD/Simulation/PTC_Creo_Mechanism_Dynamics_Option_DS.pdf" }
+  - { name: "Creo Fatigue Analysis", href: "https://www.ptc.com/-/media/Files/PDFs/CAD/PTC-Creo_Fatigue_Advisor_Extension_DS.pdf" }
+  - { name: "Creo Fluid-Flow Analysis (Cfd)", href: "https://www.ptc.com/en/technologies/cad/simulation-and-analysis/computational-fluid-dynamics" }
+  - { name: "Creo Mold-Fill Analysis", href: "https://www.ptc.com/-/media/Files/PDFs/CAD/Creo_4/Datasheet-Creo_Mold_Analysis_Extension-en.pdf" }
+  - { name: "Creo Ansys", href: "https://www.ptc.com/en/products/creo/ansys-simulation" }
+  - { name: "Creo Simulation Live", href: "https://www.ptc.com/en/products/creo/simulation-live" }

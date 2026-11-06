@@ -5,25 +5,29 @@
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import VariantLabel from "@/prototype/VariantLabel.astro";
 import { footerVariants } from "@/components/layout/footer/variants";
-import { getSite } from "@/lib/content";
-import { allOption, control, selected, variantOptions } from "@/prototype/controls";
+import { getMainLinks, getSite } from "@/lib/content";
+import { allOption, control, paletteClass, paletteControl, selected, sitePalette, variantOptions } from "@/prototype/controls";
 
 const site = await getSite();
-const { variant: active, ...footer } = site.footer;
+const { variant: active, explore, ...footer } = site.footer;
 const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions(Object.keys(footerVariants), "footer")), allOption], active);
+const palette = paletteControl(Astro.url, await sitePalette());
+const links = await getMainLinks();
 const shown = selected(variant);
 ---
 
-<PrototypeLayout title="Footer" controls={[variant]}>
+<PrototypeLayout title="Footer" controls={[variant, palette]}>
+  <div class:list={[paletteClass(palette)]}>
   {
     shown.map((name) => {
       const Variant = footerVariants[name];
       return (
         <div>
           {shown.length > 1 && <VariantLabel section="footer" name={name} />}
-          <Variant siteName={site.name} {...footer} />
+          <Variant siteName={site.name} links={explore ?? links} {...footer} />
         </div>
       );
     })
   }
+  </div>
 </PrototypeLayout>

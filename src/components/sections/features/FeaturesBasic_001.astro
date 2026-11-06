@@ -1,0 +1,21 @@
+---
+// FeaturesBasic_001: versi bare minimum (tanpa desain). Judul section + daftar bernomor judul — penjelasan.
+import BasicHeading from "../BasicHeading.astro";
+import type { FeaturesProps } from "./types";
+
+type Props = FeaturesProps;
+
+const { items, ...heading } = Astro.props;
+---
+
+<BasicHeading {...heading} />
+<ol>
+  {
+    items.map((item) => (
+      <li>
+        {item.title}
+        {item.description && <> — {item.description}</>}
+      </li>
+    ))
+  }
+</ol>

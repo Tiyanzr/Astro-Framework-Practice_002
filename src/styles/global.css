@@ -166,10 +166,84 @@
   --ring: var(--midnight);
 }
 
+/* Palet + font + jarak REFERENSI parametris.com (export klien "Parametris Complete Source v8", style.css).
+   DRAFT: hanya dipakai halaman /prototype (combo box "Palet: referensi") untuk membandingkan variasi bergaya referensi.
+   Dipasang sebagai class pada pembungkus: `<div class="theme-parametris">`. Semua token semantik di dalamnya berganti,
+   jadi variasi tetap memakai token (text-primary, border-border, ...) dan bisa kembali ke palet situs cukup dengan melepas class ini.
+   Nilai asli referensi: ink #14252e, muted #606b70, gold #86732c, line #d8dcd9, latar closing #f2f3ef, dark #11262c, font Arial. */
+.theme-parametris {
+  --background: #ffffff;
+  --background-alt: #f2f3ef;
+  --foreground: #14252e;
+  --card: #ffffff;
+  --card-foreground: #14252e;
+  --popover: #ffffff;
+  --popover-foreground: #14252e;
+  --primary: #86732c;
+  --primary-hover: color-mix(in srgb, #86732c 80%, #14252e);
+  --primary-foreground: #ffffff;
+  --secondary: #f2f3ef;
+  --secondary-foreground: #14252e;
+  --muted: #f3f4f0;
+  --muted-foreground: #606b70;
+  --accent: #f3f4f0;
+  --accent-foreground: #14252e;
+  --highlight: #86732c;
+  --border: #d8dcd9;
+  --input: #d8dcd9;
+  --ring: #86732c;
+  --display-family: Arial, Helvetica, sans-serif;
+  --heading-family: Arial, Helvetica, sans-serif;
+  /* Jarak referensi: .wrap max 1440px, gutter 5% (6.2% mulai 1050px), .section 60px → 95px */
+  --page-max: 90rem;
+  --page-gutter: 5%;
+  --section-y: 3.75rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+@media (width >= 48.8125rem) {
+  .theme-parametris {
+    --section-y: 5.9375rem;
+  }
+}
+@media (width >= 65.625rem) {
+  .theme-parametris {
+    --page-gutter: 6.2%;
+  }
+}
+.theme-parametris ::selection {
+  background: #86732c;
+  color: #ffffff;
+}
+/* Section gelap di dalam palet referensi (.dark referensi: #11262c, emas terang #c7b775). */
+.theme-parametris .theme-dark,
+.theme-parametris.theme-dark {
+  --background: #11262c;
+  --background-alt: #193039;
+  --foreground: #ffffff;
+  --card: #193039;
+  --card-foreground: #ffffff;
+  --popover: #193039;
+  --popover-foreground: #ffffff;
+  --primary: #c7b775;
+  --primary-hover: #d0bd7b;
+  --primary-foreground: #11262c;
+  --secondary: #193039;
+  --secondary-foreground: #ffffff;
+  --muted: #193039;
+  --muted-foreground: #b7c4c6;
+  --accent: #193039;
+  --accent-foreground: #ffffff;
+  --highlight: #d0bd7b;
+  --border: rgb(255 255 255 / 0.19);
+  --input: rgb(255 255 255 / 0.19);
+  --ring: #c7b775;
+}
+
 .theme-light,
 .theme-dark,
 .theme-green,
-.theme-olive {
+.theme-olive,
+.theme-parametris {
   background-color: var(--background);
   color: var(--foreground);
 }
@@ -269,6 +343,50 @@
   --text-eyebrow--letter-spacing: 0.14em;
   --text-eyebrow--font-weight: 500;
 
+  /* Skala huruf REFERENSI parametris.com (draft, dipakai variasi bergaya referensi: HeroText_*, CardsGallery_*, ...).
+     Judul besar tipis (weight 400) dengan letter-spacing sangat rapat, sesuai style.css referensi. */
+  --text-ref-h1: clamp(2.625rem, 6.4vw, 5.6875rem); /* 42 → 91px, judul hero beranda */
+  --text-ref-h1--line-height: 1.08;
+  --text-ref-h1--letter-spacing: -0.065em;
+  --text-ref-h1--font-weight: 400;
+
+  --text-ref-h1-inner: clamp(2.625rem, 6vw, 5.125rem); /* 42 → 82px, judul hero halaman lain */
+  --text-ref-h1-inner--line-height: 1.08;
+  --text-ref-h1-inner--letter-spacing: -0.06em;
+  --text-ref-h1-inner--font-weight: 400;
+
+  --text-ref-closing: clamp(2.5rem, 5.5vw, 4.875rem); /* 40 → 78px, judul ajakan penutup */
+  --text-ref-closing--line-height: 1.12;
+  --text-ref-closing--letter-spacing: -0.05em;
+  --text-ref-closing--font-weight: 400;
+
+  --text-ref-h2: clamp(2.1875rem, 4.4vw, 3.75rem); /* 35 → 60px, judul section */
+  --text-ref-h2--line-height: 1.12;
+  --text-ref-h2--letter-spacing: -0.05em;
+  --text-ref-h2--font-weight: 400;
+
+  --text-ref-caption: clamp(2.25rem, 4vw, 3.5625rem); /* 36 → 57px, judul di atas foto banner */
+  --text-ref-caption--line-height: 1.12;
+  --text-ref-caption--letter-spacing: -0.05em;
+  --text-ref-caption--font-weight: 400;
+
+  --text-ref-h3-lg: clamp(1.625rem, 2.2vw, 1.875rem); /* 26 → 30px, judul kartu besar */
+  --text-ref-h3-lg--line-height: 1.25;
+  --text-ref-h3-lg--letter-spacing: -0.025em;
+  --text-ref-h3-lg--font-weight: 400;
+
+  --text-ref-h3: 1.5625rem; /* 25px, judul kartu */
+  --text-ref-h3--line-height: 1.25;
+  --text-ref-h3--letter-spacing: -0.025em;
+  --text-ref-h3--font-weight: 400;
+
+  --text-ref-contact: clamp(1.375rem, 3vw, 2.5rem); /* 22 → 40px, email besar di kontak */
+  --text-ref-contact--line-height: 1.3;
+  --text-ref-contact--letter-spacing: -0.04em;
+
+  --text-ref-lead: 1.0625rem; /* 17px, paragraf pembuka hero */
+  --text-ref-lead--line-height: 1.75;
+
   /* Easing — gerakan "cepat di awal, melambat halus di akhir" */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -294,8 +412,9 @@
 }
 
 /* Judul besar (h1) memakai font condensed yang sudah rapat dari sananya: letter-spacing negatif dari token
-   text-display-xl, text-display, dan text-h1 (dibuat untuk Archivo) dinetralkan. Di luar @layer supaya menimpa utility. */
-h1 {
+   text-display-xl, text-display, dan text-h1 (dibuat untuk Archivo) dinetralkan. Di luar @layer supaya menimpa utility.
+   Kecuali judul bergaya referensi (class text-ref-*), yang memang memakai letter-spacing rapat dari tokennya. */
+h1:not([class*="text-ref-"]) {
   letter-spacing: 0;
 }
 

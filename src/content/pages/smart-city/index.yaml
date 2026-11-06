@@ -1,0 +1,62 @@
+# /smart-city — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Smart city"
+description: "Command center mengintegrasikan sistem IoT untuk pemantauan, analisis data, dan pengendalian berbagai fungsi kota secara real-time, mendukung efisiensi, keamanan, dan kualitas lingkungan perkotaan."
+parent: iot
+summary: "Data kota dan kontrol terpusat."
+order: 4
+image:
+  src: ./illustration.png
+  alt: "Smart city"
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "SOLUSI IOT / SMART CITY"
+    aside: { label: "Beranda", href: / }
+    title: "Data kota terintegrasi."
+    accent: "Layanan lebih responsif."
+    description: "Command center mengintegrasikan sistem IoT untuk pemantauan, analisis data, dan pengendalian berbagai fungsi kota secara real-time, mendukung efisiensi, keamanan, dan kualitas lingkungan perkotaan."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: media
+    variant: MediaFigure_001
+    image:
+      src: ./illustration.png
+      alt: "SOLUSI IOT / SMART CITY"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Command Center Dashboard System"
+        description: "Infrastruktur antarmuka digital untuk akses, pemantauan, dan kontrol proses organisasi secara terpusat."
+      - title: "Ekosistem data terpusat"
+        description: "Digitalisasi pemantauan data di lingkungan pemerintah kabupaten/kota untuk mendukung pelayanan masyarakat."
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "MANFAAT & KEUNGGULAN"
+    items:
+      - title: "Data diperbarui setiap hari"
+        icon: calendar-check
+        description: "Pembaruan harian membantu tim mengikuti kondisi dan informasi terkini."
+      - title: "Akses melalui ponsel dan komputer"
+        icon: monitor-smartphone
+        description: "Akses informasi dan pemantauan melalui ponsel maupun komputer."
+      - title: "Data faktual, terkini, dan andal"
+        icon: database
+        description: "Satukan data faktual dan terkini dalam ekosistem terpusat."
+      - title: "Dapat dikelola tim lokal / pemerintah"
+        icon: users
+        description: "Sistem dapat dikelola tim lokal untuk mendukung keberlanjutan operasional."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }
