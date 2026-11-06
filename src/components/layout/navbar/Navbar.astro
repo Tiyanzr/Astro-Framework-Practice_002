@@ -1,0 +1,19 @@
+---
+// Pintu masuk navbar: variasi dipilih lewat `navbar.variant` di src/content/site.yaml (= nama file tanpa .astro).
+// Isi: nama situs + cta dari site.yaml, item menu dari src/content/menu/*.yaml. Daftar variasi: ./variants.ts.
+// Saat build, variasi yang belum disetujui diganti NavbarBasic_001 (tanpa desain), lihat lib/variants.ts.
+import { getMainLinks, getSite } from "@/lib/content";
+import { pickVariant } from "@/lib/variants";
+import { navbarVariants } from "./variants";
+
+interface Props {
+  /** Paksa variasi tertentu (dipakai halaman /prototype/navbar). */
+  variant?: string;
+}
+
+const site = await getSite();
+const links = await getMainLinks();
+const Variant = await pickVariant(navbarVariants, Astro.props.variant ?? site.navbar.variant, "navbar", "NavbarBasic_001");
+---
+
+<Variant siteName={site.name} cta={site.cta} links={links} />

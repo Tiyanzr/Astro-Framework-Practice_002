@@ -1,0 +1,19 @@
+# Status variasi: daftar variasi yang SUDAH DISETUJUI, per section (nama = nama folder section).
+# - Variasi yang tidak tercantum di sini = DRAFT: tetap bisa dipakai & dilihat saat `astro dev`,
+#   tetapi saat build otomatis diganti versi Basic-nya (teks saja).
+# - Variasi <Nama>Basic_<NNN> selalu boleh dipakai, tidak perlu dicantumkan.
+# - Menyetujui variasi = tambahkan namanya di section yang sesuai, mis. hero: [HeroImage_002]
+# Semua variasi beserta statusnya bisa dilihat di /prototype/variants (hanya saat dev).
+
+approved:
+  navbar: [NavbarPanel_001]
+  hero: [HeroImage_002]
+  intro: [IntroMedia_002]
+  cards: []
+  catalog: []
+  posts: []
+  text: []
+  cta: []
+  contact: []
+  footer: [FooterSimple_001]
+  post: [PostArticle_001]

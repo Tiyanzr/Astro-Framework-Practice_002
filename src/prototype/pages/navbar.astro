@@ -1,0 +1,31 @@
+---
+// /prototype/navbar: coba variasi navbar dengan isi yang sama (site.yaml + src/content/menu/).
+// Pilih variasi di bar atas (?v=); "Semua" = semua variasi berjajar. Bawaan = variasi yang dipakai situs.
+// Semua variasi di src/components/layout/navbar/ otomatis ikut, diberi tanda status (src/content/variants.yaml).
+// Setiap navbar ditaruh dalam bingkai ber-transform: elemen `fixed` di dalamnya menempel ke bingkai, bukan ke layar,
+// jadi tidak menimpa bar pilihan. Tinggi bingkai memberi ruang untuk panel menu saat dibuka.
+// Catatan: di mode "Semua", tombol menu hanya berfungsi di navbar pertama (id elemen sama).
+import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
+import Navbar from "@/components/layout/navbar/Navbar.astro";
+import VariantLabel from "@/prototype/VariantLabel.astro";
+import { navbarVariants } from "@/components/layout/navbar/variants";
+import { getSite } from "@/lib/content";
+import { allOption, control, selected, variantOptions } from "@/prototype/controls";
+
+const site = await getSite();
+const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions(Object.keys(navbarVariants), "navbar")), allOption], site.navbar.variant);
+const shown = selected(variant);
+---
+
+<PrototypeLayout title="Navbar" controls={[variant]}>
+  {
+    shown.map((name) => (
+      <div>
+        {shown.length > 1 && <VariantLabel section="navbar" name={name} />}
+        <div class="relative min-h-[560px] overflow-hidden border-b border-border [transform:translateZ(0)]">
+          <Navbar variant={name} />
+        </div>
+      </div>
+    ))
+  }
+</PrototypeLayout>

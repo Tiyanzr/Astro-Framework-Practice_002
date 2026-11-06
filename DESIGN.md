@@ -1,8 +1,9 @@
 # Parametrik — Design System
 
 > Dokumen hidup. Semua nilai di sini sudah terpasang sebagai token di [`src/styles/global.css`](src/styles/global.css).
-> Contoh visualnya bisa dilihat di halaman `/prototype` (hanya saat `astro dev`): warna, font, dan semua variasi section. Struktur folder ada di bagian [Struktur file](#struktur-file), pemisahan produksi dan prototype di [Produksi vs prototype](#produksi-vs-prototype).
+> Contoh visualnya bisa dilihat di halaman `/prototype` (hanya saat `astro dev`): warna, font, dan semua variasi section. Struktur folder ada di bagian [Struktur file](#struktur-file), pemisahan produksi dan prototype di [Status variasi & prototype](#status-variasi--prototype).
 > Kalau mengubah token, ubah di `global.css` **dan** catat di sini.
+> Ringkasan proyek, cara kerja, status terakhir, dan rencana ke depan: [AGENTS.md](AGENTS.md).
 
 ## Ringkasan
 
@@ -174,10 +175,11 @@ Nilai jarak universal ada di awal `src/styles/global.css`. Mengubahnya di sana b
 
 ## Navbar
 
-- Komponen: `src/components/layout/Navbar.astro`, otomatis terpasang lewat `BaseLayout`. Isi menu di `src/content/menu/*.yaml` (1 item = 1 file), tombol CTA di `src/content/site.yaml` (`cta`).
+- Mengikuti [standar section dengan variasi](#standar-section-dengan-variasi): pintu masuk `src/components/layout/navbar/Navbar.astro` (otomatis terpasang lewat `BaseLayout`), variasi dipilih lewat `navbar.variant` di `site.yaml`, dibandingkan di `/prototype/navbar`. Isi menu di `src/content/menu/*.yaml` (1 item = 1 file), tombol CTA di `src/content/site.yaml` (`cta`).
+- Basic: `NavbarBasic_001` (teks saja). Desain di bawah ini = **`NavbarPanel_001`** (draft).
 - Posisi `fixed` di atas, tinggi 64px (`h-16`).
 - Latar **solid** `bg-background` dengan garis bawah `border-border`. **Tanpa glassmorphism** (tanpa transparansi dan blur), supaya terlihat lebih profesional dan tenang.
-- Karena navbar `fixed`, konten halaman diberi `pt-16` agar tidak tertutup.
+- Karena navbar `fixed`, variasi itu sendiri menaruh spacer `h-16` setelah navbar agar konten tidak tertutup (`BaseLayout` tidak lagi memberi `pt-16`).
 ### Menu pop-up (gaya panel geser)
 
 - Dibuka lewat tombol menu (garis dua → silang) di kanan navbar, di semua ukuran layar.
@@ -246,7 +248,34 @@ sections:
 
 - **Tukar urutan** = pindahkan bloknya. **Section yang sama boleh dipakai lebih dari sekali.**
 - **Isi selalu per halaman.** Variasi yang sama di dua halaman bisa punya isi dan jumlah tombol berbeda.
-- `src/components/sections/Sections.astro` memetakan `type` ke pintu masuk section (`hero` → `Hero.astro`, `intro` → `Intro.astro`).
+- `src/components/sections/Sections.astro` memetakan `type` ke pintu masuk section (`hero` → `Hero.astro`, `cards` → `Cards.astro`, dst.).
+
+**Jenis section yang tersedia** (semua punya versi Basic di produksi):
+
+| `type` | Isi di YAML | Data otomatis dari |
+|---|---|---|
+| `hero` | `title`, `description`, `eyebrow`, `actions[]`, `links[]`, `image` | — |
+| `intro` | `title`, `description`, `highlight`, `media` | — |
+| `cards` | judul section + **`from: <induk>`** atau **`items[]`** manual (`title`, `description`, `href`) | `from` → halaman anak `pages/<induk>/*.yaml` (`title` + `summary`, urut `order`). Tambah halaman anak = otomatis tambah kartu |
+| `catalog` | judul section, `categories[]` (kosong = semua), `limit` (produk per kategori), `more` | koleksi `products` (1 file = 1 kategori). Setiap kategori punya anchor `#<id>` |
+| `posts` | judul section, `limit` (kosong = semua), `category`, `more` | koleksi `posts` (tanpa draft saat build), terbaru di atas |
+| `text` | judul section, `body` (paragraf dipisah baris kosong) | — |
+| `cta` | judul section, `actions[]` | — |
+| `contact` | judul section, `form` (`fields[]`: `name`, `label`, `type`, `required`; `submit`) | `site.yaml` › `contact` (email, telepon, alamat, jam). Formulir masih **mockup**, belum terkirim |
+
+Semua section selain hero dan intro memakai judul section yang sama (`eyebrow`, `title`, `description`, opsional) dan pembungkus `ui/Section` (`tone`, `width`; diabaikan oleh Basic). Kode bersama: `sections/WrappedVariant.astro` (pilih variasi + bungkus), `sections/BasicHeading.astro` (judul untuk versi Basic), `sections/types.ts`.
+
+**Halaman mockup** (isi placeholder: *Title*, *Description*, lorem ipsum):
+
+| URL | File | Memperlihatkan |
+|---|---|---|
+| `/` | `home.yaml` | banyak section dalam satu halaman: hero, intro, cards manual, catalog (2 produk/kategori), posts (3 terbaru), cta |
+| `/software` | `software.yaml` | showcase produk (catalog, semua kategori) |
+| `/iot`, `/layanan` | `iot.yaml`, `layanan.yaml` | kartu otomatis dari halaman anak (`cards` › `from`) |
+| `/iot/manufaktur`, `/iot/energi`, `/layanan/pelatihan`, `/layanan/konsultasi` | `iot/*.yaml`, `layanan/*.yaml` | halaman anak (hero + text + cta) |
+| `/tentang` | `tentang.yaml` | halaman teks |
+| `/kontak` | `kontak.yaml` | contact (data dari site.yaml + formulir) |
+| `/artikel` | `artikel.yaml` | posts (semua artikel); detail di `/posts/<slug>/` (4 artikel dummy `article-title-1..4`) |
 - **Jenis section baru** (mis. `layanan`): tambahkan skemanya di `src/content.config.ts` (`pages` › `sections`, dengan `type: z.literal("layanan")`), lalu daftarkan pintu masuknya di `components` pada `Sections.astro`.
 - Contoh halaman kedua (hanya dev): `src/prototype/content/pages/contoh-halaman.yaml` → `/contoh-halaman` (hero 3 tombol + dua intro dengan tone berbeda). Halaman di folder itu tidak ikut build.
 
@@ -267,12 +296,12 @@ src/components/sections/<nama>/        (footer: src/components/layout/footer/)
 | Nama folder | huruf kecil: `hero`, `intro`, `footer` |
 | Nama variasi | `<Nama><Gaya>_<NNN>`. Gaya = bentuk dasarnya (`Image` = foto penuh, `Media` = teks + video/gambar, `Simple`); nomor 3 digit mulai `_001`. Gaya baru = nama gaya baru, mulai lagi dari `_001` |
 | Isi | item di `sections` pada `src/content/pages/<halaman>.yaml` dengan `type: <nama>` (footer: `site.yaml` › `footer`), selalu dengan kolom `variant` |
-| Perbandingan | `/prototype/<nama>`: semua variasi (produksi + kandidat) tampil berurutan dengan isi yang sama. Daftar semua halaman prototype di `/prototype` |
-| Kandidat | variasi yang belum disetujui ditaruh di `src/prototype/variants/<nama>/`, bukan di folder section (lihat [Produksi vs prototype](#produksi-vs-prototype)) |
+| Perbandingan | `/prototype/<nama>`: semua variasi tampil dengan isi yang sama, diberi tanda status. Semua section sekaligus: `/prototype/variants`. Daftar semua halaman prototype di `/prototype` |
+| Status | draft / disetujui / basic, diatur di `src/content/variants.yaml` (lihat [Status variasi & prototype](#status-variasi--prototype)) |
 | Helper | `src/lib/variants.ts`: `collectVariants()` (dipakai `variants.ts`) dan `pickVariant()` (dipakai pintu masuk, pesan error menyebut pilihan yang ada) |
 
 - **Menambah variasi = menambah file.** Tidak ada daftar yang perlu diisi manual; file baru otomatis bisa dipilih dan otomatis tampil di `/prototype/<nama>`.
-- **Variasi baru selalu mulai sebagai kandidat** di `src/prototype/variants/<nama>/`. Setelah disetujui, filenya dipindah ke folder section.
+- **Variasi baru otomatis berstatus draft.** Menyetujui = tambahkan namanya di `src/content/variants.yaml`, file tetap di tempatnya.
 
 ### Pembungkus section — `src/components/ui/Section.astro`
 
@@ -369,11 +398,9 @@ src/components/sections/post/
 │   ├── PostToc.astro       ← daftar isi dari judul ## (dan ###), menandai judul yang sedang dibaca
 │   ├── PostTags.astro      ← tag
 │   └── PostRelated.astro   ← kartu artikel terkait
-└── PostBasic_001.astro     ← PRODUKSI: bare minimum, HTML polos tanpa desain
-
-src/prototype/variants/post/
-├── PostArticle_001.astro   ← KANDIDAT: satu kolom sempit
-└── PostArticle_002.astro   ← KANDIDAT: kepala lebar + cover, sidebar daftar isi sticky, artikel terkait
+├── PostBasic_001.astro     ← basic: HTML polos tanpa desain
+├── PostArticle_001.astro   ← draft: satu kolom sempit
+└── PostArticle_002.astro   ← draft: kepala lebar + cover, sidebar daftar isi sticky, artikel terkait
 ```
 
 | Aturan | Isi |
@@ -439,7 +466,7 @@ src/
 ├── lib/section.ts              ← nilai tone/width yang diizinkan untuk ui/Section
 ├── layouts/BaseLayout.astro    ← <head>, tema, Navbar, <main><slot/></main>
 ├── components/
-│   ├── layout/Navbar.astro     ← bagian yang muncul di semua halaman
+│   ├── layout/navbar/          ← Navbar.astro + variants.ts + types.ts + NavbarBasic_001 (standar section dengan variasi)
 │   ├── layout/footer/          ← Footer.astro + variants.ts + FooterBasic_001 (standar section dengan variasi)
 │   ├── sections/hero/          ← 1 folder per section yang punya variasi (Hero.astro + variants.ts + HeroBasic_001)
 │   ├── sections/intro/         ← Intro.astro + variants.ts + IntroBasic_001
@@ -451,61 +478,83 @@ src/
 ├── pages/                      ← rute PRODUKSI; isinya hanya menyusun section di dalam BaseLayout
 │   ├── [...slug].astro         ← SEMUA halaman dari content/pages/*.yaml (susunan section dari YAML)
 │   └── posts/[id].astro        ← halaman otomatis untuk setiap folder di content/posts
-└── prototype/                  ← PROTOTYPE: hanya saat `astro dev`, tidak pernah ikut build (lihat Produksi vs prototype)
+└── prototype/                  ← PROTOTYPE: hanya saat `astro dev`, tidak pernah ikut build (lihat Status variasi & prototype)
 ```
 
-## Produksi vs prototype
+## Status variasi & prototype
 
-> **Status saat ini (2026-11-05): belum ada desain resmi dari atasan.** Semua desain (HeroImage_001/_002, IntroMedia_001/_002, FooterSimple_001, PostArticle_001/_002) berstatus **kandidat** di `src/prototype/variants/`. Produksi hanya berisi versi **Basic**, jadi fokusnya fungsionalitas arsitektur, bukan tampilan.
+> **Status saat ini (2026-11-06): belum ada desain resmi dari atasan; fokusnya fungsionalitas arsitektur.** Variasi yang dipakai situs disetujui untuk demo: `NavbarPanel_001`, `HeroImage_002`, `IntroMedia_002`, `FooterSimple_001`, `PostArticle_001`. Draft: `HeroImage_001`, `IntroMedia_001`, `PostArticle_002`. Section baru (cards, catalog, posts, text, cta, contact) baru punya versi Basic.
+
+### Satu tempat untuk semua variasi
+
+Semua variasi sebuah section ada **di folder section itu sendiri** (`src/components/sections/<section>/` atau `src/components/layout/<section>/`), apa pun statusnya. Statusnya dicatat terpisah di **`src/content/variants.yaml`**:
+
+```yaml
+approved:
+  hero: [HeroImage_002]   # disetujui → boleh dipakai di build
+  footer: []
+```
+
+| Status | Artinya | Saat dev | Saat build |
+|---|---|---|---|
+| **basic** | `<Nama>Basic_<NNN>`, teks saja, tanpa desain | dipakai | dipakai |
+| **disetujui** | tercantum di `variants.yaml` › `approved` › `<section>` | dipakai | dipakai |
+| **draft** | semua variasi lain (variasi baru otomatis draft) | dipakai | **diganti Basic**, dengan peringatan di log build |
+
+- **Membuat variasi baru** = tambah file `<Nama><Gaya>_<NNN>.astro` di folder section. Otomatis terdeteksi, berstatus draft, muncul di combo box `/prototype/<section>` dan di `/prototype/variants`.
+- **Menyetujui** = tambahkan namanya di `variants.yaml`. Tidak ada file yang dipindah. Riwayat persetujuan tercatat di git.
+- **Menolak** = hapus filenya.
+- YAML halaman boleh menunjuk variasi draft: saat dev desainnya tampil, saat build otomatis diganti Basic. Sekarang YAML menunjuk desain draft (NavbarPanel_001, HeroImage_002, IntroMedia_002, FooterSimple_001, PostArticle_001) supaya dev tetap berdesain.
+- **Variasi Basic selalu mengabaikan `tone`, `width`, `pulldown`** (`isBasic()` di `lib/variants.ts`), jadi build tanpa warna latar walau YAML mengisinya.
+- Bawaan `variant` di skema (kalau tidak diisi) = Basic.
+- Logika: `src/lib/variants.ts` (`collectVariants`, `variantStatus`, `resolveVariant`, `pickVariant`).
+- Catatan: variasi draft tetap ikut di-compile saat build (tidak ditampilkan). File draft yang error akan membuat build gagal.
 
 ### Versi Basic (bare minimum)
 
-Setiap section punya satu variasi `<Nama>Basic_001` di folder produksinya: HTML polos (judul, paragraf, daftar link, gambar), **tanpa warna dan tanpa desain**, hanya `container-page` + `section-y` supaya tidak menempel ke tepi. Gunanya membuktikan bahwa semua data dari YAML/Markdown sampai ke halaman.
+Setiap section punya satu variasi `<Nama>Basic_001`: HTML polos (judul, paragraf, daftar link, gambar), **tanpa warna dan tanpa desain**, hanya `container-page` + `section-y` supaya tidak menempel ke tepi. Gunanya membuktikan bahwa semua data dari YAML/Markdown sampai ke halaman.
 
 | Section | Basic | Menampilkan |
 |---|---|---|
-| hero | `HeroBasic_001` | eyebrow, judul, deskripsi, `actions`, `links` (atau menu), gambar |
+| navbar | `NavbarBasic_001` | nama situs (link ke beranda), item menu + sub-menu, tombol aksi, semuanya link teks |
+| hero | `HeroBasic_001` | eyebrow, judul, deskripsi, `actions`, `links` (hanya kalau diisi), gambar |
 | intro | `IntroBasic_001` | eyebrow, judul, paragraf, highlight, media (link YouTube / gambar / teks placeholder) |
+| cards, catalog, posts, text, cta, contact | `<Nama>Basic_001` | lihat *Jenis section yang tersedia* (posts: judul + tanggal saja) |
 | footer | `FooterBasic_001` | nama situs, alamat, email, link sosial, copyright |
 | post | `PostBasic_001` | kepala, cover, daftar isi, isi Markdown (tanpa `.prose`), tag, artikel terkait |
 
-- **Saat dev:** halaman memakai variasi yang ditulis di YAML (boleh kandidat), jadi desain bisa dilihat di beranda maupun `/prototype/<section>`.
-- **Saat build:** variasi kandidat diganti otomatis dengan Basic-nya, termasuk pengaturan desain pembungkus (`tone`, `width`, `pulldown` diabaikan). YAML tidak perlu diubah: begitu desain disetujui dan dipindah ke folder produksi, build langsung memakainya.
-- Bawaan `variant` di skema (kalau tidak diisi) = Basic.
-- Navbar belum memakai sistem variasi, jadi masih tampil dengan desainnya sekarang.
+### Folder prototype
 
-Project dibagi dua wilayah yang tidak bercampur. **Produksi** = semua yang tayang di web. **Prototype** = tempat mencoba dan menilai; isinya hanya hidup saat `astro dev` dan **tidak pernah ikut `astro build`** (diatur `src/prototype/integration.mjs`, didaftarkan di `astro.config.mjs`).
+Isinya hanya alat untuk melihat dan mencoba; hidup saat `astro dev` saja dan **tidak pernah ikut `astro build`** (diatur `src/prototype/integration.mjs`, didaftarkan di `astro.config.mjs`).
 
 ```
 src/prototype/
 ├── pages/                      ← 1 file = 1 halaman di /prototype/... (file baru langsung terbaca, tanpa restart)
 │   ├── index.astro             ← /prototype: daftar semua halaman prototype, dibuat otomatis
-│   ├── colors, fonts, hero, intro, footer, post.astro   ← halaman perbandingan
+│   ├── variants.astro          ← /prototype/variants: SEMUA variasi + status + halaman yang memakainya
+│   ├── navbar, hero, intro, footer, post.astro   ← preview per section (combo box variasi)
+│   ├── colors, fonts.astro     ← token warna & kandidat font
 │   ├── coba/                   ← halaman coba-coba bebas (/prototype/coba/<nama>); contoh.astro bisa disalin
 │   └── tutorial/               ← sisa tutorial Astro (about, blog)
-├── sections/                   ← section coba-coba bebas, tidak harus ikut standar variasi
-├── variants/<section>/         ← variasi KANDIDAT (hero/, intro/, footer/, post/), diberi label "Kandidat" di /prototype
-├── content/posts/              ← postingan contoh untuk menguji tampilan artikel (contoh-semua-elemen, post-1..3)
-├── PrototypeLayout.astro       ← layout semua halaman prototype: bar atas (hanya combo box) + bar bawah (hanya tombol kembali), putih, selalu terlihat
-├── controls.ts                 ← pembuat combo box: control(), variantOptions(), selected(), opsi "Semua"
-├── VariantLabel.astro          ← label nama variasi di halaman /prototype
+├── sections/                   ← komponen coba-coba bebas, tidak harus ikut standar variasi
+├── content/pages, content/posts ← halaman & artikel uji (mis. /contoh-halaman, contoh-semua-elemen)
+├── PrototypeLayout.astro       ← layout semua halaman prototype: bar atas (hanya combo box) + bar bawah (hanya tombol kembali)
+├── controls.ts                 ← pembuat combo box: control(), variantOptions() (dengan tanda status), selected(), opsi "Semua"
+├── VariantLabel.astro          ← label nama variasi + status (Draft / Disetujui / Basic)
 ├── route.astro                 ← rute penampung /prototype/[...path]
-└── integration.mjs             ← mengaktifkan semua di atas hanya saat dev
+└── integration.mjs             ← mengaktifkan rute /prototype hanya saat dev
 ```
+
+**`/prototype/variants`** (dibuat otomatis): tabel semua variasi per section dengan kolom **status**, **dipakai di** (halaman dari `pages/*.yaml`, `site.yaml` untuk navbar/footer/post, frontmatter artikel), dan link **preview** ke `/prototype/<section>?v=<variasi>`.
 
 | Pekerjaan | Caranya |
 |---|---|
-| Layout halaman prototype | Selalu `PrototypeLayout` (bukan `BaseLayout`): navbar dan footer situs tidak tampil. Gantinya **bar atas sticky** (hanya combo box, tanpa judul; tidak ada kalau halaman tidak punya pilihan) dan **bar bawah fixed** (hanya tombol *Daftar prototype*; tidak ada di halaman daftar). Keduanya putih polos dengan garis tipis. Untuk melihat section bersama navbar/footer situs, buka halaman produksi |
-| Combo box | Kirim lewat prop `controls` (buat dengan `control()` di `controls.ts`). Pilihan disimpan di URL: `?v=` variasi, `?tone=` tone, `?p=` artikel, `?font=` font. Opsi **Semua** menampilkan semua pilihan berjajar dengan label. Bawaan = yang sedang dipakai situs (home.yaml / site.yaml) |
-| Mencoba halaman/section bebas | Buat file di `src/prototype/pages/coba/` (dan `src/prototype/sections/`). Teks boleh ditulis langsung, tidak perlu YAML |
-| Membuat variasi baru untuk dinilai | Buat `src/prototype/variants/<section>/<Nama><Gaya>_<NNN>.astro` (import dari folder section pakai `@/components/...`). Otomatis tampil di `/prototype/<section>` dengan label Kandidat, dan bisa dicoba di `home.yaml` saat dev |
-| Variasi disetujui | **Pindahkan filenya** ke folder section produksi (`src/components/sections/<section>/`), lalu pilih lewat `variant:` di YAML |
-| Variasi ditolak | Hapus filenya dari `src/prototype/variants/` |
+| Layout halaman prototype | Selalu `PrototypeLayout` (bukan `BaseLayout`): navbar dan footer situs tidak tampil. Gantinya **bar atas sticky** (hanya combo box; tidak ada kalau halaman tidak punya pilihan) dan **bar bawah fixed** (hanya tombol *Daftar prototype*; tidak ada di halaman daftar) |
+| Combo box | Kirim lewat prop `controls` (buat dengan `control()` di `controls.ts`). Pilihan disimpan di URL: `?v=` variasi, `?tone=` tone, `?p=` artikel, `?font=` font. Opsi **Semua** menampilkan semua pilihan berjajar dengan label. Bawaan = yang sedang dipakai situs |
+| Mencoba halaman/komponen bebas | Buat file di `src/prototype/pages/coba/` (dan `src/prototype/sections/`). Teks boleh ditulis langsung, tidak perlu YAML |
 | Menerbitkan artikel | `npm run import:notion -- "<folder>"` → masuk `src/content/posts/<slug>/` dengan `draft: true` (tampil saat dev saja). Setelah dicek, hapus baris `draft` lalu build |
 
-**Pengaman:** kalau YAML produksi menunjuk variasi yang masih kandidat, `astro build` **memakai versi Basic** section itu (lihat di bawah) dan menulis peringatan di log: *"[hero] variasi "HeroImage_002" belum disetujui … → build memakai HeroBasic_001"*. Tanpa versi Basic, build gagal dengan pesan *"… pindahkan dulu ke folder section produksi"*. Nama variasi yang sama tidak boleh ada di produksi dan prototype sekaligus. Hasil `dist/` hanya berisi halaman produksi dan artikel yang bukan draft.
-
-Catatan: Tailwind memindai semua file di `src/`, jadi class yang hanya dipakai di prototype tetap ikut di CSS produksi (ukurannya kecil, tidak memengaruhi tampilan).
+Hasil `dist/` hanya berisi halaman dari `src/content/pages/` dan artikel yang bukan draft. Catatan: Tailwind memindai semua file di `src/`, jadi class yang hanya dipakai di prototype/draft tetap ikut di CSS (kecil, tidak memengaruhi tampilan).
 
 ### Aturan
 
@@ -528,11 +577,10 @@ Catatan: Tailwind memindai semua file di `src/`, jadi class yang hanya dipakai d
 | Koleksi | Lokasi | Field |
 |---|---|---|
 | `posts` | `src/content/posts/<slug>/index.md` | `title`, `description`, `pubDate`, `updatedDate?`, `author`, `category?`, `tags`, `cover?` (path relatif), `coverAlt?`, `draft` (default false), `variant?` |
-| `site` | `src/content/site.yaml` | `name`, `description`, `url`, `lang`, `cta` (`label`, `href`), `footer` (lihat bagian Footer), `post` (`variant`, `labels`, lihat bagian Artikel) |
-| `pages` | `src/content/pages/**/*.yaml` (dev: + `src/prototype/content/pages/`) | `title?`, `description?`, `sections[]`: `type: hero` (`variant`, `title`, `eyebrow?`, `description?`, `actions[]`, `links?`, `size?`, `image?` = `src` relatif + `alt`) · `type: intro` (`variant`, `tone?`, `width?`, `pulldown?`, `eyebrow?`, `title`, `description?`, `highlight?`, `media?`) |
-| `menu` | `src/content/menu/*.yaml` | `title`, `description?`, `href`, `order` — dipakai panel menu navbar & HeroImage_002 |
-| `services` (rencana) | `src/content/services/*.md` | — |
-| `projects` (rencana) | `src/content/projects/*.md` | — |
+| `site` | `src/content/site.yaml` | `name`, `description`, `url`, `lang`, `cta` (`label`, `href`), `contact` (`email?`, `phone?`, `address[]`, `hours?`), `navbar` (`variant`), `footer` (lihat bagian Footer), `post` (`variant`, `labels`, lihat bagian Artikel) |
+| `pages` | `src/content/pages/**/*.yaml` (dev: + `src/prototype/content/pages/`) | `title?`, `description?`, `summary?` + `order` (untuk kartu di halaman induk), `sections[]` (lihat *Jenis section yang tersedia*): `type: hero` (`variant`, `title`, `eyebrow?`, `description?`, `actions[]`, `links?`, `size?`, `image?` = `src` relatif + `alt`) · `type: intro` (`variant`, `tone?`, `width?`, `pulldown?`, `eyebrow?`, `title`, `description?`, `highlight?`, `media?`) |
+| `menu` | `src/content/menu/*.yaml` | `title`, `description?`, `href`, `order`, `children[]` (`title`, `href`: sub-menu) — dipakai navbar & HeroImage_002 |
+| `products` | `src/content/products/*.yaml` | 1 file = 1 kategori: `title`, `summary?`, `order`, `items[]` (`name`, `description?`, `href?`) — dipakai section `catalog` |
 
 ### Postingan: 1 folder per postingan
 
@@ -594,3 +642,8 @@ Isi artikel ditampilkan dengan class `prose` yang warnanya diambil dari token (l
 - **2026-11-04 (revisi 8):** Bar prototype dibuat **putih** (bukan theme-dark). Bar atas kini **hanya berisi combo box** (judul halaman dihapus; opsi menjelaskan dirinya sendiri: "Semua variasi", "Tone olive"), bar bawah hanya tombol kembali.
 - **2026-11-05:** **Susunan halaman pindah ke YAML.** `src/content/pages/*.yaml` kini berisi daftar `sections` (`type` + `variant` + isi), dirender `Sections.astro` lewat satu rute `src/pages/[...slug].astro` (nama file = URL; `index.astro` dihapus). Halaman baru = file YAML baru; urutan dan jumlah section bebas. Hero: `primaryAction`/`secondaryAction` diganti `actions` (jumlah bebas), `links` HeroImage_002 bisa diisi per halaman. Contoh halaman kedua di `src/prototype/content/pages/` (hanya dev).
 - **2026-11-05 (revisi 2):** Belum ada desain resmi, jadi **semua desain dikembalikan menjadi kandidat** di `src/prototype/variants/` (HeroImage_001/_002, IntroMedia_001/_002, FooterSimple_001, PostArticle_001). Produksi kini hanya berisi versi **Basic** tanpa desain (`HeroBasic_001`, `IntroBasic_001`, `FooterBasic_001`, `PostBasic_001`). `resolveVariant()` di `lib/variants.ts`: saat build, variasi kandidat otomatis diganti Basic (dengan peringatan di log) dan tone/width/pulldown diabaikan; saat dev desain kandidat tetap tampil.
+- **2026-11-05 (revisi 3):** Fokus fungsionalitas: **navbar dijadikan section bervariasi** (`layout/navbar/`, `NavbarBasic_001` di produksi, desain lama menjadi kandidat `NavbarPanel_001`, `/prototype/navbar`, `site.yaml › navbar.variant`). Semua YAML produksi kini menunjuk variasi Basic, sehingga situs tampil **teks saja** saat dev maupun build. Variasi Basic mengabaikan tone/width/pulldown.
+- **2026-11-05 (revisi 4):** YAML dikembalikan ke desain kandidat supaya dev tetap berdesain; build tetap memakai Basic (fallback otomatis).
+- **2026-11-05 (revisi 5):** **Mockup arsitektur ala parametris.com.** 6 jenis section baru (semua versi Basic): `cards` (manual atau otomatis dari halaman anak), `catalog` (koleksi baru `products`), `posts`, `text`, `cta`, `contact` (`site.yaml › contact`, formulir mockup). Menu mendukung sub-menu (`children`). Halaman: `/software`, `/iot` (+2 anak), `/layanan` (+2 anak), `/tentang`, `/kontak`, `/artikel`. Semua teks placeholder (*Title*, *Description*, lorem ipsum); label menu = nama halaman tujuan. 4 artikel dummy `article-title-1..4`; artikel kelistrikan dipindah ke `src/prototype/content/posts/`.
+- **2026-11-05 (revisi 6):** **Variasi kembali ke folder section-nya**, status dicatat di `src/content/variants.yaml` (`approved` per section; selain itu = **draft**, Basic selalu boleh). Folder `src/prototype/variants/` dan modul `prototype:variants` dihapus. Istilah "kandidat" diganti "draft". Ditambah halaman tracking `/prototype/variants` (semua variasi, status, dipakai di mana, link preview).
+- **2026-11-06:** Variasi yang dipakai situs **disetujui** di `variants.yaml` untuk demo (NavbarPanel_001, HeroImage_002, IntroMedia_002, FooterSimple_001, PostArticle_001), sehingga hasil build sama dengan dev. Dokumentasi serah-terima (tujuan, cara kerja, arsitektur, resep, status, rencana, jebakan) ditulis di `AGENTS.md`.

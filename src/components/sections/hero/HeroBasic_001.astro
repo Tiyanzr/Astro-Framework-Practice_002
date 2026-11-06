@@ -1,14 +1,14 @@
 ---
 // HeroBasic_001: versi bare minimum (tanpa desain). Hanya memastikan semua isi hero dari YAML tampil dan berfungsi.
-// Dipakai produksi selama belum ada desain hero yang disetujui (kandidat desain: src/prototype/variants/hero/).
+// Dipakai build selama belum ada desain hero yang disetujui (variasi desain lain di folder yang sama berstatus draft, lihat src/content/variants.yaml).
+// `links` hanya tampil kalau diisi di YAML (fallback ke menu utama adalah perilaku desain HeroImage_002).
 import { Image } from "astro:assets";
-import { getMainLinks } from "@/lib/content";
 import type { HeroProps } from "./types";
 
 type Props = HeroProps;
 
 const { eyebrow, title, description, actions = [], image, links } = Astro.props;
-const items = links ?? (await getMainLinks());
+const items = links ?? [];
 ---
 
 <section class="container-page section-y">

@@ -1,0 +1,89 @@
+---
+// NavbarPanel_001: navbar putih fixed + menu panel geser dari kanan. Isi dari Navbar.astro (menu + CTA).
+// data-state="open|closed" pada #site-menu mengatur semua animasi lewat group-data (lihat DESIGN.md › Navbar).
+import Logo from "@/components/ui/Logo.astro";
+import type { NavbarProps } from "@/components/layout/navbar/types";
+
+type Props = NavbarProps;
+
+const { siteName, cta: ctaLink, links: mainLinks } = Astro.props;
+---
+
+<div id="site-menu" class="group/menu" data-state="closed">
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-border bg-background">
+    <div class="container-page flex h-16 items-center justify-between gap-6">
+      <Logo label={siteName} />
+      <div class="flex items-center gap-2">
+        <a
+          href={ctaLink.href}
+          class="hidden rounded-md bg-primary px-4 py-2 text-small font-semibold whitespace-nowrap text-primary-foreground transition-colors duration-300 hover:bg-primary-hover sm:inline-block"
+        >
+          {ctaLink.label}
+        </a>
+        <button
+          id="menu-toggle"
+          class="relative size-10 rounded-md border border-border"
+          aria-label="Buka menu"
+          aria-expanded="false"
+          aria-controls="menu-panel"
+        >
+          <span
+            class="absolute top-1/2 left-1/2 h-0.5 w-5 -translate-x-1/2 -translate-y-[4px] bg-foreground group-data-[state=open]/menu:translate-y-0 group-data-[state=open]/menu:rotate-45"
+          ></span>
+          <span
+            class="absolute top-1/2 left-1/2 h-0.5 w-5 -translate-x-1/2 translate-y-[3px] bg-foreground group-data-[state=open]/menu:translate-y-0 group-data-[state=open]/menu:-rotate-45"
+          ></span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <!-- Ruang setinggi navbar (fixed), supaya isi halaman tidak tertutup -->
+  <div class="h-16" aria-hidden="true"></div>
+
+  <!-- Latar gelap di belakang panel -->
+  <div
+    id="menu-overlay"
+    class="pointer-events-none fixed inset-0 top-16 z-40 bg-midnight/60 opacity-0 transition-opacity duration-500 ease-out-quart group-data-[state=open]/menu:pointer-events-auto group-data-[state=open]/menu:opacity-100"
+  ></div>
+
+  <!-- Panel menu: masuk dari kanan. Buka = ease-out-expo 700ms (cepat lalu melambat), tutup = ease-in-out-quart 400ms. -->
+  <nav
+    id="menu-panel"
+    class="invisible fixed top-16 right-0 bottom-0 z-40 flex w-full translate-x-full flex-col border-l border-border bg-background transition-[translate,visibility] duration-400 ease-in-out-quart group-data-[state=open]/menu:visible group-data-[state=open]/menu:translate-x-0 group-data-[state=open]/menu:duration-700 group-data-[state=open]/menu:ease-out-expo md:w-[420px]"
+    aria-label="Menu utama"
+  >
+    <ul class="divide-y divide-border border-b border-border">
+      {mainLinks.map((link) => (
+        <li>
+          <!-- Hover: hanya latar yang makin terang, tanpa gerakan -->
+          <a href={link.href} class="flex items-center gap-4 px-6 py-5 transition-colors duration-300 ease-out-quart hover:bg-background-alt">
+            <span class="flex-1 text-h4">{link.label}</span>
+            <svg class="size-5 text-muted-foreground" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" />
+            </svg>
+          </a>
+          <!-- Sub-menu (children di src/content/menu/) sengaja tidak ditampilkan di panel ini: hanya judul utama. -->
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
+
+<script>
+  const root = document.getElementById("site-menu")!;
+  const toggle = document.getElementById("menu-toggle")!;
+  const overlay = document.getElementById("menu-overlay")!;
+
+  const setOpen = (open: boolean) => {
+    root.dataset.state = open ? "open" : "closed";
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
+    document.documentElement.style.overflow = open ? "hidden" : "";
+  };
+
+  toggle.addEventListener("click", () => setOpen(root.dataset.state !== "open"));
+  overlay.addEventListener("click", () => setOpen(false));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+</script>

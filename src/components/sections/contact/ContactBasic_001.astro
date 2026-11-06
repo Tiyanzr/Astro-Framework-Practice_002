@@ -1,0 +1,41 @@
+---
+// ContactBasic_001: versi bare minimum (tanpa desain). Info kontak sebagai teks/link + formulir HTML polos.
+// Formulir masih mockup: tombol kirim tidak mengirim ke mana pun (nanti bisa memakai Netlify Forms).
+import BasicHeading from "../BasicHeading.astro";
+import type { ContactProps } from "./types";
+
+type Props = ContactProps;
+
+const { contact, form, ...heading } = Astro.props;
+const tel = contact.phone?.replace(/[^+\d]/g, "");
+---
+
+<BasicHeading {...heading} />
+<address class="not-italic">
+  {contact.address.map((line) => <p>{line}</p>)}
+  {contact.phone && <p><a href={`tel:${tel}`}>{contact.phone}</a></p>}
+  {contact.email && <p><a href={`mailto:${contact.email}`}>{contact.email}</a></p>}
+  {contact.hours && <p>{contact.hours}</p>}
+</address>
+{
+  form && (
+    <form method="post" onsubmit="event.preventDefault()">
+      {form.fields.map((field) => (
+        <p>
+          <label>
+            {field.label}
+            <br />
+            {field.type === "textarea" ? (
+              <textarea name={field.name} required={field.required} rows={4} class="border" />
+            ) : (
+              <input type={field.type} name={field.name} required={field.required} class="border" />
+            )}
+          </label>
+        </p>
+      ))}
+      <p>
+        <button type="submit" class="border px-2">{form.submit}</button>
+      </p>
+    </form>
+  )
+}

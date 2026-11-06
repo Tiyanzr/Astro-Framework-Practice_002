@@ -10,7 +10,7 @@ interface Props extends HeroProps {
 
 // Saat build, variasi yang belum disetujui diganti HeroBasic_001 (tanpa desain), lihat lib/variants.ts.
 const { variant = "HeroBasic_001", ...props } = Astro.props;
-const Variant = pickVariant(heroVariants, variant, "hero", "HeroBasic_001");
+const Variant = await pickVariant(heroVariants, variant, "hero", "HeroBasic_001");
 ---
 
 <Variant {...props} />

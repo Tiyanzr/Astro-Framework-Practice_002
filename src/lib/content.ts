@@ -1,7 +1,7 @@
 // Pembaca konten dari src/content/. Semua kalimat ada di file .yaml/.md di sana; file ini hanya mengambilnya.
 import { getCollection, getEntry, type CollectionEntry } from "astro:content";
 
-export type NavLink = { label: string; href: string; description?: string };
+export type NavLink = { label: string; href: string; description?: string; children?: NavLink[] };
 
 /** Info umum situs (src/content/site.yaml). */
 export async function getSite() {
@@ -35,7 +35,38 @@ export async function getMainLinks(): Promise<NavLink[]> {
   const items = await getCollection("menu");
   return items
     .sort((a, b) => a.data.order - b.data.order)
-    .map(({ data }) => ({ label: data.title, href: data.href, description: data.description }));
+    .map(({ data }) => ({
+      label: data.title,
+      href: data.href,
+      description: data.description,
+      children: data.children.map((c) => ({ label: c.title, href: c.href })),
+    }));
+}
+
+/** URL sebuah halaman dari id-nya: home → /, iot/manufaktur → /iot/manufaktur. */
+export const pageHref = (id: string) => (id === "home" ? "/" : `/${id}`);
+
+/**
+ * Halaman anak langsung dari `parent` (mis. "iot" → pages/iot/*.yaml, tidak termasuk cucu), urut `order`.
+ * Dipakai section `cards` › from, jadi menambah halaman anak = otomatis menambah kartu.
+ */
+export async function getChildPages(parent: string) {
+  const prefix = `${parent.replace(/\/$/, "")}/`;
+  const pages = await getCollection("pages", ({ id }) => id.startsWith(prefix) && !id.slice(prefix.length).includes("/"));
+  return pages
+    .sort((a, b) => a.data.order - b.data.order)
+    .map(({ id, data }) => ({ title: data.title ?? id, description: data.summary, href: pageHref(id) }));
+}
+
+/** Kategori produk (src/content/products/*.yaml), urut `order`. `ids` = hanya kategori tertentu, sesuai urutan ids. */
+export async function getProductCategories(ids?: string[]) {
+  const all = (await getCollection("products")).sort((a, b) => a.data.order - b.data.order);
+  if (!ids?.length) return all;
+  return ids.map((id) => {
+    const found = all.find((c) => c.id === id);
+    if (!found) throw new Error(`Kategori produk "${id}" tidak ada di src/content/products/.`);
+    return found;
+  });
 }
 
 /** Semua postingan yang boleh tampil. Saat build, postingan `draft: true` disaring. Terbaru di atas. */

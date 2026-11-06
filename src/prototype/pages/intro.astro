@@ -1,7 +1,7 @@
 ---
 // /prototype/intro: coba variasi intro dengan isi yang sama (intro pertama di src/content/pages/home.yaml).
 // Bar atas: variasi (?v=) dan tone (?tone=). "Semua" = semua pilihan berjajar. Width mengikuti bawaan variasi, pulldown dimatikan.
-// Bawaan = variasi + tone yang dipakai beranda. Variasi produksi dan kandidat (src/prototype/variants/intro/) otomatis ikut.
+// Bawaan = variasi + tone yang dipakai beranda. Semua variasi di src/components/sections/intro/ otomatis ikut, diberi tanda status.
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import Intro from "@/components/sections/intro/Intro.astro";
 import VariantLabel from "@/prototype/VariantLabel.astro";
@@ -12,7 +12,7 @@ import { allOption, control, selected, variantOptions } from "@/prototype/contro
 
 const { type: _type, variant: homeVariant, tone: homeTone, width: _width, pulldown: _pulldown, ...content } = await getSection("home", "intro");
 
-const variant = control(Astro.url, "v", "Variasi", [...variantOptions(Object.keys(introVariants)), allOption], homeVariant);
+const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions(Object.keys(introVariants), "intro")), allOption], homeVariant);
 const tone = control(Astro.url, "tone", "Tone", [...sectionTones.map((t) => ({ value: t, label: `Tone ${t}` })), allOption], homeTone ?? introDefaults[variant.value]?.tone ?? "default");
 const combos = selected(variant).flatMap((name) => selected(tone).map((t) => ({ name, tone: t })));
 ---
@@ -21,7 +21,7 @@ const combos = selected(variant).flatMap((name) => selected(tone).map((t) => ({ 
   {
     combos.map(({ name, tone }) => (
       <div>
-        {combos.length > 1 && <VariantLabel name={`${name} · tone ${tone} · width ${introDefaults[name]?.width ?? "full"}`} />}
+        {combos.length > 1 && <VariantLabel section="intro" name={name} note={`tone ${tone} · width ${introDefaults[name]?.width ?? "full"}`} />}
         <Intro {...content} variant={name} tone={tone as (typeof sectionTones)[number]} pulldown={false} />
       </div>
     ))

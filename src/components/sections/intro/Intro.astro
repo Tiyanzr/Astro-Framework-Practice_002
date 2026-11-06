@@ -3,7 +3,7 @@
 // Variasi hanya mengatur susunan isi; latar, lebar, dan pulldown diatur di sini supaya sama untuk semua variasi.
 // Kalau tone/width/pulldown tidak diisi, dipakai bawaan variasi dari introDefaults (./variants.ts).
 import Section from "@/components/ui/Section.astro";
-import { resolveVariant } from "@/lib/variants";
+import { isBasic, resolveVariant } from "@/lib/variants";
 import { introDefaults, introVariants } from "./variants";
 import type { IntroProps } from "./types";
 
@@ -13,10 +13,11 @@ interface Props extends IntroProps {
 
 const { variant = "IntroBasic_001", tone, width, pulldown, ...content } = Astro.props;
 // Saat build, variasi yang belum disetujui diganti IntroBasic_001 (tanpa desain), lihat lib/variants.ts.
-// Kalau itu terjadi, tone/width/pulldown dari YAML juga diabaikan: pengaturan itu bagian dari desain, bukan isi.
-const { Variant, name, isFallback } = resolveVariant(introVariants, variant, "intro", "IntroBasic_001");
+// Untuk variasi Basic (dipilih langsung atau hasil pengganti), tone/width/pulldown dari YAML diabaikan:
+// pengaturan itu bagian dari desain, bukan isi.
+const { Variant, name } = await resolveVariant(introVariants, variant, "intro", "IntroBasic_001");
 const defaults = introDefaults[name] ?? {};
-const settings = isFallback ? defaults : { tone: tone ?? defaults.tone, width: width ?? defaults.width, pulldown: pulldown ?? defaults.pulldown };
+const settings = isBasic(name) ? defaults : { tone: tone ?? defaults.tone, width: width ?? defaults.width, pulldown: pulldown ?? defaults.pulldown };
 ---
 
 <Section tone={settings.tone} width={settings.width} pulldown={settings.pulldown}>

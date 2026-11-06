@@ -1,0 +1,20 @@
+# /software: showcase produk. Isi produk ada di src/content/products/ (1 file = 1 kategori).
+title: Software
+summary: Description
+order: 1
+
+sections:
+  - type: hero
+    title: Title
+    description: Description
+
+  # Semua kategori & semua produk. Pilih kategori tertentu: categories: [category-1, category-2]
+  - type: catalog
+    title: Title
+    description: Description
+
+  - type: cta
+    title: Title
+    description: Description
+    actions:
+      - { label: Kontak, href: /kontak }
