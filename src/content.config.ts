@@ -371,13 +371,4 @@ const pages = defineCollection({
   },
 });
 
-// Status variasi: satu file src/content/variants.yaml berisi variasi yang sudah disetujui per section.
-// Variasi yang tidak tercantum = draft (lihat src/lib/variants.ts).
-const variants = defineCollection({
-  loader: glob({ pattern: "variants.yaml", base: "./src/content" }),
-  schema: z.object({
-    approved: z.record(z.string(), z.array(z.string())).default({}),
-  }),
-});
-
-export const collections = { posts, menu, products, site, pages, variants };
+export const collections = { posts, menu, products, site, pages };

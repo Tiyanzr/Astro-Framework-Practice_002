@@ -8,8 +8,7 @@ import { footerVariants } from "./variants";
 const site = await getSite();
 const links = await getMainLinks();
 const { variant, explore, ...footer } = site.footer;
-// Saat build, variasi yang belum disetujui diganti FooterBasic_001 (tanpa desain), lihat lib/variants.ts.
-const Variant = await pickVariant(footerVariants, variant, "footer", "FooterBasic_001");
+const Variant = pickVariant(footerVariants, variant, "footer");
 ---
 
 <!-- Kolom menu footer: site.yaml › footer.explore kalau diisi, kalau tidak item menu utama -->

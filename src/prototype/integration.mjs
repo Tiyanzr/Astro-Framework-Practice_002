@@ -1,7 +1,6 @@
 // Integrasi "prototype": halaman di src/prototype/pages/ hanya hidup saat `astro dev`, tidak pernah ikut `astro build`.
 // Semua file src/prototype/pages/**/*.astro tampil di /prototype/... lewat satu rute penampung (file baru langsung terbaca).
 // Konten uji di src/prototype/content/ diatur terpisah di src/content.config.ts (juga hanya saat dev).
-// Status variasi (draft/disetujui) TIDAK diatur di sini, tapi di src/content/variants.yaml.
 import { fileURLToPath } from "node:url";
 
 export default function prototype() {

@@ -21,7 +21,7 @@ const notes: Record<string, string> = {
   media: "Section gambar: banner foto & gambar lebar (baru)",
   features: "Daftar kapabilitas bernomor (baru)",
   benefits: "Manfaat: grid ikon, tag, dua kolom (baru)",
-  variants: "Daftar SEMUA variasi: status (base/pass/draft) dan halaman yang memakainya",
+  variants: "Daftar SEMUA variasi: dipakai / tidak dipakai, dan halaman yang memakainya",
 };
 
 // Pengelompokan daftar (urutan grup & isi mengikuti daftar ini; template YAML tiap bagian ada di MODULES.md):
@@ -36,7 +36,7 @@ const groupDefs = [
     note: "Disusun per halaman di sections YAML · template di MODULES.md",
     pages: ["hero", "intro", "media", "cards", "catalog", "features", "benefits", "posts", "text", "cta", "contact"],
   },
-  { name: "Tinjauan", note: "Status semua variasi", pages: ["variants"] },
+  { name: "Tinjauan", note: "Semua variasi: dipakai di mana", pages: ["variants"] },
 ];
 
 const files = Object.keys(import.meta.glob("./**/*.astro"))

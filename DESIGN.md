@@ -4,7 +4,7 @@
 > Semua nilai warna/font/jarak terpasang sebagai token di [`src/styles/global.css`](src/styles/global.css); kalau mengubah token, ubah di sana **dan** catat di sini.
 > Contoh visual: `/prototype` (hanya saat `astro dev`).
 > Ringkasan proyek, cara kerja, status, rencana: [AGENTS.md](AGENTS.md). Template YAML siap tempel: [MODULES.md](MODULES.md).
-> Terakhir diperbarui: **2026-11-06**.
+> Terakhir diperbarui: **2026-11-09**.
 
 ## Daftar isi
 
@@ -20,7 +20,7 @@
 10. [Komponen UI bersama](#komponen-ui-bersama)
 11. [Koleksi konten (skema)](#koleksi-konten-skema)
 12. [SEO & indexing](#seo--indexing)
-13. [Status variasi & prototype](#status-variasi--prototype)
+13. [Pemakaian variasi & prototype](#pemakaian-variasi--prototype)
 14. [Struktur file](#struktur-file)
 15. [Aturan](#aturan)
 16. [Riwayat keputusan](#riwayat-keputusan)
@@ -255,10 +255,10 @@ src/components/sections/<nama>/          (navbar/footer: src/components/layout/<
 | Bagian | Aturan |
 |---|---|
 | Nama variasi | `<Nama><Gaya>_<NNN>`. Gaya = bentuk dasar (`Text`, `Gallery`, `Rows`, …); nomor 3 digit mulai `_001`. Gaya baru mulai lagi `_001` |
-| Basic | setiap section punya `<Nama>Basic_001`: HTML polos tanpa desain, hanya `container-page` + `section-y`. Bukti semua data sampai ke halaman, dan pengganti draft saat build |
-| Menambah variasi | tambah file; tidak ada daftar manual. Otomatis draft, muncul di `/prototype/<nama>` dan `/prototype/variants` |
+| Basic | setiap section punya `<Nama>Basic_001`: HTML polos tanpa desain, hanya `container-page` + `section-y`. Bawaan kalau `variant:` tidak diisi, dan bukti semua data sampai ke halaman. Jangan dihapus |
+| Menambah variasi | tambah file; tidak ada daftar manual. Langsung bisa dipilih, muncul di `/prototype/<nama>` dan `/prototype/variants` (sebagai "tidak dipakai" sampai ditulis di YAML) |
 | Props sama | semua variasi menerima props yang sama (`types.ts`), jadi ganti `variant:` tidak merusak isi. Variasi boleh **mengabaikan** field (mis. Basic tidak menampilkan gambar kartu); field yang dikosongkan bagiannya hilang |
-| Helper | `src/lib/variants.ts`: `collectVariants`, `isBasic`, `variantStatus`, `resolveVariant`, `pickVariant` (pesan error menyebut pilihan yang ada) |
+| Helper | `src/lib/variants.ts`: `collectVariants`, `isBasic`, `resolveVariant`, `pickVariant` (pesan error menyebut pilihan yang ada) |
 | Kode bersama | `sections/WrappedVariant.astro` (pilih variasi + bungkus `ui/Section`), `sections/BasicHeading.astro` (judul versi Basic), `sections/SplitHeading.astro` (judul gaya parametris.com), `sections/types.ts` (`SectionHeading`, `SectionImage`, `Link`, `numbered(i)`) |
 
 **Mengganti variasi aman ke dua arah:** pindah dari variasi tanpa tombol ke variasi bertombol tidak error; tombol muncul kalau `actions` diisi di YAML. Yang perlu diwaspadai: **field salah ketik dibuang diam-diam** oleh zod (mis. `action:` → tombol hilang tanpa pesan). Cocokkan dengan MODULES.md.
@@ -279,19 +279,19 @@ Mengatur latar, lebar, dan posisi, terpisah dari isi (pola `b-section` + `s-cont
 
 ## Katalog section & variasi
 
-Status: **pass** = disetujui (tercantum di `variants.yaml`), **base** = Basic, **draft** = belum disetujui (saat build diganti Basic). Field per variasi: [MODULES.md](MODULES.md).
+Pemakaian per 2026-11-09: **dipakai** = dipakai di situs, **base** = versi Basic, **tidak dipakai** = desain yang tidak dipakai saat ini (data terbaru otomatis di `/prototype/variants`). Field per variasi: [MODULES.md](MODULES.md).
 
 ### Hero — `sections/hero/`
 
 Isi: `eyebrow`, `aside` (`label`, `href?`), `title`, `accent`, `description`, `actions[]` (`label`, `href`, jumlah bebas; pertama = utama), `image`, `size` (`xl`/`default`), `links[]`.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `HeroBasic_001` | base | teks polos |
-| `HeroText_001` | **pass** | hero teks parametris.com: label kiri + `aside` kanan, judul tipis sangat besar (`text-ref-h1`, halaman lain `-inner`) + `accent` emas, deskripsi + tombol bergaris. Dipakai 12 halaman |
-| `HeroText_002` | **pass** | seperti `_001` di atas foto (`image`) dengan lapisan gelap. Dipakai `/services` |
-| `HeroImage_001` | draft | foto penuh + gradasi gelap, teks putih kiri bawah (palet situs) |
-| `HeroImage_002` | draft | foto penuh + kartu putih berisi judul dan daftar link (`links`, kosong = item menu); referensi fastems.com |
+| `HeroText_001` | **dipakai** | hero teks parametris.com: label kiri + `aside` kanan, judul tipis sangat besar (`text-ref-h1`, halaman lain `-inner`) + `accent` emas, deskripsi + tombol bergaris. Dipakai 12 halaman |
+| `HeroText_002` | **dipakai** | seperti `_001` di atas foto (`image`) dengan lapisan gelap. Dipakai `/services` |
+| `HeroImage_001` | tidak dipakai | foto penuh + gradasi gelap, teks putih kiri bawah (palet situs) |
+| `HeroImage_002` | tidak dipakai | foto penuh + kartu putih berisi judul dan daftar link (`links`, kosong = item menu); referensi fastems.com |
 
 `HeroBackground.astro` = latar foto / placeholder bergaris untuk `HeroImage_*`. Foto hero ideal ≥ 1600px lanskap.
 
@@ -299,11 +299,11 @@ Isi: `eyebrow`, `aside` (`label`, `href?`), `title`, `accent`, `description`, `a
 
 Isi: `eyebrow`, `title`, `description` (paragraf dipisah baris kosong), `highlight`, `media` (`youtube` + `id` · `image` + `src` · `placeholder`). Bawaan per variasi: `introDefaults`.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `IntroBasic_001` | base | teks + link media |
-| `IntroMedia_001` | draft | panel teks kiri + media kanan (bawaan `contained`) |
-| `IntroMedia_002` | draft | judul besar di atas, teks + media bersudut tegas di bawah (bawaan `full`) |
+| `IntroMedia_001` | tidak dipakai | panel teks kiri + media kanan (bawaan `contained`) |
+| `IntroMedia_002` | tidak dipakai | judul besar di atas, teks + media bersudut tegas di bawah (bawaan `full`) |
 
 Belum dipakai halaman situs (parametris.com tidak punya section ini).
 
@@ -311,59 +311,59 @@ Belum dipakai halaman situs (parametris.com tidak punya section ini).
 
 Isi: `image` (wajib), `eyebrow`, `title`, `accent`. Tidak dibungkus `ui/Section`.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `MediaBasic_001` | base | gambar + teks |
-| `MediaBanner_001` | **pass** | foto selebar layar + judul putih kiri bawah (`text-ref-caption`); `.visual` referensi. Beranda |
-| `MediaFigure_001` | **pass** | gambar utuh selebar isi (`.detail-image`). Ilustrasi halaman sektor & layanan |
+| `MediaBanner_001` | **dipakai** | foto selebar layar + judul putih kiri bawah (`text-ref-caption`); `.visual` referensi. Beranda |
+| `MediaFigure_001` | **dipakai** | gambar utuh selebar isi (`.detail-image`). Ilustrasi halaman sektor & layanan |
 
 ### Cards — `sections/cards/`
 
 Isi: judul section + **`from: <id induk>`** (otomatis dari halaman ber-`parent`, pakai `title`/`summary`/`image`, urut `order`) **atau** `items[]` manual (`title`, `description`, `href`, `image`); `linkLabel`, `more`.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `CardsBasic_001` | base | daftar link |
-| `CardsGallery_001` | **pass** | kartu foto 2 kolom bergaris, bernomor (sektor IoT; biasanya `tone: dark`) |
-| `CardsGallery_002` | **pass** | kartu foto 3 kolom (layanan) |
+| `CardsGallery_001` | **dipakai** | kartu foto 2 kolom bergaris, bernomor (sektor IoT; biasanya `tone: dark`) |
+| `CardsGallery_002` | **dipakai** | kartu foto 3 kolom (layanan) |
 
 ### Catalog — `sections/catalog/`
 
 Isi: judul section, `categories[]` (kosong = semua kategori tingkat atas), `limit` (produk per kategori; kosong = semua, `0` = tanpa daftar produk), `more`. Data dari koleksi `products`; setiap kategori punya anchor `#<id>`.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `CatalogBasic_001` | base | daftar kategori + produk |
-| `CatalogGrid_001` | **pass** | grid kategori bergambar bernomor; daftar produk di bawah kartu. Beranda (`limit: 0`) & `/software` |
+| `CatalogGrid_001` | **dipakai** | grid kategori bergambar bernomor; daftar produk di bawah kartu. Beranda (`limit: 0`) & `/software` |
 
 ### Features — `sections/features/`
 
 Isi: judul section + `items[]` (`title`, `description`).
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `FeaturesBasic_001` | base | daftar |
-| `FeaturesRows_001` | **pass** | baris bernomor bergaris ("KAPABILITAS") |
+| `FeaturesRows_001` | **dipakai** | baris bernomor bergaris ("KAPABILITAS") |
 
 ### Benefits — `sections/benefits/`
 
 Isi: judul section + `items[]` (`icon`, `title`, `description`, `entries[]` = `term`/`detail`) + `note`. `icon` = nama file di `src/assets/icons/` (tanpa `.svg`).
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `BenefitsBasic_001` | base | daftar |
-| `BenefitsIcons_001` | **pass** | grid ikon ("MANFAAT & KEUNGGULAN") |
-| `BenefitsTags_001` | **pass** | deretan tag ("BIDANG PENERAPAN", custom training) |
-| `BenefitsColumns_001` | **pass** | dua kolom berincian `entries` ("METODE PELAKSANAAN") |
+| `BenefitsIcons_001` | **dipakai** | grid ikon ("MANFAAT & KEUNGGULAN") |
+| `BenefitsTags_001` | **dipakai** | deretan tag ("BIDANG PENERAPAN", custom training) |
+| `BenefitsColumns_001` | **dipakai** | dua kolom berincian `entries` ("METODE PELAKSANAAN") |
 
 ### Posts — `sections/posts/`
 
-Isi: judul section, `limit`, `category`, `more`, `linkLabel`, atau **`items[]` manual** (`title`, `category?`, `href`; link luar dibuka di tab baru). Tanpa `items` = koleksi `posts` (tanpa draft saat build), terbaru di atas.
+Isi: judul section, `limit`, `category`, `more`, `linkLabel`, atau **`items[]` manual** (`title`, `category?`, `href`; link luar dibuka di tab baru). Tanpa `items` = koleksi `posts` (artikel `draft: true` tidak ikut build), terbaru di atas.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `PostsBasic_001` | base | judul + tanggal |
-| `PostsGrid_001` | **pass** | 2 kolom: kategori, judul, link teks |
+| `PostsGrid_001` | **dipakai** | 2 kolom: kategori, judul, link teks |
 
 ### Text — `sections/text/`
 
@@ -373,19 +373,19 @@ Isi: judul section + `body` (paragraf dipisah baris kosong). Hanya `TextBasic_00
 
 Isi: judul section + `actions[]`.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `CtaBasic_001` | base | judul + link |
-| `CtaClosing_001` | **pass** | penutup "MULAI PERCAKAPAN", judul `text-ref-closing`, bawaan `tone: alt`. Dipakai 12 halaman |
+| `CtaClosing_001` | **dipakai** | penutup "MULAI PERCAKAPAN", judul `text-ref-closing`, bawaan `tone: alt`. Dipakai 12 halaman |
 
 ### Contact — `sections/contact/`
 
 Isi: judul section, `contact` (menimpa `site.yaml › contact` untuk section ini), `actions[]`, `addressLabel`, `form` (`fields[]`, `submit`; **mockup**, belum terkirim). Data bawaan: `site.yaml › contact` (`email`, `phone`, `address[]`, `hours`, `emails[]`, `phones[]` berlabel). Link telepon dibuat `telHref()`.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `ContactBasic_001` | base | data kontak + formulir polos |
-| `ContactDirect_001` | **pass** | email besar, tombol WhatsApp/telepon, alamat di kolom kanan, tanpa formulir |
+| `ContactDirect_001` | **dipakai** | email besar, tombol WhatsApp/telepon, alamat di kolom kanan, tanpa formulir |
 
 ## Navbar, footer, artikel
 
@@ -395,11 +395,11 @@ Ketiganya **mandatory**: berlaku di semua halaman, variasinya dipilih sekali di 
 
 Variasi: `site.yaml › navbar.variant`. Item menu: `src/content/menu/*.yaml` (1 item = 1 file: `title`, `description?`, `href`, `order`, `children[]`). Item dengan `href: ""` = hanya judul dropdown (mis. **Produk** → Software, Internet of Things). Tombol CTA: `site.yaml › cta`.
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `NavbarBasic_001` | base | link teks + sub-menu |
-| `NavbarDropdown_001` | **pass** | header **sticky** putih sedikit transparan + blur (`bg-background/96 backdrop-blur-md`, sengaja seperti referensi walau dulu diputuskan "tanpa glassmorphism"), dropdown sub-menu (`<details>`), CTA bergaris, tombol menu di HP (script kecil `data-navdrop`). Tombol bahasa EN/ID belum |
-| `NavbarPanel_001` | draft | `fixed` 64px, latar solid tanpa glassmorphism, tombol menu → panel geser dari kanan (700ms `ease-out-expo` buka / 400ms tutup), lapisan `bg-midnight/60`, Escape menutup; hanya judul utama. Menaruh spacer `h-16` sendiri |
+| `NavbarDropdown_001` | **dipakai** | header **sticky** putih sedikit transparan + blur (`bg-background/96 backdrop-blur-md`, sengaja seperti referensi walau dulu diputuskan "tanpa glassmorphism"), dropdown sub-menu (`<details>`), CTA bergaris, tombol menu di HP (script kecil `data-navdrop`). Tombol bahasa EN/ID belum |
+| `NavbarPanel_001` | tidak dipakai | `fixed` 64px, latar solid tanpa glassmorphism, tombol menu → panel geser dari kanan (700ms `ease-out-expo` buka / 400ms tutup), lapisan `bg-midnight/60`, Escape menutup; hanya judul utama. Menaruh spacer `h-16` sendiri |
 
 ### Footer — `layout/footer/`
 
@@ -415,11 +415,11 @@ Variasi: `site.yaml › footer.variant`. Selalu di dasar layar (`body` flex `min
 | `address[]`, `socialsTitle` | dipakai `FooterSimple_001` |
 | `socials[]` (`platform`, `href`) | facebook, instagram, linkedin, youtube, x, tiktok, whatsapp |
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `FooterBasic_001` | base | teks polos |
-| `FooterColumns_001` | **pass** | 3 kolom (logo + tagline, menu, kontak) + copyright & sosial sebagai link teks |
-| `FooterSimple_001` | draft | logo + alamat kiri, ikon sosial bulat kanan (dhl.com), garis + copyright |
+| `FooterColumns_001` | **dipakai** | 3 kolom (logo + tagline, menu, kontak) + copyright & sosial sebagai link teks |
+| `FooterSimple_001` | tidak dipakai | logo + alamat kiri, ikon sosial bulat kanan (dhl.com), garis + copyright |
 
 ### Artikel — `sections/post/`
 
@@ -432,11 +432,11 @@ Halaman `/posts/<slug>/`. Variasi hanya **menyusun** blok di `blocks/` (`PostHea
 | Sidebar otomatis | daftar isi dari judul `##`/`###` (hilang kalau < 3); artikel terkait `getRelatedPosts` (kategori sama +2, tiap tag sama +1) |
 | Label kecil | `site.yaml › post.labels` |
 
-| Variasi | Status | Tampilan |
+| Variasi | Pemakaian | Tampilan |
 |---|---|---|
 | `PostBasic_001` | base | HTML polos |
-| `PostArticle_001` | **pass** | satu kolom sempit |
-| `PostArticle_002` | draft | kepala lebar + cover, sidebar daftar isi sticky, artikel terkait |
+| `PostArticle_001` | **dipakai** | satu kolom sempit |
+| `PostArticle_002` | tidak dipakai | kepala lebar + cover, sidebar daftar isi sticky, artikel terkait |
 
 **1 artikel = 1 folder** (`src/content/posts/<slug>/index.md` + gambarnya): upload cukup satu folder, hapus artikel tidak meninggalkan gambar yatim, nama gambar tidak bentrok. Import Notion:
 
@@ -470,7 +470,6 @@ Skema di `src/content.config.ts` (zod). **Kunci yang tidak dikenal dibuang tanpa
 | `menu` | `src/content/menu/*.yaml` | `title`, `description?`, `href` (`""` = judul dropdown), `order`, `children[]` (`title`, `href`) |
 | `products` | `src/content/products/<id>.yaml` + `<id>.jpg` (dev: + `src/prototype/content/products/`) | 1 file = 1 kategori: `title`, `summary?`, `order`, `image?`, `items[]` (`name`, `description?`, `href?`). Kategori di subfolder hanya tampil kalau diminta lewat `categories:` |
 | `posts` | `src/content/posts/<slug>/index.md` (dev: + `src/prototype/content/posts/`) | `title`, `description`, `pubDate`, `updatedDate?`, `author`, `category?`, `tags`, `cover?`, `coverAlt?`, `draft` (default false), `variant?` |
-| `variants` | `src/content/variants.yaml` | `approved: { <section>: [nama variasi] }` |
 
 Pembaca data (`src/lib/content.ts`): `getSite`, `getPage`, `getSection`, `getMainLinks`, `pageHref`, `getChildPages` (by `parent` atau subfolder), `getProductCategories`, `getPosts`, `getRelatedPosts`.
 
@@ -492,26 +491,29 @@ Isi sekarang: 13 halaman, 6 kategori produk PTC (`cad`, `cam`, `cae`, `plm`, `al
 
 Catatan: link internal ditulis tanpa garis miring akhir, canonical dengan; Netlify (pretty URLs) menyamakannya. URL lama demo (`/iot/manufaktur`, `/layanan`, `/tentang`, `/kontak`, `/artikel`) sudah tidak ada.
 
-## Status variasi & prototype
+## Pemakaian variasi & prototype
 
-### Status di `src/content/variants.yaml`
+### Yang ditulis di YAML = yang tampil
 
-```yaml
-approved:
-  hero: [HeroText_001, HeroText_002]   # pass → boleh dipakai di build
-  intro: []
-```
+**Tidak ada status atau daftar persetujuan.** Variasi yang ditulis di `variant:` (YAML halaman atau `site.yaml`) itulah yang tampil, **sama persis saat dev dan build**. Persetujuan terjadi lewat alur kerja:
 
-| Status | Label prototype | Artinya | Dev | Build |
-|---|---|---|---|---|
-| basic | **base** | `<Nama>Basic_<NNN>` | dipakai | dipakai |
-| approved | **pass** | tercantum di `approved › <section>` | dipakai | dipakai |
-| draft | **draft** | semua lainnya (variasi baru otomatis draft) | dipakai | **diganti Basic** + peringatan di log |
+1. Buat variasi baru (file `<Nama><Gaya>_<NNN>.astro`) di folder section.
+2. Tinjau di `/prototype/<section>` (combo box variasi + contoh isi dari halaman mana pun).
+3. Kalau oke, tulis namanya di `variant:` YAML halaman.
+4. Commit/push ke `demo` (Netlify) hanya kalau diminta.
 
-- Menyetujui = tambah nama di `variants.yaml` (riwayat di git). Menolak = hapus file. Tidak ada file yang dipindah.
-- Bawaan `variant` di skema (kalau tidak diisi) = Basic.
-- Variasi draft tetap **di-compile** saat build: file draft yang error membuat build gagal.
-- Sekarang: **17 pass, 7 draft, 14 base**. Semua YAML situs menunjuk variasi pass, jadi hasil build = tampilan dev.
+`/prototype/variants` dan combo box prototype memberi label yang **dihitung otomatis dari YAML** (`src/prototype/usage.ts`):
+
+| Label | Artinya |
+|---|---|
+| **dipakai** | ditulis di YAML situs (halaman, `site.yaml`, frontmatter artikel) |
+| **base** | versi `<Nama>Basic_<NNN>` yang tidak dipakai. Jangan dihapus: bawaan kalau `variant:` kosong |
+| **tidak dipakai** | desain yang tidak dipakai saat ini. Boleh dihapus kalau tidak diperlukan lagi (riwayat tetap di git) |
+
+- Pemakaian di konten uji (`src/prototype/content/`) tetap ditampilkan dengan tanda "(uji)", tetapi tidak dihitung sebagai dipakai.
+- Nama variasi salah ketik di YAML = error saat dev/build yang menyebut semua pilihan yang ada.
+- Semua variasi (dipakai atau tidak) ikut di-compile saat build: file variasi yang error membuat build gagal.
+- Sekarang (2026-11-09): **17 dipakai, 7 tidak dipakai, 14 base**.
 
 ### Prototype (`/prototype`, hanya `astro dev`)
 
@@ -523,10 +525,10 @@ Daftar `/prototype` dikelompokkan:
 |---|---|---|
 | **Mandatory** | colors, fonts, navbar, footer, post | berlaku di semua halaman, diatur sekali |
 | **Modul** | hero, intro, media, cards, catalog, features, benefits, posts, text, cta, contact | section per halaman (template di MODULES.md) |
-| **Tinjauan** | variants | tabel semua variasi: status, dipakai di mana (halaman, `site.yaml`, frontmatter), link preview |
+| **Tinjauan** | variants | tabel semua variasi: dipakai / base / tidak dipakai, dipakai di mana (halaman, `site.yaml`, frontmatter), link preview |
 | Lainnya | (otomatis) | file baru yang belum dikelompokkan di `pages/index.astro` |
 
-Combo box (nilai di URL, bisa dibagikan): `?v=` variasi (dengan tanda status, opsi **Semua variasi** = berjajar dengan label), `?c=` contoh isi (setiap section berjenis itu di semua halaman YAML, beranda dulu), `?palet=` palet, `?tone=`, `?p=` artikel, `?font=`. Bawaan = yang dipakai situs.
+Combo box (nilai di URL, bisa dibagikan): `?v=` variasi (dengan tanda pemakaian, opsi **Semua variasi** = berjajar dengan label), `?c=` contoh isi (setiap section berjenis itu di semua halaman YAML, beranda dulu), `?palet=` palet, `?tone=`, `?p=` artikel, `?font=`. Bawaan = yang dipakai situs.
 
 Halaman modul cukup satu baris: `<SectionPreview section="cards" />` (`src/prototype/SectionPreview.astro`). Section baru perlu didaftarkan di `variantsBySection` di file itu.
 
@@ -543,13 +545,13 @@ Konten uji (dev saja): `src/prototype/content/pages/contoh-halaman.yaml`, `src/p
 ├── AGENTS.md · DESIGN.md · MODULES.md
 └── src/
     ├── content/                ← SEMUA isi (lihat Koleksi konten)
-    │   ├── site.yaml, variants.yaml
+    │   ├── site.yaml
     │   ├── pages/<url>/index.yaml + gambar
     │   ├── menu/*.yaml
     │   ├── products/<id>.yaml + <id>.jpg
     │   └── posts/<slug>/index.md + gambar
     ├── content.config.ts       ← skema zod
-    ├── lib/                    ← content.ts (pembaca data), variants.ts (status & pemilihan variasi), section.ts (tone/width)
+    ├── lib/                    ← content.ts (pembaca data), variants.ts (deteksi & pemilihan variasi), section.ts (tone/width)
     ├── layouts/BaseLayout.astro ← <head> (SEO), tema, Navbar, <main>, Footer; prop `bare` = tanpa navbar/footer
     ├── pages/
     │   ├── [...slug].astro     ← SEMUA halaman dari content/pages
@@ -610,4 +612,5 @@ Branch: `prototype-01` (kerja harian) → `demo` (Netlify https://parametris-ast
 - **2026-11-06 (revisi 4):** **MODULES.md** (template YAML per bagian). Daftar `/prototype` dikelompokkan Mandatory / Modul / Tinjauan.
 - **2026-11-06 (revisi 5):** Label status disingkat **base / pass / draft**.
 - **2026-11-06 (revisi 6):** **Situs dimigrasi ke parametris.com:** isi asli (ID), URL sama, **1 halaman = 1 folder** + field `parent`, gambar produk sefolder dengan YAML, variasi gaya parametris.com jadi **pass** (desain lama draft), `site.yaml › theme: parametris`, `homeTitle`, `footer.explore`, `posts › items`; canonical + Open Graph; domain `https://www.parametris.com` (astro.config, robots.txt, .htaccess); arsip export dipindah ke `reference/`; `/prototype/referensi` dihapus; artikel dummy pindah ke prototype.
-- **2026-11-06 (revisi 7):** **Dokumentasi dirapikan** ke kondisi terkini: DESIGN.md disusun ulang (dua palet, katalog semua variasi + status, SEO, skema, struktur), riwayat diurutkan kronologis. Arsitektur dianggap stabil; selanjutnya perubahan kecil.
+- **2026-11-06 (revisi 7):** **Dokumentasi dirapikan** ke kondisi terkini: DESIGN.md disusun ulang (dua palet, katalog semua variasi, SEO, skema, struktur), riwayat diurutkan kronologis. Arsitektur dianggap stabil; selanjutnya perubahan kecil.
+- **2026-11-09:** **Sistem status variasi (base/pass/draft) dihapus.** Alasannya: desain baru sudah ditinjau di prototype sebelum ditulis di YAML, jadi "dipakai di YAML" = disetujui; status manual hanya pekerjaan dobel dan membuat dev ≠ build (draft diganti Basic). Dihapus: `src/content/variants.yaml`, koleksi `variants`, `variantStatus`/`getApprovedVariants` dan pengganti Basic saat build. Gantinya: label **dipakai / base / tidak dipakai** di prototype, dihitung otomatis dari YAML (`src/prototype/usage.ts`; pemakaian di konten uji ditandai "uji" dan tidak dihitung). Versi Basic tetap ada.

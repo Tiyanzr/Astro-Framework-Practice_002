@@ -4,7 +4,7 @@
 > Lihat tampilannya dulu di `/prototype` (hanya saat `astro dev`): grup **Mandatory** untuk bagian yang berlaku di semua halaman,
 > grup **Modul** untuk section yang disusun per halaman.
 > Arsitektur & aturan desain: [DESIGN.md](DESIGN.md) · cara kerja & status proyek: [AGENTS.md](AGENTS.md).
-> Status variasi di bawah per **2026-11-06** (label prototype: **base** = versi Basic, **pass** = disetujui, **draft** = belum disetujui); status terbaru selalu ada di `/prototype/variants`.
+> Kolom **Pemakaian** di bawah per **2026-11-09** (**dipakai** = dipakai di situs, **base** = versi Basic, **tidak dipakai** = desain yang tidak dipakai saat ini). Data terbaru (dihitung otomatis dari YAML) selalu ada di `/prototype/variants`. Gaya apa pun boleh dipakai: yang ditulis di YAML itulah yang tampil, sama saat dev dan build.
 
 ---
 
@@ -31,7 +31,6 @@ Jadi: **copy blok lengkap, isi semua field yang mungkin dibutuhkan**, baru hapus
 | Kunci tanpa nilai, mis. `title:` lalu kosong | ❌ Error (`null`). Hapus barisnya atau beri `#` di depannya |
 | **Nama field salah ketik**, mis. `action:` | ⚠️ **Diam-diam diabaikan**, tidak ada pesan. Cocokkan dengan blok di sini |
 | Field tidak dipakai gaya yang dipilih | Diabaikan, aman; tampil lagi kalau ganti ke gaya yang memakainya |
-| Gaya **draft** dipakai di halaman situs | Saat dev tampil; saat **build** otomatis diganti versi Basic (lihat [status](#status-variasi)) |
 
 ### Aturan menulis YAML
 
@@ -66,7 +65,7 @@ Ada dua palet yang bisa dibandingkan di setiap halaman prototype lewat combo box
 | Palet | Di mana | Isi |
 |---|---|---|
 | Situs | `:root` (dipakai situs sekarang) | midnight, blue, green, mantis, lime + putih/hitam; Roboto Condensed + Archivo |
-| Referensi parametris.com (draft) | class `.theme-parametris` | ink #14252e, emas #86732c, gelap #11262c; Arial; jarak lebih lega |
+| Referensi parametris.com (aktif, `theme: parametris`) | class `.theme-parametris` | ink #14252e, emas #86732c, gelap #11262c; Arial; jarak lebih lega |
 
 Palet yang dipakai situs dipilih di `src/content/site.yaml` › `theme` (`parametris` sekarang). Ganti warna = ubah nilai token di `global.css` (komponen ikut berubah semua). Catat perubahannya di DESIGN.md.
 
@@ -74,11 +73,11 @@ Palet yang dipakai situs dipilih di `src/content/site.yaml` › `theme` (`parame
 
 File: `src/content/site.yaml` (nama, tombol CTA, gaya) + `src/content/menu/*.yaml` (item menu, **1 item = 1 file**). Preview: `/prototype/navbar`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `NavbarBasic_001` | base | nama situs, item menu + sub-menu, CTA (teks saja) |
-| `NavbarPanel_001` | draft | logo, CTA, menu panel geser dari kanan (hanya judul utama, tanpa sub-menu) |
-| `NavbarDropdown_001` | pass | logo, menu dengan dropdown sub-menu, CTA bergaris (gaya referensi) |
+| `NavbarPanel_001` | tidak dipakai | logo, CTA, menu panel geser dari kanan (hanya judul utama, tanpa sub-menu) |
+| `NavbarDropdown_001` | dipakai | logo, menu dengan dropdown sub-menu, CTA bergaris (gaya referensi) |
 
 ```yaml
 # src/content/site.yaml
@@ -107,11 +106,11 @@ children:                       # Sub-menu (dropdown NavbarDropdown_001, daftar 
 
 File: `src/content/site.yaml` › `footer`. Kolom menu (FooterColumns_001) otomatis dari `src/content/menu/`. Preview: `/prototype/footer`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `FooterBasic_001` | base | company, address, email, socialsTitle, socials (teks saja) |
-| `FooterSimple_001` | draft | logo, company, address, email, socialsTitle, socials (ikon bulat) |
-| `FooterColumns_001` | pass | logo, company, tagline, menu (`exploreTitle`), email/phone/location (`contactTitle`), socials (link teks) |
+| `FooterSimple_001` | tidak dipakai | logo, company, address, email, socialsTitle, socials (ikon bulat) |
+| `FooterColumns_001` | dipakai | logo, company, tagline, menu (`exploreTitle`), email/phone/location (`contactTitle`), socials (link teks) |
 
 ```yaml
 # src/content/site.yaml
@@ -163,11 +162,11 @@ contact:
 
 Tampilan semua artikel `/posts/<slug>/`. Isi artikel = folder `src/content/posts/<slug>/index.md` (impor: `npm run import:notion`). Preview: `/prototype/post`.
 
-| Gaya | Status |
+| Gaya | Pemakaian |
 |---|---|
 | `PostBasic_001` | base |
-| `PostArticle_001` | pass (satu kolom sempit) |
-| `PostArticle_002` | draft (cover, daftar isi sticky, artikel terkait) |
+| `PostArticle_001` | dipakai (satu kolom sempit) |
+| `PostArticle_002` | tidak dipakai (cover, daftar isi sticky, artikel terkait) |
 
 ```yaml
 # src/content/site.yaml
@@ -210,13 +209,13 @@ sections:
 
 Pembuka halaman, biasanya section pertama. Preview: `/prototype/hero`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `HeroBasic_001` | base | semua field sebagai teks; `links` hanya kalau diisi |
-| `HeroImage_001` | draft | foto penuh + eyebrow, title, description, **semua** actions, size |
-| `HeroImage_002` | draft | foto penuh + kartu: title, description, **links** (kosong = item menu), size. **Tanpa actions** |
-| `HeroText_001` | pass | eyebrow, aside, title, **accent**, description, **action pertama saja**, size. Tanpa foto |
-| `HeroText_002` | pass | seperti HeroText_001 di atas **foto** (image) berlapis gelap |
+| `HeroImage_001` | tidak dipakai | foto penuh + eyebrow, title, description, **semua** actions, size |
+| `HeroImage_002` | tidak dipakai | foto penuh + kartu: title, description, **links** (kosong = item menu), size. **Tanpa actions** |
+| `HeroText_001` | dipakai | eyebrow, aside, title, **accent**, description, **action pertama saja**, size. Tanpa foto |
+| `HeroText_002` | dipakai | seperti HeroText_001 di atas **foto** (image) berlapis gelap |
 
 ```yaml
   - type: hero
@@ -242,11 +241,11 @@ Pembuka halaman, biasanya section pertama. Preview: `/prototype/hero`.
 
 Pengantar teks + video/gambar tepat setelah hero. Preview: `/prototype/intro`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `IntroBasic_001` | base | semua field sebagai teks |
-| `IntroMedia_001` | draft | panel: teks kiri + media kanan (bawaan width contained) |
-| `IntroMedia_002` | draft | judul besar di atas, teks + media di bawah (bawaan width full) |
+| `IntroMedia_001` | tidak dipakai | panel: teks kiri + media kanan (bawaan width contained) |
+| `IntroMedia_002` | tidak dipakai | judul besar di atas, teks + media di bawah (bawaan width full) |
 
 ```yaml
   - type: intro
@@ -273,11 +272,11 @@ Pengantar teks + video/gambar tepat setelah hero. Preview: `/prototype/intro`.
 
 Gambar sebagai section sendiri. Preview: `/prototype/media`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `MediaBasic_001` | base | gambar + teks polos |
-| `MediaBanner_001` | pass | foto selebar layar, gradasi gelap, eyebrow + title + accent putih di kiri bawah |
-| `MediaFigure_001` | pass | gambar utuh selebar isi halaman; judul jadi keterangan di bawahnya |
+| `MediaBanner_001` | dipakai | foto selebar layar, gradasi gelap, eyebrow + title + accent putih di kiri bawah |
+| `MediaFigure_001` | dipakai | gambar utuh selebar isi halaman; judul jadi keterangan di bawahnya |
 
 ```yaml
   - type: media
@@ -294,11 +293,11 @@ Gambar sebagai section sendiri. Preview: `/prototype/media`.
 
 Kartu ke halaman lain. Isi dari halaman anak (`from`) **atau** daftar manual (`items`); kalau dua-duanya diisi, `from` yang dipakai. Preview: `/prototype/cards`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `CardsBasic_001` | base | judul section, kartu sebagai link teks, more |
-| `CardsGallery_001` | pass | foto 2 kolom bernomor + linkLabel + more (cocok tone dark) |
-| `CardsGallery_002` | pass | foto 3 kolom bernomor + linkLabel + more |
+| `CardsGallery_001` | dipakai | foto 2 kolom bernomor + linkLabel + more (cocok tone dark) |
+| `CardsGallery_002` | dipakai | foto 3 kolom bernomor + linkLabel + more |
 
 ```yaml
   - type: cards
@@ -327,10 +326,10 @@ Kartu ke halaman lain. Isi dari halaman anak (`from`) **atau** daftar manual (`i
 
 Showcase produk dari `src/content/products/` (1 file = 1 kategori, lihat [Data produk](#data-produk)). Preview: `/prototype/catalog`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `CatalogBasic_001` | base | kategori + daftar produk sebagai teks/link, more |
-| `CatalogGrid_001` | pass | kartu kategori bergambar 3 kolom bernomor, daftar produk di bawah kartu, more |
+| `CatalogGrid_001` | dipakai | kartu kategori bergambar 3 kolom bernomor, daftar produk di bawah kartu, more |
 
 ```yaml
   - type: catalog
@@ -348,10 +347,10 @@ Showcase produk dari `src/content/products/` (1 file = 1 kategori, lihat [Data p
 
 Daftar kapabilitas bernomor (judul + penjelasan per baris). Preview: `/prototype/features`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `FeaturesBasic_001` | base | daftar bernomor teks |
-| `FeaturesRows_001` | pass | baris bernomor bergaris: nomor · judul · penjelasan |
+| `FeaturesRows_001` | dipakai | baris bernomor bergaris: nomor · judul · penjelasan |
 
 ```yaml
   - type: features
@@ -370,12 +369,12 @@ Daftar kapabilitas bernomor (judul + penjelasan per baris). Preview: `/prototype
 
 Manfaat / bidang penerapan. Isi yang sama bisa tampil sebagai grid ikon, deretan tag, atau dua kolom berincian. Preview: `/prototype/benefits`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `BenefitsBasic_001` | base | judul — penjelasan, entries, note (tanpa ikon) |
-| `BenefitsIcons_001` | pass | ikon + judul + penjelasan, 3 kolom (tepat 4 item → 4 kolom), note |
-| `BenefitsTags_001` | pass | **hanya judul** sebagai tag + note |
-| `BenefitsColumns_001` | pass | 2 kolom besar: ikon + judul + penjelasan + **entries**, note |
+| `BenefitsIcons_001` | dipakai | ikon + judul + penjelasan, 3 kolom (tepat 4 item → 4 kolom), note |
+| `BenefitsTags_001` | dipakai | **hanya judul** sebagai tag + note |
+| `BenefitsColumns_001` | dipakai | 2 kolom besar: ikon + judul + penjelasan + **entries**, note |
 
 ```yaml
   - type: benefits
@@ -403,10 +402,10 @@ Ikon tersedia (`src/assets/icons/`, Lucide): `badge-check` `calendar-check` `cha
 
 Daftar artikel dari `src/content/posts/` (terbaru di atas). Preview: `/prototype/posts`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `PostsBasic_001` | base | judul + tanggal, more |
-| `PostsGrid_001` | pass | 2 kolom: kategori, judul, linkLabel, more |
+| `PostsGrid_001` | dipakai | 2 kolom: kategori, judul, linkLabel, more |
 
 ```yaml
   - type: posts
@@ -426,7 +425,7 @@ Daftar artikel dari `src/content/posts/` (terbaru di atas). Preview: `/prototype
 
 Teks bebas beberapa paragraf. Preview: `/prototype/text`.
 
-| Gaya | Status |
+| Gaya | Pemakaian |
 |---|---|
 | `TextBasic_001` | base (belum ada gaya berdesain) |
 
@@ -445,10 +444,10 @@ Teks bebas beberapa paragraf. Preview: `/prototype/text`.
 
 Ajakan bertindak, biasanya section terakhir. Preview: `/prototype/cta`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `CtaBasic_001` | base | judul, deskripsi, tombol sebagai link |
-| `CtaClosing_001` | pass | eyebrow, judul sangat besar + accent, deskripsi, tombol bergaris (bawaan tone alt) |
+| `CtaClosing_001` | dipakai | eyebrow, judul sangat besar + accent, deskripsi, tombol bergaris (bawaan tone alt) |
 
 ```yaml
   - type: cta
@@ -466,10 +465,10 @@ Ajakan bertindak, biasanya section terakhir. Preview: `/prototype/cta`.
 
 Info kontak (dari `site.yaml › contact`, lihat [Data kontak](#data-kontak-perusahaan)) + formulir. Preview: `/prototype/contact`.
 
-| Gaya | Status | Dipakai oleh gaya ini |
+| Gaya | Pemakaian | Dipakai oleh gaya ini |
 |---|---|---|
 | `ContactBasic_001` | base | semua info kontak + actions + **formulir** (mockup, belum terkirim) |
-| `ContactDirect_001` | pass | email besar, emails, actions (tombol), phones, alamat kanan. **Tanpa formulir** |
+| `ContactDirect_001` | dipakai | email besar, emails, actions (tombol), phones, alamat kanan. **Tanpa formulir** |
 
 ```yaml
   - type: contact
@@ -511,15 +510,9 @@ items:                          # Daftar produk, jumlah bebas
   - { name: "Creo View", description: "opsional", href: "https://www.ptc.com/en/products/creo/creo-view" }
 ```
 
-## Status variasi
+## Memilih gaya
 
-| Status | Saat dev | Saat build (Netlify) |
-|---|---|---|
-| **base** (versi Basic) | tampil | tampil |
-| **pass** (disetujui, tercantum di `src/content/variants.yaml`) | tampil | tampil |
-| **draft** (semua lainnya) | tampil | **diganti versi Basic** + peringatan di log build |
-
-Menyetujui gaya = tambahkan namanya di `src/content/variants.yaml` › `approved` › `<modul>`.
+**Gaya apa pun boleh dipakai.** Yang ditulis di `variant:` itulah yang tampil, sama saat dev dan build (tidak ada status/persetujuan). Alurnya: coba gaya di `/prototype/<modul>` (combo box **Variasi** + **Contoh isi**), lalu tulis namanya di YAML. Nama salah ketik = error yang menyebut semua pilihan. Daftar semua gaya + di mana dipakai: `/prototype/variants`.
 
 ## Contoh nyata
 

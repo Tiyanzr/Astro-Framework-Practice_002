@@ -1,6 +1,6 @@
 ---
 // Bagian bersama semua pintu masuk section yang dibungkus ui/Section (cards, catalog, posts, text, cta, contact):
-// pilih variasi (dengan pengganti Basic saat build, lihat lib/variants.ts), lalu bungkus dengan ui/Section.
+// pilih variasi (lihat lib/variants.ts), lalu bungkus dengan ui/Section.
 // Untuk variasi Basic, tone/width/pulldown diabaikan (pengaturan desain, bukan isi).
 // Semua prop selain yang di bawah diteruskan apa adanya ke variasi.
 import Section from "@/components/ui/Section.astro";
@@ -12,15 +12,13 @@ interface Props extends SectionSettings {
   section: string;
   variants: Record<string, any>;
   variant: string;
-  /** Variasi Basic pengganti saat build. */
-  fallback: string;
   /** Pengaturan pembungkus bawaan per variasi (kalau YAML tidak mengisinya). */
   defaults?: Record<string, SectionSettings>;
   [prop: string]: any;
 }
 
-const { section, variants, variant, fallback, defaults = {}, tone, width, pulldown, ...content } = Astro.props;
-const { Variant, name } = await resolveVariant(variants, variant, section, fallback);
+const { section, variants, variant, defaults = {}, tone, width, pulldown, ...content } = Astro.props;
+const { Variant, name } = resolveVariant(variants, variant, section);
 const base = defaults[name] ?? {};
 const settings = isBasic(name) ? {} : { tone: tone ?? base.tone, width: width ?? base.width, pulldown: pulldown ?? base.pulldown };
 ---

@@ -2,7 +2,7 @@
 // Pintu masuk showcase produk (`type: catalog`). Data dari src/content/products/*.yaml (1 file = 1 kategori).
 // `categories` = id kategori yang ditampilkan (kosong = semua), `limit` = jumlah produk per kategori
 // (kosong = semua, 0 = tanpa daftar produk, mis. ringkasan di beranda).
-// Daftar variasi: ./variants.ts. Saat build, variasi draft diganti CatalogBasic_001.
+// Daftar variasi: ./variants.ts.
 import { getProductCategories } from "@/lib/content";
 import WrappedVariant from "../WrappedVariant.astro";
 import { catalogVariants } from "./variants";
@@ -17,4 +17,4 @@ const categories = (await getProductCategories(ids)).map(({ id, data }) => ({
 }));
 ---
 
-<WrappedVariant section="catalog" variants={catalogVariants} variant={variant} fallback="CatalogBasic_001" categories={categories} {...props} />
+<WrappedVariant section="catalog" variants={catalogVariants} variant={variant} categories={categories} {...props} />

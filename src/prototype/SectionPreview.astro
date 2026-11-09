@@ -3,7 +3,7 @@
 // Bar atas: variasi (?v=), contoh isi (?c=), palet (?palet=). "Semua variasi" = semua variasi berjajar dengan isi yang sama.
 // Contoh isi = setiap section berjenis itu di semua halaman YAML (situs + halaman uji prototype).
 // Bawaan: contoh pertama (beranda dulu), palet = palet situs (site.yaml › theme).
-// Variasi baru di folder section otomatis ikut (diberi tanda status dari src/content/variants.yaml).
+// Variasi baru di folder section otomatis ikut (diberi tanda pemakaian dari src/prototype/usage.ts).
 import { getCollection } from "astro:content";
 import PrototypeLayout from "./PrototypeLayout.astro";
 import VariantLabel from "./VariantLabel.astro";

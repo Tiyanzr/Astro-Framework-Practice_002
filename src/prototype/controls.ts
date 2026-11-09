@@ -1,7 +1,7 @@
 // Pilihan (combo box) di bar atas halaman /prototype. Nilainya disimpan di URL (?v=..., ?tone=..., ?p=...),
 // jadi tautan bisa dibagikan dan tombol back browser tetap jalan.
 import { getSite } from "@/lib/content";
-import { variantStatus, type VariantStatus } from "@/lib/variants";
+import { getUsage, useOf } from "./usage";
 
 export type Option = { value: string; label: string };
 export type Control = { name: string; label: string; options: Option[]; value: string };
@@ -25,13 +25,11 @@ export function control(url: URL, name: string, label: string, options: (string 
   return { name, label, options: opts, value };
 }
 
-/** Tanda status di belakang nama variasi (status dari src/content/variants.yaml). */
-// Label pendek: base = versi Basic, pass = disetujui (tercantum di variants.yaml), draft = belum disetujui.
-export const statusLabel: Record<VariantStatus, string> = { basic: "base", approved: "pass", draft: "draft" };
-
-/** Opsi nama variasi untuk combo box, diberi tanda status, mis. "HeroImage_002 · draft". */
-export const variantOptions = async (names: string[], section: string): Promise<Option[]> =>
-  Promise.all(names.map(async (n) => ({ value: n, label: `${n} · ${statusLabel[await variantStatus(section, n)]}` })));
+/** Opsi nama variasi untuk combo box, diberi tanda pemakaian (dihitung dari YAML), mis. "HeroImage_002 · tidak dipakai". */
+export const variantOptions = async (names: string[], section: string): Promise<Option[]> => {
+  const usage = await getUsage();
+  return names.map((n) => ({ value: n, label: `${n} · ${useOf(usage, section, n)}` }));
+};
 
 /**
  * Combo box palet (?palet=): "situs" = token situs (global.css :root), "referensi" = palet + font + jarak parametris.com

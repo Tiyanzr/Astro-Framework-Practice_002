@@ -2,7 +2,7 @@
 // Pintu masuk daftar artikel (`type: posts`). Artikel dari src/content/posts/ (tanpa draft saat build), terbaru di atas.
 // `limit` = jumlah artikel (kosong = semua), `category` = saring per kategori.
 // `items` = daftar manual (mis. artikel di situs lain); kalau diisi, koleksi posts tidak dipakai.
-// Daftar variasi: ./variants.ts. Saat build, variasi draft diganti PostsBasic_001.
+// Daftar variasi: ./variants.ts.
 import { getPosts } from "@/lib/content";
 import WrappedVariant from "../WrappedVariant.astro";
 import { postsVariants } from "./variants";
@@ -26,4 +26,4 @@ if (items) {
 }
 ---
 
-<WrappedVariant section="posts" variants={postsVariants} variant={variant} fallback="PostsBasic_001" posts={posts} {...props} />
+<WrappedVariant section="posts" variants={postsVariants} variant={variant} posts={posts} {...props} />

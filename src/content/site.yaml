@@ -32,7 +32,7 @@ contact:
 
 # Navbar (item menunya dari src/content/menu/*.yaml)
 navbar:
-  # Variasi: src/components/layout/navbar/ · bandingkan di /prototype/navbar · status di src/content/variants.yaml
+  # Variasi: src/components/layout/navbar/ · bandingkan di /prototype/navbar · pemakaian semua variasi di /prototype/variants
   variant: NavbarDropdown_001
 
 # Footer (semua isinya opsional; baris yang dihapus tidak akan tampil)
