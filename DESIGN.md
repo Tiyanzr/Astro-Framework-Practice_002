@@ -519,12 +519,14 @@ Catatan: link internal ditulis tanpa garis miring akhir, canonical dengan; Netli
 
 Tidak pernah ikut build (`src/prototype/integration.mjs` menyuntik rute `/prototype/[...path]` dengan `prerender: false` hanya saat dev, didaftarkan di `astro.config.mjs`). Halaman prototype "murni": tanpa navbar/footer situs, hanya bar combo box (atas, sticky) dan tombol kembali (bawah, fixed), keduanya putih.
 
-Daftar `/prototype` dikelompokkan:
+Daftar `/prototype` dikelompokkan **per folder kode**, supaya nama grup langsung menunjukkan file mana yang diubah:
 
 | Grup | Halaman | Isi |
 |---|---|---|
-| **Mandatory** | colors, fonts, navbar, footer, post | berlaku di semua halaman, diatur sekali |
-| **Modul** | hero, intro, media, cards, catalog, features, benefits, posts, text, cta, contact | section per halaman (template di MODULES.md) |
+| **global.css** | colors, fonts | token warna, font, jarak untuk seluruh situs (`src/styles/global.css`) |
+| **ui** | ui | semua komponen `src/components/ui/` dengan semua pilihan props-nya (Button variant × size × square, TextLink, semua ikon di `src/assets/icons/`, SocialIcon, Logo, MediaPlaceholder); combo box palet + latar terang/gelap |
+| **layout** | navbar, footer | `src/components/layout/`: ada di semua halaman, variasinya dipilih di `site.yaml` |
+| **sections** | hero, intro, media, cards, catalog, features, benefits, posts, text, cta, contact, post | `src/components/sections/`: disusun per halaman di YAML (template di MODULES.md); `post` = halaman artikel |
 | **Tinjauan** | variants | tabel semua variasi: dipakai / base / tidak dipakai, dipakai di mana (halaman, `site.yaml`, frontmatter), link preview |
 | Lainnya | (otomatis) | file baru yang belum dikelompokkan di `pages/index.astro` |
 
@@ -565,7 +567,7 @@ Konten uji (dev saja): `src/prototype/content/pages/contoh-halaman.yaml`, `src/p
     ├── assets/icons/*.svg      ← ikon Lucide untuk ui/Icon
     ├── styles/global.css       ← SEMUA token (dua palet, font, skala, jarak, tone, .prose)
     └── prototype/              ← hanya dev
-        ├── pages/              ← /prototype/... (index, variants, colors, fonts, navbar, footer, post, + 1 file per modul)
+        ├── pages/              ← /prototype/... (index, variants, colors, fonts, ui, navbar, footer, post, + 1 file per section)
         ├── content/            ← halaman & artikel uji
         ├── PrototypeLayout.astro, SectionPreview.astro, VariantLabel.astro, controls.ts, route.astro
         └── integration.mjs
@@ -614,3 +616,4 @@ Branch: `prototype-01` (kerja harian) → `demo` (Netlify https://parametris-ast
 - **2026-11-06 (revisi 6):** **Situs dimigrasi ke parametris.com:** isi asli (ID), URL sama, **1 halaman = 1 folder** + field `parent`, gambar produk sefolder dengan YAML, variasi gaya parametris.com jadi **pass** (desain lama draft), `site.yaml › theme: parametris`, `homeTitle`, `footer.explore`, `posts › items`; canonical + Open Graph; domain `https://www.parametris.com` (astro.config, robots.txt, .htaccess); arsip export dipindah ke `reference/`; `/prototype/referensi` dihapus; artikel dummy pindah ke prototype.
 - **2026-11-06 (revisi 7):** **Dokumentasi dirapikan** ke kondisi terkini: DESIGN.md disusun ulang (dua palet, katalog semua variasi, SEO, skema, struktur), riwayat diurutkan kronologis. Arsitektur dianggap stabil; selanjutnya perubahan kecil.
 - **2026-11-09:** **Sistem status variasi (base/pass/draft) dihapus.** Alasannya: desain baru sudah ditinjau di prototype sebelum ditulis di YAML, jadi "dipakai di YAML" = disetujui; status manual hanya pekerjaan dobel dan membuat dev ≠ build (draft diganti Basic). Dihapus: `src/content/variants.yaml`, koleksi `variants`, `variantStatus`/`getApprovedVariants` dan pengganti Basic saat build. Gantinya: label **dipakai / base / tidak dipakai** di prototype, dihitung otomatis dari YAML (`src/prototype/usage.ts`; pemakaian di konten uji ditandai "uji" dan tidak dihitung). Versi Basic tetap ada.
+- **2026-11-09 (revisi 2):** Daftar `/prototype` dikelompokkan **per folder kode** (global.css · ui · layout · sections · Tinjauan), menggantikan Mandatory / Modul. Ditambah halaman **`/prototype/ui`** (semua komponen `ui/` + semua ikon, palet & latar gelap).

@@ -1,8 +1,8 @@
 # MODULES.md — template siap tempel
 
 > Katalog semua bagian halaman beserta **blok YAML lengkap** yang tinggal di-copy-paste.
-> Lihat tampilannya dulu di `/prototype` (hanya saat `astro dev`): grup **Mandatory** untuk bagian yang berlaku di semua halaman,
-> grup **Modul** untuk section yang disusun per halaman.
+> Lihat tampilannya dulu di `/prototype` (hanya saat `astro dev`), dikelompokkan per folder kode: **global.css** (palet), **layout** (navbar, footer),
+> **sections** (modul per halaman + artikel), dan **ui** (tombol, ikon, dll.).
 > Arsitektur & aturan desain: [DESIGN.md](DESIGN.md) · cara kerja & status proyek: [AGENTS.md](AGENTS.md).
 > Kolom **Pemakaian** di bawah per **2026-11-09** (**dipakai** = dipakai di situs, **base** = versi Basic, **tidak dipakai** = desain yang tidak dipakai saat ini). Data terbaru (dihitung otomatis dari YAML) selalu ada di `/prototype/variants`. Gaya apa pun boleh dipakai: yang ditulis di YAML itulah yang tampil, sama saat dev dan build.
 
@@ -55,7 +55,7 @@ Jadi: **copy blok lengkap, isi semua field yang mungkin dibutuhkan**, baru hapus
 
 # Mandatory
 
-Bagian yang **berlaku di semua halaman**. Diatur sekali, bukan per halaman. Preview di `/prototype` › grup Mandatory.
+Bagian yang **berlaku di semua halaman**. Diatur sekali, bukan per halaman. Preview di `/prototype` › grup global.css (palet), layout (navbar, footer), dan sections › post (artikel).
 
 ## Palet warna & font
 

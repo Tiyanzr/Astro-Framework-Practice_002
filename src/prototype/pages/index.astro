@@ -7,7 +7,8 @@ import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 const notes: Record<string, string> = {
   colors: "Palet warna, turunan, dan versi section gelap",
   fonts: "Kandidat font judul",
-  post: "Tampilan halaman artikel, pilih artikel contoh",
+  ui: "Tombol, link teks, ikon, ikon sosial, logo, placeholder media",
+  post: "Halaman artikel (/posts/...): semua variasi, pilih artikel contoh",
   hero: "Semua variasi hero",
   intro: "Semua variasi intro di semua tone",
   footer: "Semua variasi footer",
@@ -18,23 +19,28 @@ const notes: Record<string, string> = {
   text: "Semua variasi teks",
   cta: "Semua variasi ajakan bertindak",
   contact: "Semua variasi kontak",
-  media: "Section gambar: banner foto & gambar lebar (baru)",
-  features: "Daftar kapabilitas bernomor (baru)",
-  benefits: "Manfaat: grid ikon, tag, dua kolom (baru)",
+  media: "Section gambar: banner foto & gambar lebar",
+  features: "Daftar kapabilitas bernomor",
+  benefits: "Manfaat: grid ikon, tag, dua kolom",
   variants: "Daftar SEMUA variasi: dipakai / tidak dipakai, dan halaman yang memakainya",
 };
 
-// Pengelompokan daftar (urutan grup & isi mengikuti daftar ini; template YAML tiap bagian ada di MODULES.md):
-// - Mandatory: berlaku di SEMUA halaman, diatur sekali (site.yaml, menu, global.css)
-// - Modul: section yang disusun per halaman di `sections:` YAML halaman
-// - Tinjauan: alat melihat status & hasil keseluruhan
+// Pengelompokan daftar = folder kodenya, supaya jelas file mana yang diubah untuk tiap tampilan
+// (urutan grup & isi mengikuti daftar ini; template YAML tiap bagian ada di MODULES.md):
+// - global.css : token warna, font, jarak untuk seluruh situs (src/styles/global.css)
+// - ui         : komponen kecil yang dipakai banyak section (src/components/ui/)
+// - layout     : navbar & footer, ada di semua halaman, variasinya dipilih di site.yaml (src/components/layout/)
+// - sections   : modul yang disusun per halaman di `sections:` YAML, + halaman artikel (src/components/sections/)
+// - Tinjauan   : alat melihat hasil keseluruhan
 // File baru yang belum tercantum otomatis masuk grup "Lainnya".
 const groupDefs = [
-  { name: "Mandatory", note: "Berlaku di semua halaman, diatur sekali", pages: ["colors", "fonts", "navbar", "footer", "post"] },
+  { name: "global.css", note: "src/styles/global.css · token warna, font, jarak untuk seluruh situs", pages: ["colors", "fonts"] },
+  { name: "ui", note: "src/components/ui/ · komponen kecil yang dipakai banyak section", pages: ["ui"] },
+  { name: "layout", note: "src/components/layout/ · ada di semua halaman, variasinya dipilih di site.yaml", pages: ["navbar", "footer"] },
   {
-    name: "Modul",
-    note: "Disusun per halaman di sections YAML · template di MODULES.md",
-    pages: ["hero", "intro", "media", "cards", "catalog", "features", "benefits", "posts", "text", "cta", "contact"],
+    name: "sections",
+    note: "src/components/sections/ · disusun per halaman di sections YAML (template di MODULES.md); post = halaman artikel",
+    pages: ["hero", "intro", "media", "cards", "catalog", "features", "benefits", "posts", "text", "cta", "contact", "post"],
   },
   { name: "Tinjauan", note: "Semua variasi: dipakai di mana", pages: ["variants"] },
 ];
@@ -56,7 +62,7 @@ const groups = [
     {
       groups.map((group) => (
         <div class="mt-12">
-          <h2 class="font-mono text-eyebrow text-muted-foreground uppercase">{group.name}</h2>
+          <h2 class="font-mono text-small font-semibold">{group.name}</h2>
           {group.note && <p class="mt-1 text-small text-muted-foreground">{group.note}</p>}
           <ul class="mt-3 divide-y divide-border border-y border-border">
             {group.items.map((item) => (

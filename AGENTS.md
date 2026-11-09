@@ -65,7 +65,7 @@ src/
 ├── assets/icons/*.svg           ← ikon Lucide untuk ui/Icon (field `icon` di benefits)
 ├── styles/global.css            ← SEMUA token (palet situs :root + .theme-parametris, font, skala, text-ref-*, jarak, tone, .prose)
 └── prototype/                   ← HANYA saat `astro dev`, tidak pernah ikut build
-    ├── pages/                   ← /prototype/... (index, variants, colors, fonts, navbar, footer, post, + 1 file per modul)
+    ├── pages/                   ← /prototype/... (index, variants, colors, fonts, ui, navbar, footer, post, + 1 file per section)
     ├── content/pages, posts     ← halaman & artikel uji (dev saja): /contoh-halaman, contoh-semua-elemen, article-title-1..4
     ├── SectionPreview.astro     ← preview generik satu section (halaman modul = 1 baris)
     ├── usage.ts                 ← label dipakai / base / tidak dipakai, dihitung dari YAML
@@ -83,7 +83,7 @@ netlify.toml                     ← build Netlify (npm run build → dist, Node
 3. **Yang ditulis di YAML = yang tampil**, sama saat dev dan build (tidak ada status/persetujuan; peninjauan terjadi di prototype sebelum variasi ditulis di YAML). Setiap section punya `<Nama>Basic_001` (teks saja) sebagai bawaan kalau `variant:` kosong; variasi Basic mengabaikan `tone/width/pulldown`.
 4. **Palet** dipilih sekali di `site.yaml › theme` (`parametris` aktif, `situs` cadangan). Variasi hanya memakai token semantik (`text-primary`, `bg-background-alt`), jadi benar di kedua palet.
 5. **Gaya:** class Tailwind langsung di file variasi, nilai dari token (`text-ref-h2`, `bg-primary`, `container-page`, `section-y`). `<style>` di file variasi hanya untuk hal khusus. `global.css` hanya untuk token situs-wide.
-6. **Prototype** (`/prototype`, dev saja): daftar dikelompokkan **Mandatory** (colors, fonts, navbar, footer, post) · **Modul** (11 section) · **Tinjauan** (variants). Preview dengan combo box (`?v=` variasi, `?c=` contoh isi, `?palet=`, opsi "Semua variasi"); **`/prototype/variants`** = tabel semua variasi + dipakai / base / tidak dipakai + dipakai di mana.
+6. **Prototype** (`/prototype`, dev saja): daftar dikelompokkan **per folder kode**: **global.css** (colors, fonts) · **ui** (semua komponen `ui/`) · **layout** (navbar, footer) · **sections** (11 section + post) · **Tinjauan** (variants). Jadi nama grup langsung menunjukkan folder yang diubah. Preview dengan combo box (`?v=` variasi, `?c=` contoh isi, `?palet=`, opsi "Semua variasi"); **`/prototype/variants`** = tabel semua variasi + dipakai / base / tidak dipakai + dipakai di mana.
 
 ## 4. Resep pekerjaan umum
 
@@ -96,12 +96,13 @@ netlify.toml                     ← build Netlify (npm run build → dist, Node
 | Menambah item menu / sub-menu | Tambah file di `src/content/menu/` / isi `children` di file item induk (`href: ""` = hanya judul dropdown). |
 | Mengubah menu footer | `site.yaml › footer.explore`. |
 | Menambah artikel | `npm run import:notion -- "<folder export Notion>" [--slug x] [--force]` → cek di dev → hapus baris `draft: true`. |
-| Menambah ikon | Taruh SVG (Lucide, `stroke="currentColor"`) di `src/assets/icons/<nama>.svg`, pakai `icon: <nama>`. |
+| Menambah ikon | Taruh SVG (Lucide, `stroke="currentColor"`) di `src/assets/icons/<nama>.svg`, pakai `icon: <nama>`. Langsung muncul di `/prototype/ui`. |
+| Menambah/mengubah komponen `ui/` | Edit di `src/components/ui/`; cek semua pilihan props-nya di `/prototype/ui` (palet & latar gelap). Komponen baru: tambahkan juga contohnya di `src/prototype/pages/ui.astro`. |
 | Membuat variasi baru | Salin variasi terdekat di folder section → beri nama `<Nama><Gaya>_<NNN>.astro` (gaya baru mulai `_001`). Langsung muncul di `/prototype/<section>` dan `/prototype/variants` (sebagai "tidak dipakai"). |
 | Memakai variasi di situs | Setelah ditinjau di prototype, tulis namanya di `variant:` YAML halaman (navbar/footer/artikel: `site.yaml`). |
 | Membuang variasi | Hapus filenya (cek dulu di `/prototype/variants` bahwa labelnya "tidak dipakai"). Versi Basic jangan dihapus. |
 | Ganti palet seluruh situs | `site.yaml › theme: parametris \| situs`. |
-| Membuat **jenis** section baru | 1) folder `src/components/sections/<nama>/` berisi `<Nama>.astro` (pakai `WrappedVariant`), `variants.ts`, `types.ts`, `<Nama>Basic_001.astro` (salin pola `cta/` atau `cards/`); 2) skema `type: z.literal("<nama>")` di `content.config.ts` + masukkan ke `discriminatedUnion`; 3) daftarkan di `Sections.astro`; 4) `src/prototype/pages/<nama>.astro` (`<SectionPreview section="<nama>" />`) + daftarkan di `variantsBySection` (`SectionPreview.astro`), grup Modul (`prototype/pages/index.astro`), dan `sectionOrder` (`prototype/pages/variants.astro`); 5) catat di DESIGN.md + MODULES.md. |
+| Membuat **jenis** section baru | 1) folder `src/components/sections/<nama>/` berisi `<Nama>.astro` (pakai `WrappedVariant`), `variants.ts`, `types.ts`, `<Nama>Basic_001.astro` (salin pola `cta/` atau `cards/`); 2) skema `type: z.literal("<nama>")` di `content.config.ts` + masukkan ke `discriminatedUnion`; 3) daftarkan di `Sections.astro`; 4) `src/prototype/pages/<nama>.astro` (`<SectionPreview section="<nama>" />`) + daftarkan di `variantsBySection` (`SectionPreview.astro`), grup `sections` (`prototype/pages/index.astro`), dan `sectionOrder` (`prototype/pages/variants.astro`); 5) catat di DESIGN.md + MODULES.md. |
 | Menambah token warna/jarak/font | `src/styles/global.css` (palet situs di `:root`, palet referensi di `.theme-parametris`) + catat di DESIGN.md. |
 | Deploy ke Netlify | `git push origin prototype-01` lalu `git push origin prototype-01:demo` (hanya kalau diminta). |
 
@@ -124,7 +125,7 @@ Remote: hanya `origin` = github.com/Tiyanzr/Astro-Framework-Practice_002. (READM
 - **SEO:** domain `https://www.parametris.com` (astro.config, sitemap, robots.txt, .htaccess), canonical, Open Graph dasar, judul tab seperti parametris.com.
 - **11 jenis section** (`hero`, `intro`, `media`, `cards`, `catalog`, `features`, `benefits`, `posts`, `text`, `cta`, `contact`) + navbar, footer, halaman artikel. Semua punya Basic.
 - **Variasi:** 17 dipakai (semua gaya parametris.com + `PostArticle_001`), 7 tidak dipakai (desain lama palet situs: `NavbarPanel_001`, `HeroImage_001/_002`, `IntroMedia_001/_002`, `FooterSimple_001`, `PostArticle_002`), 14 base. Sistem status pass/draft dihapus 2026-11-09. Daftar lengkap: DESIGN.md › *Katalog section & variasi*.
-- **Prototype** lengkap (Mandatory / Modul / Tinjauan), MODULES.md, import Notion, draft artikel.
+- **Prototype** lengkap (global.css / ui / layout / sections / Tinjauan), MODULES.md, import Notion, draft artikel.
 - **Belum di-commit:** migrasi parametris.com + dokumentasi ini masih perubahan lokal di `prototype-01` (sampai pemilik meminta commit/push).
 
 **Belum / sengaja ditunda**
