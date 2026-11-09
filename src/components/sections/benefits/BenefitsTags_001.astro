@@ -1,0 +1,16 @@
+---
+// BenefitsTags_001 (referensi: parametris.com, .tags "BIDANG PENERAPAN" di halaman Tentang & Energi):
+// hanya judul item sebagai deretan tag bergaris, lalu paragraf penutup `note`. Ikon & penjelasan diabaikan.
+import SplitHeading from "../SplitHeading.astro";
+import type { BenefitsProps } from "./types";
+
+type Props = BenefitsProps;
+
+const { items, note, ...heading } = Astro.props;
+---
+
+<SplitHeading {...heading} />
+<ul class:list={["flex flex-wrap gap-3.5", !heading.title && !heading.accent && "mt-[25px]"]}>
+  {items.map((item) => <li class="border border-border px-[19px] py-[13px]">{item.title}</li>)}
+</ul>
+{note && <p class="mt-[30px] max-w-[900px] text-muted-foreground">{note}</p>}

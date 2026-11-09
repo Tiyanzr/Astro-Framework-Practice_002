@@ -1,0 +1,110 @@
+---
+// /prototype/ui: semua komponen kecil di src/components/ui/ dalam satu halaman, dengan semua pilihan props-nya.
+// Bar atas: palet (?palet=) dan latar (?tone=terang|gelap), supaya terlihat apakah warnanya tetap benar di section gelap.
+// Ikon dibaca otomatis dari src/assets/icons/, jadi ikon baru langsung muncul di sini.
+// (ui/Section dilihat lewat tone/width di halaman section; ui/YouTube lewat media youtube di /prototype/intro.)
+import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
+import Button from "@/components/ui/Button.astro";
+import Icon from "@/components/ui/Icon.astro";
+import Logo from "@/components/ui/Logo.astro";
+import MediaPlaceholder from "@/components/ui/MediaPlaceholder.astro";
+import SocialIcon from "@/components/ui/SocialIcon.astro";
+import TextLink from "@/components/ui/TextLink.astro";
+import { control, paletteClass, paletteControl, sitePalette } from "@/prototype/controls";
+
+const palette = paletteControl(Astro.url, await sitePalette());
+const tone = control(Astro.url, "tone", "Latar", [
+  { value: "terang", label: "Latar terang" },
+  { value: "gelap", label: "Latar gelap (theme-dark)" },
+]);
+
+const buttonVariants = ["primary", "secondary", "outline", "solid"] as const;
+const sizes = ["md", "lg"] as const;
+const icons = Object.keys(import.meta.glob("/src/assets/icons/*.svg")).map((p) => p.split("/").pop()!.replace(/\.svg$/, ""));
+const platforms = ["facebook", "instagram", "linkedin", "youtube", "x", "tiktok", "whatsapp"] as const;
+---
+
+<PrototypeLayout title="ui" controls={[palette, tone]}>
+  <div class:list={[paletteClass(palette), tone.value === "gelap" && "theme-dark"]}>
+    <div class="container-page section-y space-y-16">
+      <!-- Button -->
+      <section>
+        <h2 class="font-mono text-eyebrow text-muted-foreground uppercase">Button · variant × size · square</h2>
+        <div class="mt-6 space-y-4">
+          {
+            buttonVariants.map((variant) => (
+              <div class="flex flex-wrap items-center gap-4">
+                <span class="w-24 font-mono text-caption text-muted-foreground">{variant}</span>
+                {sizes.map((size) => (
+                  <Button href="#" variant={variant} size={size}>
+                    {variant} {size}
+                  </Button>
+                ))}
+                <Button href="#" variant={variant} square>
+                  {variant} square
+                </Button>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- TextLink -->
+      <section>
+        <h2 class="font-mono text-eyebrow text-muted-foreground uppercase">TextLink</h2>
+        <div class="mt-6 flex flex-wrap gap-8">
+          <TextLink href="#">Semua solusi software</TextLink>
+          <TextLink>Tanpa href (span)</TextLink>
+        </div>
+      </section>
+
+      <!-- Icon -->
+      <section>
+        <h2 class="font-mono text-eyebrow text-muted-foreground uppercase">Icon · src/assets/icons/ ({icons.length})</h2>
+        <ul class="mt-6 grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-4 lg:grid-cols-6">
+          {
+            icons.map((name) => (
+              <li class="flex flex-col items-center gap-3 bg-background px-2 py-6 text-center">
+                <Icon name={name} class="size-10 text-primary" />
+                <code class="font-mono text-caption text-muted-foreground">{name}</code>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- SocialIcon -->
+      <section>
+        <h2 class="font-mono text-eyebrow text-muted-foreground uppercase">SocialIcon</h2>
+        <ul class="mt-6 flex flex-wrap gap-8">
+          {
+            platforms.map((platform) => (
+              <li class="flex flex-col items-center gap-2">
+                <SocialIcon platform={platform} class="size-6" />
+                <code class="font-mono text-caption text-muted-foreground">{platform}</code>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Logo -->
+      <section>
+        <h2 class="font-mono text-eyebrow text-muted-foreground uppercase">Logo</h2>
+        <div class="mt-6 flex flex-wrap items-end gap-10">
+          <Logo label="Parametrik" />
+          <Logo label="Parametrik" class="h-10" />
+        </div>
+      </section>
+
+      <!-- MediaPlaceholder -->
+      <section>
+        <h2 class="font-mono text-eyebrow text-muted-foreground uppercase">MediaPlaceholder · rounded / square</h2>
+        <div class="mt-6 grid gap-6 md:grid-cols-2">
+          <MediaPlaceholder label="Video profil" />
+          <MediaPlaceholder label="Square" square />
+        </div>
+      </section>
+    </div>
+  </div>
+</PrototypeLayout>

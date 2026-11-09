@@ -1,0 +1,51 @@
+---
+// Judul section bergaya parametris.com, dipakai bersama variasi bergaya referensi (CatalogGrid_001, CardsGallery_*, ...):
+// - baris atas: eyebrow (kiri) + link "lihat semua" `more` (kanan), kalau ada
+// - judul h2 tipis berukuran besar; `accent` turun ke baris baru dengan warna aksen (text-primary)
+// - `description` (kalau ada) di kanan judul mulai md (pola .split-title referensi)
+// Semua opsional; kalau kosong semua, tidak menampilkan apa pun.
+import TextLink from "@/components/ui/TextLink.astro";
+import type { Link } from "./types";
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  accent?: string;
+  description?: string;
+  more?: Link;
+}
+
+const { eyebrow, title, accent, description, more } = Astro.props;
+const hasTitle = Boolean(title || accent);
+---
+
+{
+  (eyebrow || more) && (
+    <div class="flex items-start justify-between gap-5 md:items-center">
+      {eyebrow && <p class="text-eyebrow font-semibold uppercase">{eyebrow}</p>}
+      {more && (
+        <TextLink href={more.href} class="ml-auto max-md:text-caption">
+          {more.label}
+        </TextLink>
+      )}
+    </div>
+  )
+}
+{
+  (hasTitle || description) && (
+    <div class:list={["mt-7 mb-8 md:mb-11", description && "md:flex md:items-center md:justify-between md:gap-12"]}>
+      {hasTitle && (
+        <h2 class="text-ref-h2 text-balance">
+          {title}
+          {accent && (
+            <>
+              {title && <br />}
+              <span class="text-primary">{accent}</span>
+            </>
+          )}
+        </h2>
+      )}
+      {description && <p class="mt-5 text-muted-foreground md:mt-0 md:max-w-[285px] md:shrink-0">{description}</p>}
+    </div>
+  )
+}

@@ -1,12 +1,15 @@
 ---
-// Pintu masuk kontak (`type: contact`). Data kontak dari site.yaml › contact; label formulir dari YAML halaman.
-// Daftar variasi: ./variants.ts. Saat build, variasi draft diganti ContactBasic_001.
+// Pintu masuk kontak (`type: contact`). Data kontak dari site.yaml › contact; `contact:` di YAML halaman menimpanya
+// (hanya field yang diisi). Label formulir dan tombol dari YAML halaman.
+// Daftar variasi: ./variants.ts.
 import { getSite } from "@/lib/content";
 import WrappedVariant from "../WrappedVariant.astro";
 import { contactVariants } from "./variants";
 
-const { variant = "ContactBasic_001", ...props } = Astro.props;
+const { variant = "ContactBasic_001", contact: override = {}, ...props } = Astro.props;
 const site = await getSite();
+const filled = Object.fromEntries(Object.entries(override).filter(([, value]) => value !== undefined));
+const contact = { ...site.contact, ...filled };
 ---
 
-<WrappedVariant section="contact" variants={contactVariants} variant={variant} fallback="ContactBasic_001" contact={site.contact} {...props} />
+<WrappedVariant section="contact" variants={contactVariants} variant={variant} contact={contact} {...props} />

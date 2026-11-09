@@ -1,0 +1,58 @@
+# /energy — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Energi terbarukan"
+description: "Optimasi produksi, distribusi, dan konsumsi energi surya, angin, biomassa, dan air melalui pemantauan, analisis, serta kontrol real-time."
+parent: iot
+summary: "Pemantauan, kontrol, dan optimasi energi."
+order: 3
+image:
+  src: ./illustration.png
+  alt: "Energi terbarukan"
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "SOLUSI IOT / ENERGI TERBARUKAN"
+    aside: { label: "Beranda", href: / }
+    title: "Energi terbarukan."
+    accent: "Kendali yang terhubung."
+    description: "Optimasi produksi, distribusi, dan konsumsi energi surya, angin, biomassa, dan air melalui pemantauan, analisis, serta kontrol real-time."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: media
+    variant: MediaFigure_001
+    image:
+      src: ./illustration.png
+      alt: "SOLUSI IOT / ENERGI TERBARUKAN"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Pemantauan jarak jauh"
+        description: "Pantau distribusi listrik, dummy load, tekanan air, kecepatan putaran, dan kondisi lingkungan pembangkit."
+      - title: "Notifikasi kondisi"
+        description: "Notifikasi perubahan kondisi atau kerusakan pembangkit untuk tindak lanjut."
+      - title: "Electrical Load Controller"
+        description: "Integrasi sistem kontrol frekuensi generator untuk mendukung kestabilan dan efisiensi distribusi listrik."
+
+  - type: benefits
+    variant: BenefitsTags_001
+    eyebrow: "BIDANG PENERAPAN"
+    items:
+      - title: "Tenaga angin"
+      - title: "Tenaga surya"
+      - title: "Tenaga air"
+      - title: "Biomassa"
+      - title: "Microgrids"
+    note: "Penerapan mencakup pengelolaan kinerja turbin angin; pemantauan panel surya, predictive maintenance, dan manajemen beban; optimasi pembangkit air; efisiensi proses biomassa; serta pengelolaan microgrid dengan beragam sumber energi."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

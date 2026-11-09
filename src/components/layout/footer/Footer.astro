@@ -1,13 +1,15 @@
 ---
 // Pintu masuk footer: variasi dipilih lewat `footer.variant` di src/content/site.yaml (= nama file tanpa .astro). Daftar variasi: ./variants.ts.
-import { getSite } from "@/lib/content";
+// Isi: site.yaml › footer + item menu utama (src/content/menu/) untuk variasi yang punya kolom menu.
+import { getMainLinks, getSite } from "@/lib/content";
 import { pickVariant } from "@/lib/variants";
 import { footerVariants } from "./variants";
 
 const site = await getSite();
-const { variant, ...footer } = site.footer;
-// Saat build, variasi yang belum disetujui diganti FooterBasic_001 (tanpa desain), lihat lib/variants.ts.
-const Variant = await pickVariant(footerVariants, variant, "footer", "FooterBasic_001");
+const links = await getMainLinks();
+const { variant, explore, ...footer } = site.footer;
+const Variant = pickVariant(footerVariants, variant, "footer");
 ---
 
-<Variant siteName={site.name} {...footer} />
+<!-- Kolom menu footer: site.yaml › footer.explore kalau diisi, kalau tidak item menu utama -->
+<Variant siteName={site.name} links={explore ?? links} {...footer} />

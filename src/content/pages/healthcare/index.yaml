@@ -1,0 +1,67 @@
+# /healthcare — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Kesehatan"
+description: "Solusi terintegrasi untuk mengatur dan memantau tekanan udara, suhu, kelembapan, dan pencahayaan secara otomatis dan real-time. Sensor ruangan dan perangkat HVAC mendukung pemeliharaan kondisi ruang operasi sesuai kebutuhan medis."
+parent: iot
+summary: "Pemantauan lingkungan ruangan dan perawatan."
+order: 2
+image:
+  src: ./illustration.png
+  alt: "Kesehatan"
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "SOLUSI IOT / KESEHATAN"
+    aside: { label: "Beranda", href: / }
+    title: "Lingkungan terjaga."
+    accent: "Pelayanan lebih baik."
+    description: "Solusi terintegrasi untuk mengatur dan memantau tekanan udara, suhu, kelembapan, dan pencahayaan secara otomatis dan real-time. Sensor ruangan dan perangkat HVAC mendukung pemeliharaan kondisi ruang operasi sesuai kebutuhan medis."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: media
+    variant: MediaFigure_001
+    image:
+      src: ./illustration.png
+      alt: "SOLUSI IOT / KESEHATAN"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Central & Building Management System"
+        description: "Pengaturan dan pemantauan lingkungan ruangan secara terintegrasi."
+      - title: "Sistem deteksi jatuh"
+        description: "Deteksi jatuh untuk mendukung lingkungan perawatan."
+      - title: "Deteksi napas & detak jantung"
+        description: "Sensor IoT memantau serta menganalisis pola pernapasan dan detak jantung secara real-time."
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "MANFAAT & KEUNGGULAN"
+    items:
+      - title: "Kenyamanan pasien"
+        icon: heart
+        description: "Dukung kenyamanan pasien melalui pemantauan kondisi lingkungan ruangan."
+      - title: "Pengendalian infeksi"
+        icon: shield-check
+        description: "Pemantauan lingkungan membantu mendukung kebutuhan pengendalian infeksi."
+      - title: "Kenyamanan tim bedah"
+        icon: users
+        description: "Jaga kondisi ruang operasi untuk mendukung kenyamanan tim bedah."
+      - title: "Fungsi peralatan"
+        icon: settings
+        description: "Pantau kondisi lingkungan untuk mendukung fungsi peralatan."
+      - title: "Keselamatan & akurasi"
+        icon: scan-line
+        description: "Pengaturan dan pemantauan real-time mendukung keselamatan dan akurasi."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

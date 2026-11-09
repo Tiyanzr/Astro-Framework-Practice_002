@@ -1,8 +1,7 @@
 ---
 // Label nama variasi di halaman /prototype/*, ditaruh di atas setiap variasi yang dibandingkan.
-// Status otomatis dari src/content/variants.yaml: Draft (kuning), Disetujui (hijau), Basic (garis).
-import { variantStatus } from "@/lib/variants";
-import { statusLabel } from "./controls";
+// Tanda pemakaian dihitung otomatis dari YAML (src/prototype/usage.ts): dipakai · base · tidak dipakai.
+import { getUsage, useBadge, useOf } from "./usage";
 
 interface Props {
   section: string;
@@ -12,16 +11,11 @@ interface Props {
 }
 
 const { section, name, note } = Astro.props;
-const status = await variantStatus(section, name);
-const badge = {
-  draft: "bg-lime text-black",
-  approved: "bg-primary text-primary-foreground",
-  basic: "border border-border",
-}[status];
+const use = useOf(await getUsage(), section, name);
 ---
 
 <p class="flex flex-wrap items-center gap-3 border-y border-border bg-background-alt px-4 py-2 font-mono text-eyebrow uppercase md:px-8">
   {name}
-  <span class:list={["rounded-sm px-1.5 py-0.5", badge]}>{statusLabel[status]}</span>
+  <span class:list={["rounded-sm px-1.5 py-0.5", useBadge[use]]}>{use}</span>
   {note && <span class="text-muted-foreground">{note}</span>}
 </p>

@@ -1,5 +1,6 @@
 ---
-// /prototype/intro: coba variasi intro dengan isi yang sama (intro pertama di src/content/pages/home.yaml).
+// /prototype/intro: coba variasi intro dengan isi yang sama (intro pertama di halaman contoh
+// src/prototype/content/pages/contoh-halaman.yaml, karena situs sekarang tidak memakai intro).
 // Bar atas: variasi (?v=) dan tone (?tone=). "Semua" = semua pilihan berjajar. Width mengikuti bawaan variasi, pulldown dimatikan.
 // Bawaan = variasi + tone yang dipakai beranda. Semua variasi di src/components/sections/intro/ otomatis ikut, diberi tanda status.
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
@@ -10,7 +11,7 @@ import { getSection } from "@/lib/content";
 import { sectionTones } from "@/lib/section";
 import { allOption, control, selected, variantOptions } from "@/prototype/controls";
 
-const { type: _type, variant: homeVariant, tone: homeTone, width: _width, pulldown: _pulldown, ...content } = await getSection("home", "intro");
+const { type: _type, variant: homeVariant, tone: homeTone, width: _width, pulldown: _pulldown, ...content } = await getSection("contoh-halaman", "intro");
 
 const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions(Object.keys(introVariants), "intro")), allOption], homeVariant);
 const tone = control(Astro.url, "tone", "Tone", [...sectionTones.map((t) => ({ value: t, label: `Tone ${t}` })), allOption], homeTone ?? introDefaults[variant.value]?.tone ?? "default");

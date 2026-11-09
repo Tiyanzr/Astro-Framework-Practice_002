@@ -1,0 +1,59 @@
+# /services — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Layanan"
+description: "Pelatihan, konsultasi, dan layanan engineering untuk mendukung pengembangan, pengelolaan, dan optimasi aplikasi serta sistem di industri dan manufaktur."
+
+sections:
+  - type: hero
+    variant: HeroText_002
+    size: default
+    eyebrow: "LAYANAN"
+    aside: { label: "Beranda", href: / }
+    title: "Keahlian yang tepat."
+    accent: "Di setiap tahap."
+    description: "Pelatihan, konsultasi, dan layanan engineering untuk mendukung pengembangan, pengelolaan, dan optimasi aplikasi serta sistem di industri dan manufaktur."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+    image:
+      src: ./background.png
+      alt: "Layanan Parametrik"
+
+  - type: cards
+    variant: CardsGallery_002
+    from: services
+    linkLabel: "Lihat layanan"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Pemodelan tingkat lanjut"
+        description: "Pemodelan parametrik, sculpting, dan surface modeling untuk desain 3D yang detail."
+      - title: "Rendering & visualisasi"
+        description: "Visualisasi model 3D menjadi gambar yang realistis."
+      - title: "Kolaborasi & berbagi desain"
+        description: "Kolaborasi proyek, berbagi desain, dan pengumpulan masukan dari tim."
+      - title: "Simulasi & analisis"
+        description: "Uji performa, kekuatan, dan fungsi desain 3D."
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "MANFAAT & KEUNGGULAN"
+    items:
+      - title: "Efisiensi waktu"
+        icon: timer
+        description: "Rapikan alur kerja dan kolaborasi untuk membantu proyek selesai lebih cepat."
+      - title: "Optimasi biaya"
+        icon: chart-no-axes-combined
+        description: "Optimalkan sumber daya dan pengetahuan produk untuk mengurangi kegagalan produksi."
+      - title: "Peningkatan kualitas"
+        icon: badge-check
+        description: "Atasi masalah desain dan sesuaikan solusi dengan kebutuhan pelanggan."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

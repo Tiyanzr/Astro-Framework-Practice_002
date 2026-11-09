@@ -1,6 +1,6 @@
 ---
 // Pintu masuk teks bebas (`type: text`). `body` di YAML dipecah menjadi paragraf (pisahkan dengan satu baris kosong).
-// Daftar variasi: ./variants.ts. Saat build, variasi draft diganti TextBasic_001.
+// Daftar variasi: ./variants.ts.
 import WrappedVariant from "../WrappedVariant.astro";
 import { textVariants } from "./variants";
 
@@ -8,4 +8,4 @@ const { variant = "TextBasic_001", body, ...props } = Astro.props;
 const paragraphs: string[] = body?.split(/\n\s*\n/).map((p: string) => p.trim()).filter(Boolean) ?? [];
 ---
 
-<WrappedVariant section="text" variants={textVariants} variant={variant} fallback="TextBasic_001" paragraphs={paragraphs} {...props} />
+<WrappedVariant section="text" variants={textVariants} variant={variant} paragraphs={paragraphs} {...props} />

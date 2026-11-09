@@ -1,0 +1,17 @@
+---
+// Pintu masuk section gambar (`type: media`): banner foto penuh atau gambar lebar sebagai section sendiri.
+// Tidak dibungkus ui/Section, karena banner memenuhi lebar layar; setiap variasi mengatur lebarnya sendiri.
+// Daftar variasi: ./variants.ts.
+import { pickVariant } from "@/lib/variants";
+import { mediaVariants } from "./variants";
+import type { MediaProps } from "./types";
+
+interface Props extends MediaProps {
+  variant?: string;
+}
+
+const { variant = "MediaBasic_001", ...props } = Astro.props;
+const Variant = pickVariant(mediaVariants, variant, "media");
+---
+
+<Variant {...props} />

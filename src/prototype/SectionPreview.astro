@@ -1,0 +1,74 @@
+---
+// Halaman pratinjau satu jenis section (dipakai src/prototype/pages/<section>.astro, cukup satu baris).
+// Bar atas: variasi (?v=), contoh isi (?c=), palet (?palet=). "Semua variasi" = semua variasi berjajar dengan isi yang sama.
+// Contoh isi = setiap section berjenis itu di semua halaman YAML (situs + halaman uji prototype).
+// Bawaan: contoh pertama (beranda dulu), palet = palet situs (site.yaml › theme).
+// Variasi baru di folder section otomatis ikut (diberi tanda pemakaian dari src/prototype/usage.ts).
+import { getCollection } from "astro:content";
+import PrototypeLayout from "./PrototypeLayout.astro";
+import VariantLabel from "./VariantLabel.astro";
+import Sections from "@/components/sections/Sections.astro";
+import { benefitsVariants } from "@/components/sections/benefits/variants";
+import { cardsVariants } from "@/components/sections/cards/variants";
+import { catalogVariants } from "@/components/sections/catalog/variants";
+import { contactVariants } from "@/components/sections/contact/variants";
+import { ctaVariants } from "@/components/sections/cta/variants";
+import { featuresVariants } from "@/components/sections/features/variants";
+import { mediaVariants } from "@/components/sections/media/variants";
+import { postsVariants } from "@/components/sections/posts/variants";
+import { textVariants } from "@/components/sections/text/variants";
+import { pageHref, type PageSection, type SectionType } from "@/lib/content";
+import { allOption, control, paletteClass, paletteControl, selected, sitePalette, variantOptions } from "./controls";
+
+const variantsBySection: Partial<Record<SectionType, Record<string, unknown>>> = {
+  cards: cardsVariants,
+  catalog: catalogVariants,
+  posts: postsVariants,
+  text: textVariants,
+  cta: ctaVariants,
+  contact: contactVariants,
+  media: mediaVariants,
+  features: featuresVariants,
+  benefits: benefitsVariants,
+};
+
+interface Props {
+  section: SectionType;
+}
+
+const { section } = Astro.props;
+const variants = variantsBySection[section];
+if (!variants) throw new Error(`SectionPreview belum mengenal section "${section}". Tambahkan di variantsBySection.`);
+
+// Semua contoh isi: beranda dulu, lalu halaman lain urut abjad.
+const pages = (await getCollection("pages")).sort((a, b) => Number(a.id !== "home") - Number(b.id !== "home") || a.id.localeCompare(b.id));
+const samples = pages.flatMap((page) =>
+  page.data.sections
+    .map((s, i) => ({ s, i }))
+    .filter(({ s }) => s.type === section)
+    .map(({ s, i }) => ({ value: `${page.id}:${i}`, label: `Isi ${pageHref(page.id)} #${i + 1}`, section: s as PageSection })),
+);
+
+const sample = control(Astro.url, "c", "Contoh isi", samples);
+const chosen = samples.find((s) => s.value === sample.value)?.section;
+const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions(Object.keys(variants), section)), allOption], chosen?.variant);
+const palette = paletteControl(Astro.url, await sitePalette());
+const shown = selected(variant);
+---
+
+<PrototypeLayout title={section} controls={[variant, sample, palette]}>
+  <div class:list={[paletteClass(palette)]}>
+    {
+      !chosen ? (
+        <p class="container-page section-y text-muted-foreground">Belum ada halaman YAML yang memakai section `{section}`.</p>
+      ) : (
+        shown.map((name) => (
+          <div>
+            {shown.length > 1 && <VariantLabel section={section} name={name} />}
+            <Sections sections={[{ ...chosen, variant: name } as PageSection]} />
+          </div>
+        ))
+      )
+    }
+  </div>
+</PrototypeLayout>

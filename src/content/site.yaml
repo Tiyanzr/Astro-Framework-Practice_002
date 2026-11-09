@@ -1,52 +1,62 @@
-# Info umum situs: dipakai di <head> (judul tab, SEO) dan navbar.
+# Info umum situs: dipakai di <head> (judul tab, SEO), navbar, footer, dan section kontak.
+# Sumber isi: parametris.com (export v8 › app.js header/footer/kontak), versi Indonesia.
 name: Parametrik
-description: Parametrik Solusi Integrasi
-url: https://parametris.com
+description: Software engineering, solusi IoT, dan keahlian teknis untuk membantu bisnis Anda berinovasi, mengoptimalkan proses, dan berkembang.
+# Domain resmi (samakan dengan astro.config.mjs › site)
+url: https://www.parametris.com
 lang: id
+# Judul tab beranda. Halaman lain: "<judul halaman> — Parametrik"
+homeTitle: Parametrik — Software, IoT & Engineering
+# Palet seluruh situs: situs = palet kita (global.css :root) · parametris = palet parametris.com (.theme-parametris)
+theme: parametris
 
 # Tombol aksi utama di navbar
 cta:
-  label: Kontak
-  href: /kontak
+  label: Mari berdiskusi
+  href: /contact
 
-# Kontak perusahaan: dipakai section `contact` (halaman /kontak). Baris yang dihapus tidak akan tampil.
-# TODO: placeholder, ganti dengan data asli.
+# Kontak perusahaan: dipakai section `contact` (halaman /contact). Baris yang dihapus tidak akan tampil.
 contact:
-  email: email@example.com
-  phone: +62 21 0000 0000
+  email: sales@parametris.com
+  phone: "+62 21 3044 8230"
   address:
-    - Address line 1
-    - City, Postal Code
-  hours: Senin–Jumat, 08.00–17.00
+    - Synergy Building Suite 1508
+    - Jalur Sutera Barat Kav. 17
+    - Alam Sutera
+    - Tangerang 15325 – Indonesia
+  emails:
+    - { label: Dukungan teknis, email: support@parametris.com }
+  phones:
+    - { label: WhatsApp, number: "+62 821 1629 1814" }
+    - { label: Fax, number: "+62 21 3044 8240" }
 
 # Navbar (item menunya dari src/content/menu/*.yaml)
 navbar:
-  # Variasi: src/components/layout/navbar/ · bandingkan di /prototype/navbar · status di src/content/variants.yaml
-  variant: NavbarPanel_001
+  # Variasi: src/components/layout/navbar/ · bandingkan di /prototype/navbar · pemakaian semua variasi di /prototype/variants
+  variant: NavbarDropdown_001
 
 # Footer (semua isinya opsional; baris yang dihapus tidak akan tampil)
 footer:
   # Nama file variasi di src/components/layout/footer/
-  variant: FooterSimple_001
+  variant: FooterColumns_001
   company: PT Parametrik Solusi Integrasi
-  # Alamat: 1 baris = 1 item
-  address:
-    - Alamat baris 1
-    - Kota, Kode Pos, Indonesia
-  email: info@parametris.com
-  # Judul di atas ikon media sosial
-  socialsTitle: Ikuti Kami
-  # Media sosial: tambah/hapus item sesuai kebutuhan.
+  tagline: Produk dan layanan untuk engineering, manufaktur, dan teknologi terhubung.
+  email: support@parametris.com
+  phone: "+62 21 3044 8230"
+  location: { label: "Alam Sutera · Tangerang", href: /contact }
+  exploreTitle: Jelajahi
+  contactTitle: Hubungi kami
+  # Isi kolom menu footer (beda dari navbar: tanpa Beranda, Produk dipecah jadi Software & IoT)
+  explore:
+    - { label: Software, href: /software }
+    - { label: Internet of Things, href: /iot }
+    - { label: Layanan, href: /services }
+    - { label: Tentang kami, href: /about }
   # platform yang dikenali: facebook, instagram, linkedin, youtube, x, tiktok, whatsapp
   socials:
-    - platform: facebook
-      href: "#"
-    - platform: x
-      href: "#"
-    - platform: youtube
-      href: "#"
-    - platform: linkedin
-      href: "#"
+    - { platform: instagram, href: "https://www.instagram.com/parametriksi/" }
+    - { platform: linkedin, href: "https://www.linkedin.com/company/parametrik-solusi-integrasi/" }
+    - { platform: youtube, href: "https://www.youtube.com/@parametriksi" }
 
 # Halaman artikel (/posts/<slug>/)
 post:

@@ -1,0 +1,23 @@
+# /contact — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Kontak"
+description: "Diskusikan kebutuhan software, IoT, pelatihan, konsultasi, atau engineering bersama tim Parametrik."
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "KONTAK"
+    aside: { label: "Beranda", href: / }
+    title: "Kebutuhan Anda."
+    accent: "Awal percakapan kita."
+    description: "Diskusikan kebutuhan software, IoT, pelatihan, konsultasi, atau engineering bersama tim Parametrik."
+
+  - type: contact
+    variant: ContactDirect_001
+    # Data kontak dari src/content/site.yaml › contact
+    eyebrow: "HUBUNGI TIM KAMI"
+    addressLabel: "ALAMAT"
+    actions:
+      - { label: "WhatsApp", href: "https://api.whatsapp.com/send?phone=6282116291814" }
+      - { label: "+62 21 3044 8230", href: "tel:+622130448230" }

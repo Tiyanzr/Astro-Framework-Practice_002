@@ -1,0 +1,20 @@
+---
+// Ikon garis dari src/assets/icons/<name>.svg (Lucide, lisensi ISC di folder yang sama), ditanam langsung sebagai SVG.
+// Warna mengikuti teks (stroke="currentColor"), jadi cukup beri class warna, mis. text-primary.
+// Menambah ikon = menaruh file .svg baru di src/assets/icons/ (stroke="currentColor", tanpa width/height).
+const icons = import.meta.glob<string>("/src/assets/icons/*.svg", { query: "?raw", import: "default", eager: true });
+
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className = "size-10" } = Astro.props;
+const svg = icons[`/src/assets/icons/${name}.svg`];
+if (!svg) {
+  const names = Object.keys(icons).map((p) => p.split("/").pop()!.replace(/\.svg$/, ""));
+  throw new Error(`Ikon "${name}" tidak ada di src/assets/icons/. Pilihan: ${names.join(", ")}.`);
+}
+---
+
+<span class:list={["inline-block shrink-0 [&>svg]:size-full", className]} aria-hidden="true" set:html={svg} />

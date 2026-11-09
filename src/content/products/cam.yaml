@@ -1,0 +1,10 @@
+# Kategori software CAM. Tambah produk = tambah item. Sumber: parametris.com (export v8 › products.js).
+title: "CAM"
+summary: "Pemesinan dan manufaktur aditif."
+order: 2
+image:
+  src: ./cam.jpg
+  alt: "CAM"
+items:
+  - { name: "Creo Nc Machining", href: "https://www.ptc.com/en/technologies/cad/cam-software" }
+  - { name: "Creo Additive Manufacturing", href: "https://www.ptc.com/en/technologies/cad/additive-manufacturing" }

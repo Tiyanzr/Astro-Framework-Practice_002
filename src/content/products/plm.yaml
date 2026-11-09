@@ -1,0 +1,16 @@
+# Kategori software PLM. Tambah produk = tambah item. Sumber: parametris.com (export v8 › products.js).
+title: "PLM"
+summary: "Pengelolaan siklus hidup produk."
+order: 4
+image:
+  src: ./plm.jpg
+  alt: "PLM"
+items:
+  - { name: "Pengelolaan data produk", href: "https://www.ptc.com/en/technologies/plm/product-data-management" }
+  - { name: "Pengelolaan proses manufaktur", href: "https://www.ptc.com/en/technologies/plm/manufacturing-process-management" }
+  - { name: "Pengelolaan perubahan engineering", href: "https://www.ptc.com/en/technologies/plm/engineering-change-management" }
+  - { name: "Pengelolaan variasi produk", href: "https://www.ptc.com/en/technologies/plm/product-variability-management" }
+  - { name: "Pengelolaan BOM", href: "https://www.ptc.com/en/technologies/plm/bill-of-materials" }
+  - { name: "Pengelolaan kualitas", href: "https://www.ptc.com/en/technologies/plm/quality-management" }
+  - { name: "Pengembangan produk kolaboratif", href: "https://www.ptc.com/en/technologies/plm/collaborative-product-development" }
+  - { name: "Kolaborasi rantai pasok", href: "https://www.ptc.com/en/technologies/plm/supply-chain-collaboration" }

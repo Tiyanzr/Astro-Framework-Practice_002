@@ -1,0 +1,45 @@
+# /about — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Tentang kami"
+description: "PT Parametrik Solusi Integrasi menyediakan solusi untuk perusahaan yang bergerak dalam riset dan pengembangan produk, engineering, tooling, dan manufaktur."
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "TENTANG KAMI"
+    aside: { label: "Beranda", href: / }
+    title: "Dari konsep."
+    accent: "Menuju realisasi."
+    description: "PT Parametrik Solusi Integrasi menyediakan solusi untuk perusahaan yang bergerak dalam riset dan pengembangan produk, engineering, tooling, dan manufaktur."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Produk & layanan yang saling mendukung"
+        description: "Teknologi CAID/CAD/CAM/CAE/PLM mendukung pengembangan produk dan manufaktur, dari art to part."
+      - title: "Nilai dari investasi teknologi"
+        description: "Technical support, training, consulting, dan engineering services membantu perusahaan memanfaatkan teknologi."
+
+  - type: benefits
+    variant: BenefitsTags_001
+    eyebrow: "BIDANG PENERAPAN"
+    items:
+      - title: "Otomotif & transportasi"
+      - title: "Elektronik konsumen"
+      - title: "Alat berat"
+      - title: "Peralatan rumah tangga"
+      - title: "Peralatan industri & otomasi"
+      - title: "Minyak & gas"
+      - title: "Tool & die"
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

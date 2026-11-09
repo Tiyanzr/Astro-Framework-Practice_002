@@ -1,0 +1,59 @@
+# /iot — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Internet of things"
+description: "Hubungkan perangkat dan sistem melalui internet untuk pertukaran data, pemantauan real-time, dan otomatisasi proses."
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "PRODUK / INTERNET OF THINGS"
+    aside: { label: "Beranda", href: / }
+    title: "Perangkat terhubung."
+    accent: "Operasi terintegrasi."
+    description: "Hubungkan perangkat dan sistem melalui internet untuk pertukaran data, pemantauan real-time, dan otomatisasi proses."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: cards
+    variant: CardsGallery_001
+    tone: dark
+    from: iot
+    linkLabel: "Jelajahi"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Konektivitas perangkat"
+        description: "Menghubungkan sensor, mesin, dan peralatan untuk pertukaran data yang efisien."
+      - title: "Pemantauan real-time"
+        description: "Data langsung dari perangkat untuk analisis dan pengambilan keputusan lebih cepat."
+      - title: "Otomatisasi proses"
+        description: "Otomatisasi tugas berdasarkan data untuk meningkatkan efisiensi dan produktivitas."
+      - title: "Keamanan terintegrasi"
+        description: "Protokol keamanan untuk melindungi perangkat, data, dan integritas sistem."
+      - title: "Integrasi multiplatform"
+        description: "Integrasi berbagai platform dan sistem menjadi solusi yang fleksibel."
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "MANFAAT & KEUNGGULAN"
+    items:
+      - title: "Efisiensi operasional"
+        icon: gauge
+        description: "Kurangi pekerjaan manual melalui pemantauan dan kontrol otomatis."
+      - title: "Penghematan biaya"
+        icon: chart-no-axes-combined
+        description: "Optimalkan sumber daya serta biaya operasional dan pemeliharaan."
+      - title: "Peningkatan kualitas layanan"
+        icon: heart-handshake
+        description: "Manfaatkan data real-time untuk layanan yang lebih responsif."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

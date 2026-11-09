@@ -1,0 +1,88 @@
+# /training — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Pelatihan"
+description: "Pelatihan pemodelan dan optimasi desain untuk proses manufaktur, dari tingkat dasar hingga lanjutan. Program dapat disesuaikan dengan kebutuhan spesifik tim Anda."
+parent: services
+summary: "Tingkatkan keterampilan tim, dari dasar hingga lanjutan."
+order: 1
+image:
+  src: ./illustration.png
+  alt: "Pelatihan"
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "LAYANAN / PELATIHAN"
+    aside: { label: "Beranda", href: / }
+    title: "Kembangkan kemampuan."
+    accent: "Dukung inovasi."
+    description: "Pelatihan pemodelan dan optimasi desain untuk proses manufaktur, dari tingkat dasar hingga lanjutan. Program dapat disesuaikan dengan kebutuhan spesifik tim Anda."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: media
+    variant: MediaFigure_001
+    image:
+      src: ./illustration.png
+      alt: "LAYANAN / PELATIHAN"
+
+  - type: features
+    variant: FeaturesRows_001
+    eyebrow: "KAPABILITAS"
+    items:
+      - title: "Pelatihan produk PTC & engineering"
+        description: "Program untuk membekali tim engineering dengan pengetahuan dan keterampilan, dipandu instruktur berpengalaman dan dilengkapi sertifikat pelatihan."
+      - title: "Custom engineering training"
+        description: "Modul terarah untuk meningkatkan keterampilan teknis, merapikan proses, atau mengadopsi teknologi baru."
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "CAKUPAN CUSTOM TRAINING"
+    title: "Pelatihan sesuai"
+    accent: "kebutuhan tim Anda."
+    items:
+      - { icon: sliders-horizontal, title: "Pengembangan kurikulum sesuai kebutuhan" }
+      - { icon: graduation-cap, title: "Pelatihan engineering khusus" }
+      - { icon: gauge, title: "Perbaikan dan optimasi proses" }
+      - { icon: factory, title: "Pelatihan spesifik industri" }
+
+  - type: benefits
+    variant: BenefitsColumns_001
+    eyebrow: "METODE PELAKSANAAN"
+    title: "Tatap muka."
+    accent: "Atau secara online."
+    items:
+      - icon: users
+        title: "Pelatihan tatap muka"
+        description: "Sesi workshop dengan praktik langsung."
+        entries:
+          - { term: "Off-site", detail: "Dilaksanakan di fasilitas Parametrik." }
+          - { term: "On-site", detail: "Dilaksanakan di fasilitas pelanggan." }
+      - icon: monitor-smartphone
+        title: "Pelatihan online"
+        entries:
+          - { term: "Kelas virtual interaktif", detail: "Pembelajaran langsung bersama instruktur secara online." }
+          - { term: "E-learning mandiri", detail: "Modul pembelajaran fleksibel yang dapat diikuti sesuai kecepatan peserta." }
+
+  - type: benefits
+    variant: BenefitsIcons_001
+    eyebrow: "MANFAAT & KEUNGGULAN"
+    items:
+      - title: "Pengembangan keterampilan"
+        icon: graduation-cap
+        description: "Tingkatkan keterampilan dan kompetensi untuk mendukung produktivitas tim."
+      - title: "Program sesuai kebutuhan"
+        icon: sliders-horizontal
+        description: "Sesuaikan modul pelatihan dengan kebutuhan dan tujuan perusahaan."
+      - title: "Dukungan bagi pertumbuhan tim"
+        icon: users
+        description: "Dukung tim yang berkembang dan karyawan baru melalui program pelatihan."
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

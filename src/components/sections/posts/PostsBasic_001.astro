@@ -14,7 +14,8 @@ const { posts, more, ...heading } = Astro.props;
   {
     posts.map((post) => (
       <li>
-        <a href={post.href}>{post.title}</a> — <time datetime={post.pubDate.toISOString()}>{formatDate(post.pubDate)}</time>
+        <a href={post.href}>{post.title}</a>
+        {post.pubDate && <> — <time datetime={post.pubDate.toISOString()}>{formatDate(post.pubDate)}</time></>}
       </li>
     ))
   }

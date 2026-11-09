@@ -1,0 +1,108 @@
+---
+// NavbarDropdown_001 (referensi: parametris.com, header): navbar sticky putih (sedikit transparan + blur, seperti referensi),
+// logo kiri, menu kanan. Item dengan sub-menu (`children` di src/content/menu/) = dropdown: terbuka saat hover/fokus (desktop)
+// atau ketuk; item tanpa `href` hanya jadi judul dropdown. Tombol CTA bergaris di ujung kanan.
+// Di bawah md menu disembunyikan di balik tombol garis tiga dan terbuka ke bawah sebagai daftar.
+// Catatan: tombol bahasa EN/ID referensi belum dibuat (situs belum dua bahasa).
+import Logo from "@/components/ui/Logo.astro";
+import type { NavbarProps } from "./types";
+
+type Props = NavbarProps;
+
+const { siteName, cta, links } = Astro.props;
+---
+
+<header class="sticky top-0 z-30 border-b border-border bg-background/96 backdrop-blur-md" data-navdrop>
+  <div class="container-page flex flex-wrap items-center gap-4 py-[18px] md:flex-nowrap md:gap-[25px] md:py-6">
+    <Logo label={siteName} class="h-7 md:h-[30px] lg:h-9" />
+
+    <button
+      type="button"
+      class="ml-auto grid size-10 place-content-center gap-1.5 border border-border md:hidden"
+      aria-expanded="false"
+      aria-controls="navdrop-menu"
+      aria-label="Buka menu"
+      data-navdrop-toggle
+    >
+      <span class="block h-px w-5 bg-foreground"></span>
+      <span class="block h-px w-5 bg-foreground"></span>
+      <span class="block h-px w-5 bg-foreground"></span>
+    </button>
+
+    <nav
+      id="navdrop-menu"
+      aria-label={siteName}
+      class="order-last hidden basis-full flex-col items-stretch gap-[15px] py-[15px] text-body font-semibold data-[open=true]:flex md:order-none md:ml-auto md:flex md:basis-auto md:flex-row md:items-center md:gap-[18px] md:py-0 md:text-[13px] lg:gap-[27px] lg:text-small"
+      data-navdrop-menu
+    >
+      {
+        links.map((link) =>
+          link.children && link.children.length > 0 ? (
+            <details class="group/drop relative" data-navdrop-item>
+              <summary class="cursor-pointer list-none transition-colors duration-300 hover:text-primary [&::-webkit-details-marker]:hidden">
+                {link.href ? <a href={link.href}>{link.label}</a> : link.label}
+              </summary>
+              {/* ::before = jembatan tak terlihat antara judul dan panel, supaya hover tidak terputus */}
+              <div class="mt-2.5 border border-border bg-background p-2.5 md:absolute md:top-10 md:-left-5 md:mt-0 md:w-60 md:shadow-[0_16px_35px_rgb(17_38_44/0.08)] md:before:absolute md:before:inset-x-0 md:before:-top-[22px] md:before:h-[22px]">
+                {link.children.map((child) => (
+                  <a href={child.href} class="block px-3 py-2.5 font-normal transition-colors duration-300 hover:bg-muted">
+                    {child.label}
+                  </a>
+                ))}
+              </div>
+            </details>
+          ) : (
+            <a href={link.href} class="transition-colors duration-300 hover:text-primary">
+              {link.label}
+            </a>
+          ),
+        )
+      }
+      <a href={cta.href} class="self-start border border-foreground px-3 py-2.5 transition-colors duration-300 hover:bg-foreground hover:text-background md:self-auto lg:px-[19px] lg:py-3">
+        {cta.label}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const desktop = window.matchMedia("(min-width: 48rem)");
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-navdrop]")) {
+    const toggle = root.querySelector<HTMLButtonElement>("[data-navdrop-toggle]");
+    const menu = root.querySelector<HTMLElement>("[data-navdrop-menu]");
+    const items = [...root.querySelectorAll<HTMLDetailsElement>("[data-navdrop-item]")];
+    const closeOthers = (keep?: HTMLDetailsElement) => items.forEach((d) => d !== keep && (d.open = false));
+
+    toggle?.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") !== "true";
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
+      if (menu) menu.dataset.open = String(open);
+    });
+
+    for (const d of items) {
+      d.addEventListener("toggle", () => d.open && closeOthers(d));
+      d.addEventListener("focusin", () => {
+        closeOthers(d);
+        d.open = true;
+      });
+      d.addEventListener("focusout", (e) => {
+        if (!d.contains(e.relatedTarget as Node)) d.open = false;
+      });
+      d.addEventListener("pointerenter", (e) => {
+        if (e.pointerType === "mouse" && desktop.matches) {
+          closeOthers(d);
+          d.open = true;
+        }
+      });
+      d.addEventListener("pointerleave", (e) => {
+        if (e.pointerType === "mouse" && desktop.matches) d.open = false;
+      });
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeOthers();
+    });
+  }
+</script>

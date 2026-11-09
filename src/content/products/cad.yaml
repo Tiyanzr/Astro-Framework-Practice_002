@@ -1,0 +1,14 @@
+# Kategori software CAD. Tambah produk = tambah item. Sumber: parametris.com (export v8 › products.js).
+title: "CAD"
+summary: "Desain dan pemodelan produk."
+order: 1
+image:
+  src: ./cad.jpg
+  alt: "CAD"
+items:
+  - { name: "Creo Parametric", href: "https://www.ptc.com/en/products/creo/parametric" }
+  - { name: "Creo View", href: "https://www.ptc.com/en/products/creo/creo-view" }
+  - { name: "Creo Direct", href: "https://www.ptc.com/en/products/creo/direct" }
+  - { name: "Creo Schematics", href: "https://www.ptc.com/en/products/creo/schematics" }
+  - { name: "Creo Layout", href: "https://www.ptc.com/en/products/creo/layout" }
+  - { name: "Creo Illustrate", href: "https://www.ptc.com/en/products/creo/illustrate" }

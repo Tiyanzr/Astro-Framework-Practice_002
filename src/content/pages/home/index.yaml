@@ -1,0 +1,73 @@
+# / — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+description: "Software engineering, solusi IoT, dan keahlian teknis untuk membantu bisnis Anda berinovasi, mengoptimalkan proses, dan berkembang."
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: xl
+    eyebrow: "PT PARAMETRIK SOLUSI INTEGRASI"
+    aside: { label: "DARI KONSEP MENUJU REALISASI" }
+    title: "Software untuk engineering."
+    accent: "Teknologi untuk industri."
+    description: "Software engineering, solusi IoT, dan keahlian teknis untuk membantu bisnis Anda berinovasi, mengoptimalkan proses, dan berkembang."
+    actions:
+      - { label: "Jelajahi produk", href: "/software" }
+
+  - type: media
+    variant: MediaBanner_001
+    image:
+      src: ./banner.jpg
+      alt: "Desain dan pengembangan produk"
+    eyebrow: "ENGINEERING · SOFTWARE · IOT"
+    title: "Teknologi bertemu"
+    accent: "kebutuhan nyata."
+
+  - type: catalog
+    variant: CatalogGrid_001
+    eyebrow: "01 / SOFTWARE"
+    title: "Perangkat yang tepat."
+    accent: "Di setiap tahap desain."
+    description: "Dari pemodelan dan simulasi hingga pengelolaan siklus hidup produk."
+    more: { label: "Semua solusi software", href: "/software" }
+    # 0 = ringkasan saja (tanpa daftar produk); daftar lengkap ada di /software
+    limit: 0
+
+  - type: cards
+    variant: CardsGallery_001
+    tone: dark
+    eyebrow: "02 / INTERNET OF THINGS"
+    title: "Terhubung."
+    accent: "Terpantau. Terintegrasi."
+    more: { label: "Kenali solusi IoT", href: "/iot" }
+    from: iot
+    linkLabel: "Jelajahi"
+
+  - type: cards
+    variant: CardsGallery_002
+    eyebrow: "03 / LAYANAN"
+    title: "Keahlian untuk"
+    accent: "melangkah lebih jauh."
+    from: services
+    linkLabel: "Lihat layanan"
+
+  - type: posts
+    variant: PostsGrid_001
+    eyebrow: "04 / ARTIKEL & WAWASAN"
+    title: "Pengetahuan yang"
+    accent: "terus berkembang."
+    linkLabel: "Baca artikel asli"
+    # Sama seperti referensi: menautkan artikel asli di parametris.com (bukan koleksi posts)
+    items:
+      - { category: SOFTWARE, title: "Software Mathcad di Jakarta", href: "https://www.parametris.com/mathcad-software-in-jakarta/" }
+      - category: PELATIHAN
+        title: "Pelatihan & sertifikasi Parametrik: tingkatkan keterampilan bersama reseller PTC di Jakarta"
+        href: "https://www.parametris.com/parametrik-training-certification/"
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

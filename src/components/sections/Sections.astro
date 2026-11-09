@@ -3,12 +3,15 @@
 // Setiap item memilih komponen lewat `type`. Menambah JENIS section baru = tambah skemanya di
 // src/content.config.ts (pages › sections) lalu daftarkan pintu masuknya di `components` di bawah.
 import type { PageSection, SectionType } from "@/lib/content";
+import Benefits from "./benefits/Benefits.astro";
 import Cards from "./cards/Cards.astro";
 import Catalog from "./catalog/Catalog.astro";
 import Contact from "./contact/Contact.astro";
 import Cta from "./cta/Cta.astro";
+import Features from "./features/Features.astro";
 import Hero from "./hero/Hero.astro";
 import Intro from "./intro/Intro.astro";
+import Media from "./media/Media.astro";
 import Posts from "./posts/Posts.astro";
 import Text from "./text/Text.astro";
 
@@ -21,6 +24,9 @@ const components: Record<SectionType, any> = {
   text: Text,
   cta: Cta,
   contact: Contact,
+  media: Media,
+  features: Features,
+  benefits: Benefits,
 };
 
 interface Props {

@@ -12,10 +12,9 @@ interface Props extends IntroProps {
 }
 
 const { variant = "IntroBasic_001", tone, width, pulldown, ...content } = Astro.props;
-// Saat build, variasi yang belum disetujui diganti IntroBasic_001 (tanpa desain), lihat lib/variants.ts.
-// Untuk variasi Basic (dipilih langsung atau hasil pengganti), tone/width/pulldown dari YAML diabaikan:
+// Untuk variasi Basic, tone/width/pulldown dari YAML diabaikan:
 // pengaturan itu bagian dari desain, bukan isi.
-const { Variant, name } = await resolveVariant(introVariants, variant, "intro", "IntroBasic_001");
+const { Variant, name } = resolveVariant(introVariants, variant, "intro");
 const defaults = introDefaults[name] ?? {};
 const settings = isBasic(name) ? defaults : { tone: tone ?? defaults.tone, width: width ?? defaults.width, pulldown: pulldown ?? defaults.pulldown };
 ---

@@ -1,0 +1,59 @@
+---
+// HeroText_001 (referensi: parametris.com, .hero): hero teks tanpa foto.
+// Baris label: eyebrow (kiri) + `aside` (kanan, mis. link "Beranda"; disembunyikan di HP).
+// Judul h1 tipis sangat besar, `accent` turun ke baris baru berwarna aksen. Bawah: deskripsi (kiri) + tombol pertama (kanan).
+// size "xl" = beranda (judul terbesar), "default" = halaman lain (judul sedikit lebih kecil, jarak bawah lebih lega).
+import Button from "@/components/ui/Button.astro";
+import type { HeroProps } from "./types";
+
+type Props = HeroProps;
+
+const { eyebrow, aside, title, accent, description, actions = [], size = "xl" } = Astro.props;
+const action = actions[0];
+---
+
+<section class:list={["container-page pt-7 md:pt-11", size === "xl" ? "pb-9 md:pb-12" : "pb-9 md:pb-[70px]"]}>
+  {
+    (eyebrow || aside) && (
+      <div class="flex justify-between gap-5 text-eyebrow font-semibold text-muted-foreground uppercase">
+        {eyebrow && <span>{eyebrow}</span>}
+        {aside && (
+          <span class="ml-auto hidden md:inline">
+            {aside.href ? (
+              <a href={aside.href} class="transition-colors duration-300 hover:text-primary">
+                {aside.label}
+              </a>
+            ) : (
+              aside.label
+            )}
+          </span>
+        )}
+      </div>
+    )
+  }
+
+  <h1 class:list={["mt-8 mb-8 max-w-[1200px] md:mt-[38px]", size === "xl" ? "text-ref-h1" : "text-ref-h1-inner"]}>
+    {title}
+    {
+      accent && (
+        <>
+          <br />
+          <span class="text-primary">{accent}</span>
+        </>
+      )
+    }
+  </h1>
+
+  {
+    (description || action) && (
+      <div class="md:flex md:items-end md:justify-between md:gap-10">
+        {description && <p class="m-0 max-w-[610px] text-body text-muted-foreground md:text-ref-lead">{description}</p>}
+        {action && (
+          <Button href={action.href} variant="outline" size="lg" square class="mt-6 text-small md:mt-0">
+            {action.label}
+          </Button>
+        )}
+      </div>
+    )
+  }
+</section>

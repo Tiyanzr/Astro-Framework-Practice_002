@@ -1,0 +1,13 @@
+# Kategori software ALM. Tambah produk = tambah item. Sumber: parametris.com (export v8 › products.js).
+title: "ALM"
+summary: "Pengelolaan siklus hidup aplikasi."
+order: 5
+image:
+  src: ./alm.jpg
+  alt: "ALM"
+items:
+  - { name: "Pengelolaan kebutuhan", href: "https://www.ptc.com/en/technologies/application-lifecycle-management/requirements-management" }
+  - { name: "Pengelolaan pengujian", href: "https://www.ptc.com/en/technologies/application-lifecycle-management/test-management" }
+  - { name: "Pengelolaan risiko software", href: "https://www.ptc.com/en/technologies/application-lifecycle-management/software-risk-management" }
+  - { name: "Pengembangan software", href: "https://www.ptc.com/en/technologies/application-lifecycle-management/software-development" }
+  - { name: "Devops", href: "https://www.ptc.com/en/technologies/application-lifecycle-management/devops" }

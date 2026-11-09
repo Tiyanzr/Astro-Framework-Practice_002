@@ -1,0 +1,28 @@
+# /software — sumber teks: parametris.com (export v8 › data.js, versi Indonesia), susunan mengikuti app.js › render().
+# Gambar halaman ini disimpan di folder yang sama dengan file ini.
+title: "Software"
+description: "Solusi CAD, CAM, CAE, PLM, ALM, dan AR untuk meningkatkan produktivitas dan mendukung kebutuhan spesifik tim Anda."
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "PRODUK / SOFTWARE"
+    aside: { label: "Beranda", href: / }
+    title: "Dari desain."
+    accent: "Hingga pengembangan produk."
+    description: "Solusi CAD, CAM, CAE, PLM, ALM, dan AR untuk meningkatkan produktivitas dan mendukung kebutuhan spesifik tim Anda."
+    actions:
+      - { label: "Diskusikan kebutuhan", href: "/contact" }
+
+  - type: catalog
+    variant: CatalogGrid_001
+    # semua kategori di src/content/products/, lengkap dengan daftar produk
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

@@ -1,0 +1,11 @@
+# Kategori software AR. Tambah produk = tambah item. Sumber: parametris.com (export v8 › products.js).
+title: "AR"
+summary: "Augmented reality untuk industri."
+order: 6
+image:
+  src: ./ar.jpg
+  alt: "AR"
+items:
+  - { name: "Solusi AR untuk manufaktur", href: "https://www.ptc.com/en/technologies/augmented-reality/solutions-for-manufacturing" }
+  - { name: "Solusi AR untuk layanan", href: "https://www.ptc.com/en/technologies/augmented-reality/solutions-for-service" }
+  - { name: "Solusi AR untuk inspeksi kualitas", href: "https://www.ptc.com/en/technologies/augmented-reality/inspection" }
