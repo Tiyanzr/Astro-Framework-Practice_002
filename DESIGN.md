@@ -4,7 +4,7 @@
 > Semua nilai warna/font/jarak terpasang sebagai token di [`src/styles/global.css`](src/styles/global.css); kalau mengubah token, ubah di sana **dan** catat di sini.
 > Contoh visual: `/prototype` (hanya saat `astro dev`).
 > Ringkasan proyek, cara kerja, status, rencana: [AGENTS.md](AGENTS.md). Template YAML siap tempel: [MODULES.md](MODULES.md).
-> Terakhir diperbarui: **2026-11-09**.
+> Terakhir diperbarui: **2026-11-10**.
 
 ## Daftar isi
 
@@ -229,7 +229,7 @@ Urutan bebas, section yang sama boleh dipakai berkali-kali, isi selalu per halam
 
 | URL | Folder | Isi |
 |---|---|---|
-| `/` | `home/` | hero, banner foto, catalog ringkas (6 kategori), kartu IoT (tone dark), kartu layanan, 2 artikel asli (`posts › items`), cta |
+| `/` | `home/` | hero, banner foto, catalog ringkas (6 kategori), kartu IoT (tone dark), kartu layanan, 2 artikel terbaru (otomatis, `limit: 2`, link "Semua artikel" → `/artikel`), cta |
 | `/software` | `software/` | hero, catalog lengkap dengan daftar produk PTC (link ke ptc.com) |
 | `/iot` | `iot/` | hero, kartu otomatis dari halaman `parent: iot`, features, benefits, cta |
 | `/manufacturing`, `/healthcare`, `/energy`, `/smart-city` | `parent: iot` | hero, ilustrasi (`MediaFigure_001`), features, benefits, cta |
@@ -237,6 +237,8 @@ Urutan bebas, section yang sama boleh dipakai berkali-kali, isi selalu per halam
 | `/training`, `/consulting`, `/engineering` | `parent: services` | seperti sektor; training + custom training (tag) & metode pelaksanaan (kolom) |
 | `/about` | `about/` | hero, features, bidang penerapan (tag), cta |
 | `/contact` | `contact/` | hero, kontak langsung (data `site.yaml › contact`, tombol WhatsApp & telepon) |
+| `/artikel` | `artikel/` | **tambahan (tidak ada di parametris.com):** hero, semua artikel (`posts` tanpa `limit`), cta. Menu navbar (order 4) & footer |
+| `/posts/<slug>/` | `src/content/posts/<slug>/` | halaman artikel: `mathcad-software-in-jakarta`, `parametrik-training-certification` |
 
 Halaman uji (dev saja): `src/prototype/content/pages/contoh-halaman.yaml` → `/contoh-halaman`.
 
@@ -446,6 +448,26 @@ npm run import:notion -- "D:\Downloads\folder-export"            # + --slug judu
 
 Script `scripts/import-notion.mjs`: metadata tebal (Deskripsi, Tanggal Publikasi/Pembaruan, Penulis, Kategori, Tag) → frontmatter; gambar → `gambar-N.png` (pertama jadi `cover`); membuka link `google.com/search?q=`; mempertahankan Shift+Enter, callout, FAQ; menulis `draft: true`. Catatan: cover = gambar pertama isi, jadi `PostArticle_002` menampilkannya dua kali; sebaiknya siapkan cover terpisah.
 
+#### Editor artikel: Keystatic (uji coba, dev saja)
+
+`/keystatic` (hanya saat `astro dev`; `keystaticDevOnly()` di `astro.config.mjs`, field di `keystatic.config.ts`). Mode **local**: menulis langsung ke file di laptop, tanpa login. Keystatic hanya **editor**: hasilnya file biasa dengan pola yang sama persis (`posts/<slug>/index.md` + gambar sefolder), jadi situs, skema, dan alur Notion tidak berubah.
+
+| Bagian | Hasil uji 2026-11-10 |
+|---|---|
+| Formulir | judul (slug/URL otomatis), deskripsi, tanggal terbit (bawaan hari ini), tanggal diperbarui, penulis (bawaan "Tim Parametrik"), kategori, tag, cover + alt, centang draft (bawaan aktif) |
+| Isi | editor visual: tebal/miring, link, judul ##–####, daftar, kutipan, **tabel** (ditulis sebagai tabel Markdown GFM), gambar. Tempel teks berformat (dari Docs/Word) terbaca |
+| File | `src/content/posts/<slug>/index.md`, `cover.png`, gambar isi (nama dibersihkan: `Diagram Proses.PNG` → `diagram-proses.png`) |
+| Situs | artikel draft tampil saat dev; centang draft dilepas → ikut build (13 → 14 halaman), gambar dioptimasi WebP |
+| Build | `/keystatic` dan `/api/keystatic` **tidak ikut** build; Netlify tetap statis |
+
+Pengaturan yang perlu dijaga (sudah diterapkan, alasannya di komentar `keystatic.config.ts`):
+
+- **Isi memakai `fields.mdx({ extension: "md" })`, bukan `fields.markdoc`.** Markdoc menulis tabel sebagai `{% table %}` yang tidak bisa dirender Astro dan mengunci format.
+- **Gambar memakai `publicPath: "../"`.** Keystatic menulis rujukan sebagai `<publicPath><slug>/<file>`; `../<slug>/<file>` dari `index.md` = folder artikel itu sendiri. (Dengan `./` rujukannya salah → halaman error.)
+- **Gambar isi memakai `directory: "src/content/posts"`.** Tanpa itu Keystatic menyimpan ke `<slug>/content/` tetapi rujukannya tanpa `content/` → gambar tidak ditemukan.
+- Dev server berjalan di `127.0.0.1:4321` (diatur Keystatic); `localhost:4321` tetap bisa dibuka.
+- Belum ada: callout & FAQ sebagai tombol editor (masih ditulis manual sebagai Markdown), mode GitHub (online + login), halaman/menu/produk di editor.
+
 ## Komponen UI bersama
 
 | Komponen | Fungsi |
@@ -471,16 +493,16 @@ Skema di `src/content.config.ts` (zod). **Kunci yang tidak dikenal dibuang tanpa
 | `products` | `src/content/products/<id>.yaml` + `<id>.jpg` (dev: + `src/prototype/content/products/`) | 1 file = 1 kategori: `title`, `summary?`, `order`, `image?`, `items[]` (`name`, `description?`, `href?`). Kategori di subfolder hanya tampil kalau diminta lewat `categories:` |
 | `posts` | `src/content/posts/<slug>/index.md` (dev: + `src/prototype/content/posts/`) | `title`, `description`, `pubDate`, `updatedDate?`, `author`, `category?`, `tags`, `cover?`, `coverAlt?`, `draft` (default false), `variant?` |
 
-Pembaca data (`src/lib/content.ts`): `getSite`, `getPage`, `getSection`, `getMainLinks`, `pageHref`, `getChildPages` (by `parent` atau subfolder), `getProductCategories`, `getPosts`, `getRelatedPosts`.
+Pembaca data (`src/lib/content.ts`): `getSite`, `getPage`, `getSection`, `getMainLinks`, `pageHref`, `getChildPages` (by `parent` atau subfolder), `getProductCategories`, `getPosts` (tanpa artikel uji prototype, kecuali `{ withTestPosts: true }` untuk halaman artikel & `/prototype/post`), `getRelatedPosts`.
 
-Isi sekarang: 13 halaman, 6 kategori produk PTC (`cad`, `cam`, `cae`, `plm`, `alm`, `ar`; 32 produk, link ke ptc.com), 4 item menu (Beranda, Produk ▾, Layanan ▾, Tentang Kami), **0 artikel** (koleksi kosong, build memberi satu peringatan yang aman diabaikan).
+Isi sekarang: 13 halaman, 6 kategori produk PTC (`cad`, `cam`, `cae`, `plm`, `alm`, `ar`; 32 produk, link ke ptc.com), 5 item menu (Beranda, Produk ▾, Layanan ▾, Artikel, Tentang Kami), **2 artikel** (ditulis ulang dari artikel lama parametris.com yang sudah 404; sumber Wayback Machine).
 
 ## SEO & indexing
 
 | Bagian | Isi |
 |---|---|
 | Domain | `astro.config.mjs › site` = `https://www.parametris.com` (samakan dengan `site.yaml › url`) |
-| URL | sama dengan parametris.com (13 halaman, lihat [Halaman situs](#halaman-situs--parametriscom-versi-indonesia)) |
+| URL | sama dengan parametris.com + `/artikel` + artikel di `/posts/<slug>/` (16 halaman, lihat [Halaman situs](#halaman-situs--parametriscom-versi-indonesia)) |
 | `<title>` | beranda: `site.homeTitle` ("Parametrik — Software, IoT & Engineering"); lainnya: `<title halaman> — Parametrik` |
 | Meta | `description` per halaman (kosong = `site.description`), `<html lang>` dari `site.lang` |
 | Canonical | `Astro.site` + path dengan garis miring akhir |
@@ -489,7 +511,7 @@ Isi sekarang: 13 halaman, 6 kategori produk PTC (`cad`, `cam`, `cae`, `plm`, `al
 | `public/robots.txt` | izinkan semua, menunjuk sitemap www.parametris.com |
 | `public/.htaccess` | (untuk hosting Apache) paksa HTTPS + `www`, 404, cache `_astro/` 1 tahun. Netlify mengabaikannya |
 
-Catatan: link internal ditulis tanpa garis miring akhir, canonical dengan; Netlify (pretty URLs) menyamakannya. URL lama demo (`/iot/manufaktur`, `/layanan`, `/tentang`, `/kontak`, `/artikel`) sudah tidak ada.
+Catatan: link internal ditulis tanpa garis miring akhir, canonical dengan; Netlify (pretty URLs) menyamakannya. URL lama demo (`/iot/manufaktur`, `/layanan`, `/tentang`, `/kontak`) sudah tidak ada. Artikel lama parametris.com ada di root (`/mathcad-software-in-jakarta/`); di sini di `/posts/<slug>/` dengan slug yang sama, jadi redirect cukup satu baris per artikel di `public/_redirects` (belum dibuat).
 
 ## Pemakaian variasi & prototype
 
@@ -617,3 +639,5 @@ Branch: `prototype-01` (kerja harian) → `demo` (Netlify https://parametris-ast
 - **2026-11-06 (revisi 7):** **Dokumentasi dirapikan** ke kondisi terkini: DESIGN.md disusun ulang (dua palet, katalog semua variasi, SEO, skema, struktur), riwayat diurutkan kronologis. Arsitektur dianggap stabil; selanjutnya perubahan kecil.
 - **2026-11-09:** **Sistem status variasi (base/pass/draft) dihapus.** Alasannya: desain baru sudah ditinjau di prototype sebelum ditulis di YAML, jadi "dipakai di YAML" = disetujui; status manual hanya pekerjaan dobel dan membuat dev ≠ build (draft diganti Basic). Dihapus: `src/content/variants.yaml`, koleksi `variants`, `variantStatus`/`getApprovedVariants` dan pengganti Basic saat build. Gantinya: label **dipakai / base / tidak dipakai** di prototype, dihitung otomatis dari YAML (`src/prototype/usage.ts`; pemakaian di konten uji ditandai "uji" dan tidak dihitung). Versi Basic tetap ada.
 - **2026-11-09 (revisi 2):** Daftar `/prototype` dikelompokkan **per folder kode** (global.css · ui · layout · sections · Tinjauan), menggantikan Mandatory / Modul. Ditambah halaman **`/prototype/ui`** (semua komponen `ui/` + semua ikon, palet & latar gelap).
+- **2026-11-10:** **Uji coba editor artikel Keystatic** (`/keystatic`, mode local, hanya dev) sebagai jalur demo "post editor bawaan". Dipilih karena hasilnya tetap file Markdown biasa di `src/content/posts/` (migrasi ke database nanti cukup script + ganti loader koleksi `posts`; tampilan tidak berubah). Isi memakai editor MDX bersimpan `.md` (bukan Markdoc) dan gambar `publicPath ../` + `directory src/content/posts` supaya pola 1 artikel = 1 folder terjaga. Login & tempat simpan online belum diputuskan (menunggu atasan: GitHub vs database).
+- **2026-11-10 (revisi 2):** **Artikel jadi bagian situs.** 2 artikel lama parametris.com (404 di sana) ditulis ulang dalam bahasa Indonesia di `src/content/posts/` (slug = URL lama). Section artikel beranda kini otomatis dari koleksi (`items` manual dihapus, `limit: 2`, link "Semua artikel"). Halaman baru **`/artikel`** (memakai ulang section `posts`, tanpa komponen baru) + item menu & footer "Artikel". `getPosts()` tidak lagi menyertakan artikel uji prototype supaya daftar artikel saat dev = build.

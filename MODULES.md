@@ -516,4 +516,4 @@ items:                          # Daftar produk, jumlah bebas
 
 ## Contoh nyata
 
-Ke-13 halaman situs (`src/content/pages/*/index.yaml`, isi asli parametris.com) memakai blok-blok di atas. Buka file-nya sebagai contoh lengkap, mis. `home/index.yaml` (hampir semua modul) dan `training/index.yaml` (benefits tiga gaya).
+Ke-14 halaman situs (`src/content/pages/*/index.yaml`: 13 dari parametris.com + `/artikel`) memakai blok-blok di atas. Buka file-nya sebagai contoh lengkap, mis. `home/index.yaml` (hampir semua modul) dan `training/index.yaml` (benefits tiga gaya).

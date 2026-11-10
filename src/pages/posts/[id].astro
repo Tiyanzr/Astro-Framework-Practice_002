@@ -6,7 +6,7 @@ import Post from "@/components/sections/post/Post.astro";
 import { getPosts } from "@/lib/content";
 
 export async function getStaticPaths() {
-  const posts = await getPosts();
+  const posts = await getPosts({ withTestPosts: true });
   return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
 }
 

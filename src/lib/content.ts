@@ -78,9 +78,16 @@ export async function getProductCategories(ids?: string[]) {
   });
 }
 
-/** Semua postingan yang boleh tampil. Saat build, postingan `draft: true` disaring. Terbaru di atas. */
-export async function getPosts() {
-  const posts = await getCollection("posts", ({ data }) => import.meta.env.DEV || !data.draft);
+/** Artikel uji di src/prototype/content/posts/ (hanya ada saat dev). */
+const isTestPost = (post: CollectionEntry<"posts">) => !!post.filePath?.replace(/\\/g, "/").includes("prototype/");
+
+/**
+ * Semua postingan yang boleh tampil. Saat build, postingan `draft: true` disaring. Terbaru di atas.
+ * Artikel uji prototype hanya ikut kalau `withTestPosts` (halaman artikel & /prototype/post), supaya daftar artikel
+ * di situs (beranda, /artikel, artikel terkait) saat dev sama dengan hasil build.
+ */
+export async function getPosts({ withTestPosts = false } = {}) {
+  const posts = await getCollection("posts", (post) => (import.meta.env.DEV || !post.data.draft) && (withTestPosts || !isTestPost(post)));
   return posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 }
 

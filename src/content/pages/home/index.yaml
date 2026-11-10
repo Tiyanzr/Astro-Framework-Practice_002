@@ -56,13 +56,10 @@ sections:
     eyebrow: "04 / ARTIKEL & WAWASAN"
     title: "Pengetahuan yang"
     accent: "terus berkembang."
-    linkLabel: "Baca artikel asli"
-    # Sama seperti referensi: menautkan artikel asli di parametris.com (bukan koleksi posts)
-    items:
-      - { category: SOFTWARE, title: "Software Mathcad di Jakarta", href: "https://www.parametris.com/mathcad-software-in-jakarta/" }
-      - category: PELATIHAN
-        title: "Pelatihan & sertifikasi Parametrik: tingkatkan keterampilan bersama reseller PTC di Jakarta"
-        href: "https://www.parametris.com/parametrik-training-certification/"
+    linkLabel: "Baca artikel"
+    # Otomatis dari src/content/posts/ (terbaru di atas). Artikel baru (mis. dari /keystatic) langsung muncul di sini.
+    limit: 2
+    more: { label: "Semua artikel", href: /artikel }
 
   - type: cta
     variant: CtaClosing_001

@@ -51,6 +51,7 @@ footer:
     - { label: Software, href: /software }
     - { label: Internet of Things, href: /iot }
     - { label: Layanan, href: /services }
+    - { label: Artikel, href: /artikel }
     - { label: Tentang kami, href: /about }
   # platform yang dikenali: facebook, instagram, linkedin, youtube, x, tiktok, whatsapp
   socials:
