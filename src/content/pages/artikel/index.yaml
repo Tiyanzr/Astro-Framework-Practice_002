@@ -1,0 +1,28 @@
+# /artikel — daftar semua artikel (tidak ada di parametris.com; ditambahkan 2026-11-10).
+# Isi daftar otomatis dari src/content/posts/ (terbaru di atas, tanpa draft saat build). Tidak ada komponen baru:
+# memakai ulang section `posts` yang sama dengan beranda, hanya tanpa `limit`.
+title: "Artikel"
+description: "Artikel dan wawasan dari Parametrik seputar software engineering, PTC, IoT, dan pelatihan."
+
+sections:
+  - type: hero
+    variant: HeroText_001
+    size: default
+    eyebrow: "ARTIKEL & WAWASAN"
+    aside: { label: "Beranda", href: / }
+    title: "Pengetahuan yang"
+    accent: "terus berkembang."
+    description: "Artikel dan wawasan seputar software engineering, PTC, IoT, dan pelatihan."
+
+  - type: posts
+    variant: PostsGrid_001
+    eyebrow: "SEMUA ARTIKEL"
+    linkLabel: "Baca artikel"
+
+  - type: cta
+    variant: CtaClosing_001
+    eyebrow: "MULAI PERCAKAPAN"
+    title: "Kebutuhan Anda."
+    accent: "Langkah kita berikutnya."
+    actions:
+      - { label: "Diskusikan kebutuhan Anda", href: "/contact" }

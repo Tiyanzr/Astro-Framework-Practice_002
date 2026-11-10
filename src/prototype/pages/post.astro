@@ -9,7 +9,7 @@ import { getPosts, getSite } from "@/lib/content";
 import { control, variantOptions } from "@/prototype/controls";
 
 const site = await getSite();
-const posts = await getPosts();
+const posts = await getPosts({ withTestPosts: true });
 const shorten = (s: string) => (s.length > 60 ? `${s.slice(0, 57)}…` : s);
 
 const variant = control(Astro.url, "v", "Variasi", await variantOptions(Object.keys(postVariants), "post"), site.post.variant);

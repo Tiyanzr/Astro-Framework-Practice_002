@@ -4,7 +4,7 @@
 > resep pekerjaan umum, status terakhir, rencana ke depan, dan jebakan yang sudah diketahui.
 > Detail desain & teknis lengkap (palet, tipografi, katalog semua variasi, skema, SEO): [DESIGN.md](DESIGN.md), dengan riwayat keputusan di bagian paling bawah.
 > Template YAML siap tempel untuk setiap bagian halaman (mandatory & modul): [MODULES.md](MODULES.md).
-> Terakhir diperbarui: **2026-11-09**.
+> Terakhir diperbarui: **2026-11-10**.
 
 ---
 
@@ -43,7 +43,7 @@ src/
 │   ├── pages/<url>/index.yaml   ← 1 halaman = 1 folder (index.yaml + gambarnya), nama folder = URL (home/ = /); isi = `sections`
 │   ├── menu/*.yaml              ← 1 item menu = 1 file (title, href, order, children[]; href "" = judul dropdown)
 │   ├── products/<id>.yaml + .jpg ← 1 kategori produk = 1 file + gambarnya (title, summary, order, image, items[])
-│   └── posts/<slug>/index.md    ← 1 artikel = 1 folder (index.md + gambar). Sekarang kosong
+│   └── posts/<slug>/index.md    ← 1 artikel = 1 folder (index.md + gambar). Sekarang 2 artikel (Mathcad, Pelatihan)
 ├── content.config.ts            ← skema semua koleksi (zod)
 ├── lib/content.ts               ← getSite, getPage, getSection, getMainLinks, pageHref, getChildPages, getProductCategories, getPosts, getRelatedPosts
 ├── lib/variants.ts              ← collectVariants, isBasic, resolveVariant, pickVariant
@@ -72,7 +72,8 @@ src/
     ├── PrototypeLayout.astro, controls.ts, VariantLabel.astro, route.astro
     └── integration.mjs          ← mendaftarkan rute /prototype/[...path] hanya saat dev (prerender: false)
 scripts/import-notion.mjs        ← impor export Notion → src/content/posts/<slug>/ (draft: true)
-astro.config.mjs                 ← site: https://www.parametris.com, sitemap, integrasi prototype
+keystatic.config.ts              ← UJI COBA editor artikel /keystatic (dev saja, mode local): field = skema posts
+astro.config.mjs                 ← site: https://www.parametris.com, sitemap, integrasi prototype + keystaticDevOnly()
 netlify.toml                     ← build Netlify (npm run build → dist, Node 22)
 ```
 
@@ -95,7 +96,8 @@ netlify.toml                     ← build Netlify (npm run build → dist, Node
 | Menambah produk / kategori | Edit `items` di `src/content/products/<kategori>.yaml`, atau tambah file kategori baru + `<kategori>.jpg` di folder yang sama. |
 | Menambah item menu / sub-menu | Tambah file di `src/content/menu/` / isi `children` di file item induk (`href: ""` = hanya judul dropdown). |
 | Mengubah menu footer | `site.yaml › footer.explore`. |
-| Menambah artikel | `npm run import:notion -- "<folder export Notion>" [--slug x] [--force]` → cek di dev → hapus baris `draft: true`. |
+| Melihat semua artikel | `/artikel` (menu navbar & footer "Artikel", link "Semua artikel" di beranda). Beranda menampilkan 2 terbaru (`limit: 2`). Keduanya otomatis dari `src/content/posts/`. |
+| Menambah artikel | **Editor (uji coba):** buka `/keystatic` saat dev → Artikel → Add → isi → Create; hapus centang Draft untuk terbit. **Atau Notion:** `npm run import:notion -- "<folder export Notion>" [--slug x] [--force]` → cek di dev → hapus baris `draft: true`. Hasil keduanya sama: `src/content/posts/<slug>/`. |
 | Menambah ikon | Taruh SVG (Lucide, `stroke="currentColor"`) di `src/assets/icons/<nama>.svg`, pakai `icon: <nama>`. Langsung muncul di `/prototype/ui`. |
 | Menambah/mengubah komponen `ui/` | Edit di `src/components/ui/`; cek semua pilihan props-nya di `/prototype/ui` (palet & latar gelap). Komponen baru: tambahkan juga contohnya di `src/prototype/pages/ui.astro`. |
 | Membuat variasi baru | Salin variasi terdekat di folder section → beri nama `<Nama><Gaya>_<NNN>.astro` (gaya baru mulai `_001`). Langsung muncul di `/prototype/<section>` dan `/prototype/variants` (sebagai "tidak dipakai"). |
@@ -106,7 +108,7 @@ netlify.toml                     ← build Netlify (npm run build → dist, Node
 | Menambah token warna/jarak/font | `src/styles/global.css` (palet situs di `:root`, palet referensi di `.theme-parametris`) + catat di DESIGN.md. |
 | Deploy ke Netlify | `git push origin prototype-01` lalu `git push origin prototype-01:demo` (hanya kalau diminta). |
 
-## 5. Status terakhir (2026-11-09)
+## 5. Status terakhir (2026-11-10)
 
 **Branch & deploy**
 
@@ -121,35 +123,37 @@ Remote: hanya `origin` = github.com/Tiyanzr/Astro-Framework-Practice_002. (READM
 
 **Sudah jadi**
 
-- **Situs = parametris.com versi Indonesia:** 13 halaman dengan URL sama (build = 13 halaman). Isi asli, 6 kategori produk PTC (32 produk), navbar/footer/kontak asli, palet `theme: parametris`.
+- **Situs = parametris.com versi Indonesia:** 13 halaman dengan URL sama, ditambah `/artikel` dan 2 artikel di `/posts/<slug>/` (build = 16 halaman). Isi asli, 6 kategori produk PTC (32 produk), navbar/footer/kontak asli, palet `theme: parametris`.
 - **SEO:** domain `https://www.parametris.com` (astro.config, sitemap, robots.txt, .htaccess), canonical, Open Graph dasar, judul tab seperti parametris.com.
 - **11 jenis section** (`hero`, `intro`, `media`, `cards`, `catalog`, `features`, `benefits`, `posts`, `text`, `cta`, `contact`) + navbar, footer, halaman artikel. Semua punya Basic.
 - **Variasi:** 17 dipakai (semua gaya parametris.com + `PostArticle_001`), 7 tidak dipakai (desain lama palet situs: `NavbarPanel_001`, `HeroImage_001/_002`, `IntroMedia_001/_002`, `FooterSimple_001`, `PostArticle_002`), 14 base. Sistem status pass/draft dihapus 2026-11-09. Daftar lengkap: DESIGN.md › *Katalog section & variasi*.
 - **Prototype** lengkap (global.css / ui / layout / sections / Tinjauan), MODULES.md, import Notion, draft artikel.
+- **Editor artikel Keystatic (uji coba, 2026-11-10):** `/keystatic` saat dev, mode local tanpa login. Buat/edit artikel, cover, gambar isi, tabel, draft/terbit sudah diuji; build tetap statis. Detail & pengaturan penting: DESIGN.md › *Editor artikel: Keystatic*. Artikel uji sudah dihapus; 2 artikel situs bisa langsung dibuka & diedit di sana.
 - **Belum di-commit:** migrasi parametris.com + dokumentasi ini masih perubahan lokal di `prototype-01` (sampai pemilik meminta commit/push).
 
 **Belum / sengaja ditunda**
 
 - Versi bahasa Inggris (teks EN sudah ada di arsip `data.js`; parametris.com default EN).
-- Artikel: koleksi `posts` kosong. Dua artikel di beranda menaut ke `www.parametris.com/...` dan akan 404 kalau situs ini menggantikan parametris.com sebelum artikelnya dipindahkan.
+- Artikel: 2 artikel lama parametris.com (sudah 404 di sana; sumber: Wayback Machine, versi EN) **ditulis ulang** dalam bahasa Indonesia, bukan terjemahan kata per kata. Slug sama dengan URL lama. Belum ada redirect `/mathcad-software-in-jakarta` → `/posts/mathcad-software-in-jakarta` (dan `/parametrik-training-certification`) untuk saat situs ini menggantikan parametris.com. Artikel lama lain (mis. "IoT Solutions for Manufacturing") belum dipindahkan.
 - Formulir kontak (tidak dipakai `ContactDirect_001`; Basic masih mockup).
 - Daftar artikel tanpa pagination & filter kategori; belum halaman per produk.
-- `og:image` / Twitter card; redirect dari URL demo lama (`/iot/manufaktur`, `/layanan`, `/tentang`, `/kontak`, `/artikel`).
+- `og:image` / Twitter card; redirect dari URL demo lama (`/iot/manufaktur`, `/layanan`, `/tentang`, `/kontak`) dan URL artikel lama parametris.com.
 - Font kandidat (Schibsted Grotesk, Hanken Grotesk, Instrument Sans) masih terpasang untuk `/prototype/fonts`; palet aktif memakai Arial.
 - Logo versi SVG (minta ke klien).
 
 ## 6. Rencana ke depan (urutan saran)
 
 1. **Tinjau situs hasil migrasi** bersama pemilik (dev & Netlify), lalu commit + push → `prototype-01` → `demo`, dan PR ke `master`.
-2. **Pindahkan artikel asli** parametris.com (minimal 2 yang ditaut beranda) ke `src/content/posts/`, lalu ganti `posts › items` di beranda dengan daftar otomatis.
-3. **Dua bahasa (id/en):** putuskan dengan pemilik. Opsi: i18n Astro (`/en/...`) + konten per bahasa. Paling mahal kalau ditunda lama.
-4. **SEO lanjutan:** `og:image` per halaman, Twitter card, `public/_redirects` Netlify untuk URL demo lama.
-5. **Kualitas:** `@astrojs/check` + `typescript` (`astro check`); skema `strict()` supaya field salah ketik memberi error.
-6. **Script `npm run new:section <nama>`** untuk kerangka jenis section baru (agar langkah resep tidak terlewat).
-7. **Daftar artikel:** pagination + filter kategori.
-8. **Formulir kontak** (opsional, kalau diminta): Netlify Forms di variasi contact.
-9. **Halaman per produk** (opsional): rute `/software/<produk>`; sekarang produk = link ke ptc.com.
-10. **Bersih-bersih setelah final:** hapus font kandidat dan variasi "tidak dipakai" yang tidak akan dipakai lagi.
+2. **Editor artikel:** putuskan dengan atasan tempat simpan online (Keystatic mode GitHub + login GitHub, atau database + admin sendiri). Tambah tombol callout/FAQ di editor. Lihat DESIGN.md › *Editor artikel: Keystatic*.
+3. **Artikel lama parametris.com lainnya:** cek daftar lengkap di Wayback Machine (CDX `parametris.com/*`), tulis ulang yang masih relevan, plus redirect URL lamanya.
+4. **Dua bahasa (id/en):** putuskan dengan pemilik. Opsi: i18n Astro (`/en/...`) + konten per bahasa. Paling mahal kalau ditunda lama.
+5. **SEO lanjutan:** `og:image` per halaman, Twitter card, `public/_redirects` Netlify untuk URL demo lama dan URL artikel lama parametris.com.
+6. **Kualitas:** `@astrojs/check` + `typescript` (`astro check`); skema `strict()` supaya field salah ketik memberi error.
+7. **Script `npm run new:section <nama>`** untuk kerangka jenis section baru (agar langkah resep tidak terlewat).
+8. **Daftar artikel:** pagination + filter kategori.
+9. **Formulir kontak** (opsional, kalau diminta): Netlify Forms di variasi contact.
+10. **Halaman per produk** (opsional): rute `/software/<produk>`; sekarang produk = link ke ptc.com.
+11. **Bersih-bersih setelah final:** hapus font kandidat dan variasi "tidak dipakai" yang tidak akan dipakai lagi.
 
 ## 7. Jebakan yang sudah diketahui
 
@@ -163,11 +167,12 @@ Remote: hanya `origin` = github.com/Tiyanzr/Astro-Framework-Practice_002. (READM
 - **`catalog › limit`:** kosong = semua produk, `0` = tanpa daftar produk (beda!).
 - **Rute `/prototype` dirender per permintaan** (`prerender: false`) supaya `?query` terbaca; `getStaticPaths` tidak dipakai di sana.
 - **`NavbarPanel_001` (tidak dipakai) memakai `fixed`** dan menaruh spacer `h-16` sendiri; `NavbarDropdown_001` memakai `sticky`. Di `/prototype/navbar`, navbar ditaruh di bingkai ber-`transform` supaya tidak menimpa bar prototype.
-- **Konten uji prototype** (`src/prototype/content/`) ikut muncul di daftar saat dev, tidak saat build.
+- **Konten uji prototype** (`src/prototype/content/`): halaman uji ikut terbaca saat dev. Artikel uji **tidak** ikut daftar artikel situs (beranda, `/artikel`, artikel terkait) karena `getPosts()` menyaringnya; hanya bisa dibuka lewat URL-nya dan `/prototype/post` (`getPosts({ withTestPosts: true })`).
 - **Tailwind v4:** `@theme inline` tidak bisa ditimpa per elemen → font memakai variabel `--display-family`/`--heading-family`. Override `.prose` sengaja di luar `@layer`. Aturan `h1 { letter-spacing: 0 }` mengecualikan `text-ref-*`.
 - Komentar CSS jangan memuat urutan `*/` (pernah merusak aturan).
 - **`.gitignore`** mengabaikan `dist/`, kecuali `reference/Parametris_Complete_Source_v8/Parametris_Complete_Source_v8/dist/` (bagian arsip klien).
 - **`.htaccess`** hanya berlaku di hosting Apache; Netlify mengabaikannya (pakai `netlify.toml` / `_redirects`).
+- **Keystatic:** jangan ganti isi ke `fields.markdoc` (tabel jadi `{% table %}`), dan jangan ubah `publicPath: "../"` / `directory` gambar tanpa menguji ulang (rujukan gambar jadi salah → halaman artikel error 500). Dev server berjalan di `127.0.0.1:4321` karena Keystatic.
 - **MODULES.md harus ikut diperbarui** setiap menambah field, variasi, atau jenis section baru.
 
 ---
@@ -183,7 +188,7 @@ astro dev --background
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
 Perintah lain: `npm run build` (hasil di `dist/`), `npm run preview`, `npm run import:notion -- "<folder>"`.
-Halaman penting saat dev: `http://localhost:4321/` (situs), `/prototype` (daftar alat), `/prototype/variants` (semua variasi + dipakai di mana).
+Halaman penting saat dev: `http://localhost:4321/` (situs), `/prototype` (daftar alat), `/prototype/variants` (semua variasi + dipakai di mana), `/keystatic` (editor artikel, uji coba).
 
 ## Documentation
 
