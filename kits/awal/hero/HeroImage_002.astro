@@ -1,15 +1,14 @@
 ---
 // HeroImage_002: foto penuh selebar layar, kartu putih di kiri berisi judul + daftar link.
-// Daftar link: `links` di YAML halaman kalau diisi; kalau kosong, item menu utama (src/content/menu/*.yaml).
+// Daftar link: `links` di YAML halaman kalau diisi; kalau kosong, item menu utama (`menuLinks`, disiapkan Hero.astro).
 // Jumlah barisnya mengikuti jumlah item.
-import { getMainLinks } from "@/lib/content";
 import HeroBackground from "@/components/sections/hero/HeroBackground.astro";
 import type { HeroProps } from "@/components/sections/hero/types";
 
 type Props = HeroProps;
 
-const { title, description, image, size = "xl", links } = Astro.props;
-const items = links ?? (await getMainLinks());
+const { title, description, image, size = "xl", links, menuLinks } = Astro.props;
+const items = links ?? menuLinks ?? [];
 ---
 
 <section

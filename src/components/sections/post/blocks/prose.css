@@ -1,0 +1,56 @@
+/* Gaya isi artikel (class `prose` dari @tailwindcss/typography, dipakai PostBody.astro) memakai token situs/kit.
+   Dipindah dari global.css karena hanya dipakai artikel. Sengaja CSS biasa (di luar @layer) supaya menimpa warna bawaan plugin. */
+.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-lead: var(--muted-foreground);
+  --tw-prose-links: var(--highlight);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--muted-foreground);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: var(--primary);
+  --tw-prose-captions: var(--muted-foreground);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+  font-size: var(--text-body);
+  line-height: 1.75;
+
+  & :where(h2) {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    letter-spacing: var(--text-h2--letter-spacing);
+    font-weight: 700;
+  }
+  & :where(h3) {
+    font-size: var(--text-h4);
+    line-height: var(--text-h4--line-height);
+    font-weight: 700;
+  }
+  & :where(a) {
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere; /* link panjang (mis. wa.me/...) tidak melebarkan halaman */
+  }
+  /* Gambar yang lebih kecil dari kolom diletakkan di tengah, seperti di Notion. */
+  & :where(img) {
+    display: block;
+    margin-inline: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+  /* Callout Notion (> ...) */
+  & :where(blockquote) {
+    font-style: normal;
+    font-weight: 400;
+    background: var(--background-alt);
+    border-left-width: 3px;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 1rem 1.25rem;
+  }
+  & :where(blockquote p:first-of-type)::before,
+  & :where(blockquote p:last-of-type)::after {
+    content: none;
+  }
+}

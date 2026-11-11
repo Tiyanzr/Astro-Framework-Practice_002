@@ -7,8 +7,9 @@ url: https://www.parametris.com
 lang: id
 # Judul tab beranda. Halaman lain: "<judul halaman> — Parametrik"
 homeTitle: Parametrik — Software, IoT & Engineering
-# Palet seluruh situs: situs = palet kita (global.css :root) · parametris = palet parametris.com (.theme-parametris)
-theme: parametris
+# Kit desain seluruh situs = nama folder di kits/ (base · parametris · awal). Ganti satu baris ini = seluruh situs berganti desain.
+# Daftar kit & isinya: /prototype/kits. Satu halaman boleh memakai kit lain lewat `kit:` di YAML halamannya.
+kit: parametris
 
 # Tombol aksi utama di navbar
 cta:
@@ -32,12 +33,12 @@ contact:
 
 # Navbar (item menunya dari src/content/menu/*.yaml)
 navbar:
-  # Variasi: src/components/layout/navbar/ · bandingkan di /prototype/navbar · pemakaian semua variasi di /prototype/variants
+  # Variasi: kits/<kit>/navbar/ (dicari di kit situs; kit lain: "kit/Nama") · bandingkan di /prototype/navbar · pemakaian di /prototype/variants
   variant: NavbarDropdown_001
 
 # Footer (semua isinya opsional; baris yang dihapus tidak akan tampil)
 footer:
-  # Nama file variasi di src/components/layout/footer/
+  # Nama file variasi di kits/<kit>/footer/
   variant: FooterColumns_001
   company: PT Parametrik Solusi Integrasi
   tagline: Produk dan layanan untuk engineering, manufaktur, dan teknologi terhubung.
@@ -61,7 +62,7 @@ footer:
 
 # Halaman artikel (/posts/<slug>/)
 post:
-  # Nama file variasi di src/components/sections/post/. Satu artikel boleh menimpanya lewat `variant:` di frontmatter.
+  # Nama file variasi di kits/<kit>/post/. Satu artikel boleh menimpanya lewat `variant:` di frontmatter.
   variant: PostArticle_001
   # Teks kecil di halaman artikel
   labels:

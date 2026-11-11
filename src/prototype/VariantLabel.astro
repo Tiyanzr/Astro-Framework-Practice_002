@@ -4,14 +4,14 @@
 import { getUsage, useBadge, useOf } from "./usage";
 
 interface Props {
-  section: string;
+  /** Variasi lengkap "kit/Nama", mis. "parametris/HeroText_001". */
   name: string;
   /** Keterangan tambahan, mis. "tone dark · width full". */
   note?: string;
 }
 
-const { section, name, note } = Astro.props;
-const use = useOf(await getUsage(), section, name);
+const { name, note } = Astro.props;
+const use = useOf(await getUsage(), name);
 ---
 
 <p class="flex flex-wrap items-center gap-3 border-y border-border bg-background-alt px-4 py-2 font-mono text-eyebrow uppercase md:px-8">

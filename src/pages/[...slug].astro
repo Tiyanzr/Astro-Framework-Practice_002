@@ -4,6 +4,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Sections from "@/components/sections/Sections.astro";
+import { getSite } from "@/lib/content";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
@@ -11,8 +12,10 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props;
+// Kit halaman: `kit:` di YAML halaman, kalau kosong site.yaml › kit.
+const kit = page.data.kit ?? (await getSite()).kit;
 ---
 
-<BaseLayout title={page.data.title} description={page.data.description}>
-  <Sections sections={page.data.sections} />
+<BaseLayout title={page.data.title} description={page.data.description} kit={kit}>
+  <Sections sections={page.data.sections} kit={kit} />
 </BaseLayout>

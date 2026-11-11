@@ -1,7 +1,10 @@
 ---
 // Menampilkan daftar `sections` dari YAML halaman, berurutan dari atas ke bawah.
-// Setiap item memilih komponen lewat `type`. Menambah JENIS section baru = tambah skemanya di
-// src/content.config.ts (pages › sections) lalu daftarkan pintu masuknya di `components` di bawah.
+// Setiap item memilih pintu masuk lewat `type`; pintu masuk memilih variasi dari kit (src/lib/kits.ts).
+// `kit` = kit halaman (pages › kit, kalau kosong site.yaml › kit). Kosong (halaman prototype) = kit situs, dan setiap
+// section dibungkus tema kit-nya sendiri.
+// Menambah JENIS section baru = tambah skemanya di src/content.config.ts (pages › sections), types.ts + pintu masuknya
+// di folder ini, daftarkan di `components` di bawah, lalu buat variasinya di kits/base/<jenis>/.
 import type { PageSection, SectionType } from "@/lib/content";
 import Benefits from "./benefits/Benefits.astro";
 import Cards from "./cards/Cards.astro";
@@ -31,14 +34,16 @@ const components: Record<SectionType, any> = {
 
 interface Props {
   sections: PageSection[];
+  /** Kit halaman. */
+  kit?: string;
 }
 
-const { sections } = Astro.props;
+const { sections, kit } = Astro.props;
 ---
 
 {
   sections.map(({ type, ...props }) => {
     const Component = components[type];
-    return <Component {...props} />;
+    return <Component {...props} kit={kit} pageKit={kit} />;
   })
 }

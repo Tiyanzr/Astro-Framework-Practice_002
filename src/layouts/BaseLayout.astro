@@ -1,25 +1,30 @@
 ---
 // Kerangka semua halaman: <head> (judul, deskripsi, canonical, Open Graph), navbar, isi halaman di <slot />, lalu footer.
 // `bare`: tanpa navbar dan footer (dipakai halaman /prototype lewat src/prototype/PrototypeLayout.astro).
-// Palet situs dari site.yaml › theme ("parametris" = class .theme-parametris di body). Halaman bare tidak diberi palet,
-// supaya prototype bisa memilih palet sendiri.
+// Kit desain: `kit` (dari YAML halaman) atau site.yaml › kit, dipasang sebagai data-kit di body supaya warna/font/jarak
+// kit itu (kits/<kit>/theme.css) berlaku. Semua theme.css kit dimuat; masing-masing hanya aktif di dalam [data-kit="<kit>"].
+// Halaman bare (prototype) tidak diberi kit: setiap pratinjau membungkus dirinya dengan tema kit-nya sendiri.
 import "@/styles/global.css";
 import Navbar from "@/components/layout/navbar/Navbar.astro";
 import Footer from "@/components/layout/footer/Footer.astro";
 import { getSite } from "@/lib/content";
 
+// Tema semua kit (CSS biasa, berlaku hanya di dalam [data-kit="<kit>"]).
+import.meta.glob("/kits/*/theme.css", { eager: true });
+
 interface Props {
   title?: string;
   description?: string;
   bare?: boolean;
+  /** Kit halaman (YAML halaman › kit). Kosong = site.yaml › kit. */
+  kit?: string;
 }
 
 const site = await getSite();
-const { title, description = site.description, bare = false } = Astro.props;
+const { title, description = site.description, bare = false, kit = site.kit } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : (site.homeTitle ?? site.name);
 // URL kanonik: domain dari astro.config.mjs › site, path halaman ini (selalu diakhiri "/", sama seperti hasil build)
 const canonical = Astro.site ? new URL(Astro.url.pathname.replace(/\/?$/, "/"), Astro.site).href : undefined;
-const themeClass = !bare && site.theme === "parametris" ? "theme-parametris" : undefined;
 ---
 
 <!-- Seluruh situs memakai light mode. Untuk section gelap, pakai class `theme-dark` pada section-nya. -->
@@ -40,12 +45,12 @@ const themeClass = !bare && site.theme === "parametris" ? "theme-parametris" : u
     <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
   <!-- flex + min-h-screen: footer tetap di dasar layar walaupun isi halaman pendek -->
-  <body class:list={["flex min-h-screen flex-col", themeClass]}>
-    {!bare && <Navbar />}
+  <body class="flex min-h-screen flex-col" data-kit={bare ? undefined : kit}>
+    {!bare && <Navbar pageKit={kit} />}
     <!-- Ruang untuk navbar fixed (kalau ada) diatur oleh variasi navbar itu sendiri. -->
     <main class="flex-1">
       <slot />
     </main>
-    {!bare && <Footer />}
+    {!bare && <Footer pageKit={kit} />}
   </body>
 </html>

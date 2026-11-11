@@ -1,10 +1,11 @@
 # MODULES.md — template siap tempel
 
 > Katalog semua bagian halaman beserta **blok YAML lengkap** yang tinggal di-copy-paste.
-> Lihat tampilannya dulu di `/prototype` (hanya saat `astro dev`), dikelompokkan per folder kode: **global.css** (palet), **layout** (navbar, footer),
-> **sections** (modul per halaman + artikel), dan **ui** (tombol, ikon, dll.).
+> Lihat tampilannya dulu di `/prototype` (hanya saat `astro dev`), dikelompokkan per folder kode: **global.css** (palet), **kits** (kit desain),
+> **layout** (navbar, footer), **sections** (modul per halaman + artikel), dan **ui** (tombol, ikon, dll.).
 > Arsitektur & aturan desain: [DESIGN.md](DESIGN.md) · cara kerja & status proyek: [AGENTS.md](AGENTS.md).
-> Kolom **Pemakaian** di bawah per **2026-11-09** (**dipakai** = dipakai di situs, **base** = versi Basic, **tidak dipakai** = desain yang tidak dipakai saat ini). Data terbaru (dihitung otomatis dari YAML) selalu ada di `/prototype/variants`. Gaya apa pun boleh dipakai: yang ditulis di YAML itulah yang tampil, sama saat dev dan build.
+> Kolom **Pemakaian** di bawah per **2026-11-10** (**dipakai** = dipakai di situs, **base** = versi Basic, **tidak dipakai** = desain yang tidak dipakai saat ini). Data terbaru (dihitung otomatis dari YAML) selalu ada di `/prototype/variants`. Gaya apa pun boleh dipakai: yang ditulis di YAML itulah yang tampil, sama saat dev dan build.
+> **Kit:** setiap gaya ada di sebuah kit desain (`kits/<kit>/<modul>/<Gaya>.astro`): `...Basic_001` = kit `base`; `HeroImage_*`, `IntroMedia_*`, `NavbarPanel_001`, `FooterSimple_001` = kit `awal`; sisanya = kit `parametris` (kit situs sekarang). Gaya dari kit situs/base cukup ditulis namanya; gaya dari kit lain ditulis `kit/Nama` (mis. `awal/HeroImage_001`), seperti di komentar blok di bawah.
 
 ---
 
@@ -12,7 +13,7 @@
 
 1. **Halaman baru = folder baru** `src/content/pages/<url>/` berisi `index.yaml` + gambar-gambar halaman itu (sama seperti artikel: 1 artikel = 1 folder). Nama folder = URL. Tidak perlu file `.astro`. Mulai dari [Kerangka halaman](#kerangka-halaman).
 2. **Tambah modul** = copy blok modul di bawah ke daftar `sections:` halaman itu (indentasi 2 spasi, diawali `- type:`). Urutan blok = urutan tampil.
-3. **Pilih gaya** lewat `variant:` (daftar pilihan ada di komentar tiap blok). Bandingkan dulu di `/prototype/<modul>`.
+3. **Pilih gaya** lewat `variant:` (daftar pilihan ada di komentar tiap blok). Bandingkan dulu di `/prototype/<modul>`. Kosongkan `variant:` = gaya pertama kit aktif.
 4. **Isi teks, jumlah kartu/tombol/item** cukup di YAML: tambah atau hapus baris item.
 
 ### Kenapa blok di sini selalu lengkap
@@ -26,7 +27,8 @@ Jadi: **copy blok lengkap, isi semua field yang mungkin dibutuhkan**, baru hapus
 | Kejadian | Akibat |
 |---|---|
 | Field bertanda **WAJIB** tidak diisi | ❌ Error saat dev/build, pesannya menyebut field yang kurang |
-| `variant:` salah ketik / tidak ada | ❌ Error, pesannya menyebut semua pilihan |
+| `variant:` salah ketik / tidak ada di kit aktif (atau `base`) | ❌ Error, pesannya menyebut semua pilihan |
+| `kit:` / `kit/Nama` menyebut kit yang tidak ada di `kits/` | ❌ Error, pesannya menyebut semua kit |
 | `icon:` tidak ada di `src/assets/icons/` | ❌ Error, pesannya menyebut semua ikon |
 | Kunci tanpa nilai, mis. `title:` lalu kosong | ❌ Error (`null`). Hapus barisnya atau beri `#` di depannya |
 | **Nama field salah ketik**, mis. `action:` | ⚠️ **Diam-diam diabaikan**, tidak ada pesan. Cocokkan dengan blok di sini |
@@ -59,15 +61,44 @@ Bagian yang **berlaku di semua halaman**. Diatur sekali, bukan per halaman. Prev
 
 ## Palet warna & font
 
-Bukan YAML: semua token ada di `src/styles/global.css` (dokumentasi di DESIGN.md › Warna, Tipografi). Preview: `/prototype/colors`, `/prototype/fonts`.
-Ada dua palet yang bisa dibandingkan di setiap halaman prototype lewat combo box **Palet**:
+Bukan YAML: tema bawaan ada di `src/styles/global.css`, tema kit di `kits/<kit>/theme.css` (dokumentasi di DESIGN.md › Tema & palet, Kit desain). Preview: `/prototype/colors`, `/prototype/fonts`, `/prototype/ui` (combo box **Tema**).
+Tema mengikuti kit; setiap variasi di prototype tampil dengan tema kit-nya sendiri:
 
-| Palet | Di mana | Isi |
+| Tema | Di mana | Isi |
 |---|---|---|
-| Situs | `:root` (dipakai situs sekarang) | midnight, blue, green, mantis, lime + putih/hitam; Roboto Condensed + Archivo |
-| Referensi parametris.com (aktif, `theme: parametris`) | class `.theme-parametris` | ink #14252e, emas #86732c, gelap #11262c; Arial; jarak lebih lega |
+| Bawaan | `global.css` › `:root` (kit `awal`, kit tanpa `theme.css`) | midnight, blue, green, mantis, lime + putih/hitam; Roboto Condensed + Archivo |
+| Kit parametris (aktif, `kit: parametris`) | `kits/parametris/theme.css` (`[data-kit="parametris"]`) | ink #14252e, emas #86732c, gelap #11262c; Arial; jarak lebih lega |
 
-Palet yang dipakai situs dipilih di `src/content/site.yaml` › `theme` (`parametris` sekarang). Ganti warna = ubah nilai token di `global.css` (komponen ikut berubah semua). Catat perubahannya di DESIGN.md.
+Kit (dan temanya) dipilih di `src/content/site.yaml` › `kit` (`parametris` sekarang). Ganti warna satu kit = ubah `kits/<kit>/theme.css`; untuk semua kit = `global.css`. Catat perubahannya di DESIGN.md.
+
+## Kit desain
+
+Bukan YAML halaman: folder `kits/<kit>/` (lihat DESIGN.md › Kit desain). Preview & ringkasan: `/prototype/kits`.
+
+```ts
+// kits/<kit>/kit.ts
+import type { KitConfig } from "@/lib/kits";
+
+export default {
+  name: "Nama Kit",               // WAJIB. Nama tampilan
+  author: "Nama pembuat",         // Opsional
+  description: "Ciri khas kit.",  // Opsional
+  defaults: {                     // Opsional: tone/width/pulldown bawaan per gaya (YAML halaman selalu menang)
+    CtaClosing_001: { tone: "alt" },
+  },
+} satisfies KitConfig;
+```
+
+```yaml
+# Memakai kit (YAML)
+# src/content/site.yaml
+kit: parametris                 # Kit seluruh situs (nama folder di kits/)
+# src/content/pages/<url>/index.yaml
+kit: awal                       # Opsional: kit untuk isi halaman ini saja (navbar & footer tetap kit situs)
+sections:
+  - type: hero
+    variant: parametris/HeroText_001   # Opsional: satu section dari kit lain
+```
 
 ## Navbar (header)
 
@@ -83,12 +114,12 @@ File: `src/content/site.yaml` (nama, tombol CTA, gaya) + `src/content/menu/*.yam
 # src/content/site.yaml
 name: Parametrik                # WAJIB. Nama situs (judul tab, label logo)
 homeTitle: "Parametrik — Software, IoT & Engineering"   # Judul tab beranda
-theme: parametris               # Palet seluruh situs: situs | parametris
+kit: parametris                 # Kit desain seluruh situs (nama folder di kits/): base | parametris | awal
 cta:                            # WAJIB. Tombol aksi di navbar
   label: Kontak
   href: /contact
 navbar:
-  variant: NavbarDropdown_001   # NavbarBasic_001 | NavbarPanel_001 | NavbarDropdown_001
+  variant: NavbarDropdown_001   # NavbarBasic_001 | awal/NavbarPanel_001 | NavbarDropdown_001
 ```
 
 ```yaml
@@ -115,7 +146,7 @@ File: `src/content/site.yaml` › `footer`. Kolom menu (FooterColumns_001) otoma
 ```yaml
 # src/content/site.yaml
 footer:
-  variant: FooterColumns_001    # FooterBasic_001 | FooterSimple_001 | FooterColumns_001
+  variant: FooterColumns_001    # FooterBasic_001 | awal/FooterSimple_001 | FooterColumns_001
   company: PT Parametrik Solusi Integrasi   # WAJIB. Nama perusahaan (juga di copyright)
   tagline: "Produk dan layanan untuk engineering, manufaktur, dan teknologi terhubung."
   address:                      # 1 baris = 1 item
@@ -193,6 +224,7 @@ Section yang **disusun per halaman** di `sections:`. Preview tiap modul di `/pro
 # src/content/pages/<url>/index.yaml  →  URL /<url>      (beranda: pages/home/index.yaml → /)
 # Gambar halaman ini disimpan di folder yang sama: src/content/pages/<url>/foto.jpg
 title: Software                 # Judul tab browser; juga judul kartu kalau halaman ini tampil di cards › from
+# kit: awal                     # Opsional: kit desain isi halaman ini (kosong = site.yaml › kit). Navbar & footer tetap kit situs
 description: "..."              # Deskripsi SEO
 summary: "..."                  # Teks kartu kalau halaman ini tampil di cards › from (halaman induk)
 order: 1                        # Urutan kartu di halaman induk
@@ -219,7 +251,7 @@ Pembuka halaman, biasanya section pertama. Preview: `/prototype/hero`.
 
 ```yaml
   - type: hero
-    variant: HeroText_001       # HeroBasic_001 | HeroImage_001 | HeroImage_002 | HeroText_001 | HeroText_002
+    variant: HeroText_001       # HeroBasic_001 | awal/HeroImage_001 | awal/HeroImage_002 | HeroText_001 | HeroText_002
     size: default               # xl = beranda (judul terbesar) | default = halaman lain
     eyebrow: "PRODUK / SOFTWARE"
     aside: { label: Beranda, href: / }        # Teks kanan atas (HeroText_*); href boleh dihapus
@@ -249,7 +281,7 @@ Pengantar teks + video/gambar tepat setelah hero. Preview: `/prototype/intro`.
 
 ```yaml
   - type: intro
-    variant: IntroMedia_002     # IntroBasic_001 | IntroMedia_001 | IntroMedia_002
+    variant: awal/IntroMedia_002 # IntroBasic_001 | awal/IntroMedia_001 | awal/IntroMedia_002
     tone: dark                  # kosongkan = bawaan gaya
     width: full                 # kosongkan = bawaan gaya
     pulldown: true              # true = menumpuk ke bawah hero (mulai tablet)
@@ -512,7 +544,7 @@ items:                          # Daftar produk, jumlah bebas
 
 ## Memilih gaya
 
-**Gaya apa pun boleh dipakai.** Yang ditulis di `variant:` itulah yang tampil, sama saat dev dan build (tidak ada status/persetujuan). Alurnya: coba gaya di `/prototype/<modul>` (combo box **Variasi** + **Contoh isi**), lalu tulis namanya di YAML. Nama salah ketik = error yang menyebut semua pilihan. Daftar semua gaya + di mana dipakai: `/prototype/variants`.
+**Gaya apa pun boleh dipakai.** Yang ditulis di `variant:` itulah yang tampil, sama saat dev dan build (tidak ada status/persetujuan). Alurnya: coba gaya di `/prototype/<modul>` (combo box **Variasi** berisi gaya dari semua kit, `kit/Nama`, + **Contoh isi**), lalu tulis namanya di YAML: cukup `Nama` kalau gaya itu ada di kit halaman (atau `base`), `kit/Nama` kalau dari kit lain. Nama salah ketik = error yang menyebut semua pilihan. Daftar semua gaya + kit + di mana dipakai: `/prototype/variants`; satu kit utuh: `/prototype/kits`.
 
 ## Contoh nyata
 

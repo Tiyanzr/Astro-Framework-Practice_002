@@ -1,18 +1,27 @@
 ---
-// Pintu masuk navbar: variasi dipilih lewat `navbar.variant` di src/content/site.yaml (= nama file tanpa .astro).
-// Isi: nama situs + cta dari site.yaml, item menu dari src/content/menu/*.yaml. Daftar variasi: ./variants.ts.
+// Pintu masuk navbar. Variasi: `navbar.variant` di src/content/site.yaml, dicari di kit situs (site.yaml › kit);
+// file-nya di kits/<kit>/navbar/. Navbar selalu ikut kit situs, juga di halaman yang memakai kit lain.
+// Isi: nama situs + cta dari site.yaml, item menu dari src/content/menu/*.yaml.
 import { getMainLinks, getSite } from "@/lib/content";
-import { pickVariant } from "@/lib/variants";
-import { navbarVariants } from "./variants";
+import KitVariant from "@/components/sections/KitVariant.astro";
 
 interface Props {
-  /** Paksa variasi tertentu (dipakai halaman /prototype/navbar). */
+  /** Paksa variasi tertentu, mis. "parametris/NavbarDropdown_001" (dipakai halaman /prototype/navbar). */
   variant?: string;
+  /** Kit halaman (tema di sekitarnya). Kosong = halaman prototype. */
+  pageKit?: string;
 }
 
 const site = await getSite();
 const links = await getMainLinks();
-const Variant = pickVariant(navbarVariants, Astro.props.variant ?? site.navbar.variant, "navbar");
 ---
 
-<Variant siteName={site.name} cta={site.cta} links={links} />
+<KitVariant
+  section="navbar"
+  variant={Astro.props.variant ?? site.navbar.variant}
+  kit={site.kit}
+  pageKit={Astro.props.pageKit}
+  siteName={site.name}
+  cta={site.cta}
+  links={links}
+/>

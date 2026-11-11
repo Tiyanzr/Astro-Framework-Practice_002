@@ -1,29 +1,38 @@
 ---
-// /prototype/intro: coba variasi intro dengan isi yang sama (intro pertama di halaman contoh
+// /prototype/intro: coba variasi intro dari semua kit dengan isi yang sama (intro pertama di halaman contoh
 // src/prototype/content/pages/contoh-halaman.yaml, karena situs sekarang tidak memakai intro).
-// Bar atas: variasi (?v=) dan tone (?tone=). "Semua" = semua pilihan berjajar. Width mengikuti bawaan variasi, pulldown dimatikan.
-// Bawaan = variasi + tone yang dipakai beranda. Semua variasi di src/components/sections/intro/ otomatis ikut, diberi tanda status.
+// Bar atas: variasi (?v=, "kit/Nama") dan tone (?tone=). "Semua" = semua pilihan berjajar. Width mengikuti bawaan variasi
+// (kits/<kit>/kit.ts), pulldown dimatikan. Bawaan = variasi + tone yang dipakai halaman contoh.
+import { getEntry } from "astro:content";
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import Intro from "@/components/sections/intro/Intro.astro";
 import VariantLabel from "@/prototype/VariantLabel.astro";
-import { introDefaults, introVariants } from "@/components/sections/intro/variants";
 import { getSection } from "@/lib/content";
+import { resolveVariant } from "@/lib/kits";
 import { sectionTones } from "@/lib/section";
-import { allOption, control, selected, variantOptions } from "@/prototype/controls";
+import { allOption, control, fullRef, selected, siteKit, variantOptions } from "@/prototype/controls";
 
-const { type: _type, variant: homeVariant, tone: homeTone, width: _width, pulldown: _pulldown, ...content } = await getSection("contoh-halaman", "intro");
+const { type: _type, variant: sampleVariant, tone: sampleTone, width: _width, pulldown: _pulldown, ...content } = await getSection("contoh-halaman", "intro");
+const sampleKit = (await getEntry("pages", "contoh-halaman"))?.data.kit ?? (await siteKit());
+const defaultsOf = (ref: string) => resolveVariant("intro", ref, sampleKit).defaults;
 
-const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions(Object.keys(introVariants), "intro")), allOption], homeVariant);
-const tone = control(Astro.url, "tone", "Tone", [...sectionTones.map((t) => ({ value: t, label: `Tone ${t}` })), allOption], homeTone ?? introDefaults[variant.value]?.tone ?? "default");
-const combos = selected(variant).flatMap((name) => selected(tone).map((t) => ({ name, tone: t })));
+const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions("intro")), allOption], fullRef("intro", sampleVariant, sampleKit));
+const tone = control(
+  Astro.url,
+  "tone",
+  "Tone",
+  [...sectionTones.map((t) => ({ value: t, label: `Tone ${t}` })), allOption],
+  sampleTone ?? defaultsOf(variant.value === "semua" ? (fullRef("intro", sampleVariant, sampleKit) ?? "") : variant.value)?.tone ?? "default",
+);
+const combos = selected(variant).flatMap((ref) => selected(tone).map((t) => ({ ref, tone: t })));
 ---
 
 <PrototypeLayout title="Intro" controls={[variant, tone]}>
   {
-    combos.map(({ name, tone }) => (
+    combos.map(({ ref, tone }) => (
       <div>
-        {combos.length > 1 && <VariantLabel section="intro" name={name} note={`tone ${tone} · width ${introDefaults[name]?.width ?? "full"}`} />}
-        <Intro {...content} variant={name} tone={tone as (typeof sectionTones)[number]} pulldown={false} />
+        {combos.length > 1 && <VariantLabel name={ref} note={`tone ${tone} · width ${defaultsOf(ref).width ?? "full"}`} />}
+        <Intro {...content} variant={ref} tone={tone as (typeof sectionTones)[number]} pulldown={false} />
       </div>
     ))
   }

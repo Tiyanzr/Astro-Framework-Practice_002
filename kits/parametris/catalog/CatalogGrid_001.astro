@@ -4,9 +4,9 @@
 // Daftar produk (link keluar, mis. ptc.com) tampil di bawah kartu kalau ada; di beranda pakai `limit: 0` untuk ringkasan saja.
 // Kartu menautkan ke anchor kategori: `more.href#<id>` (beranda → halaman software) atau `#<id>` di halaman itu sendiri.
 import { Image } from "astro:assets";
-import SplitHeading from "../SplitHeading.astro";
-import { numbered } from "../types";
-import type { CatalogProps } from "./types";
+import SplitHeading from "../parts/SplitHeading.astro";
+import { numbered } from "@/components/sections/types";
+import type { CatalogProps } from "@/components/sections/catalog/types";
 
 type Props = CatalogProps;
 

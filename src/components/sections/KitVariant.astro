@@ -1,0 +1,54 @@
+---
+// Bagian bersama semua pintu masuk section (Hero.astro, Cards.astro, Navbar.astro, ...):
+// 1. pilih variasi dari kit (src/lib/kits.ts › resolveVariant),
+// 2. kalau `wrap`, bungkus dengan ui/Section (tone/width/pulldown; untuk variasi Basic hanya bawaan kit yang dipakai),
+// 3. kalau kit variasi ≠ kit di sekitarnya (`pageKit`), bungkus dengan [data-kit] supaya warna/font kit itu yang berlaku.
+//    Kecuali kit base: versi polos selalu ikut tema di sekitarnya (mis. section cadangan di halaman ber-kit parametris).
+// Semua prop lain diteruskan apa adanya ke variasi.
+import Section from "@/components/ui/Section.astro";
+import { getSite } from "@/lib/content";
+import { BASE_KIT, isBasic, resolveVariant } from "@/lib/kits";
+import type { SectionSettings } from "@/lib/section";
+
+interface Props extends SectionSettings {
+  /** Jenis section = nama folder di kits/<kit>/, mis. "hero". */
+  section: string;
+  /** Isi `variant:` di YAML: "Nama", "kit/Nama", atau kosong (lihat lib/kits.ts). */
+  variant?: string;
+  /** Kit tempat mencari nama tanpa "kit/". Kosong = kit situs (site.yaml › kit). */
+  kit?: string;
+  /** Kit yang temanya sudah berlaku di sekitar section (kit halaman). Kosong (halaman prototype) = selalu dibungkus. */
+  pageKit?: string;
+  /** Bungkus dengan ui/Section. */
+  wrap?: boolean;
+  [prop: string]: any;
+}
+
+const { section, variant, kit, pageKit, wrap = false, tone, width, pulldown, ...content } = Astro.props;
+const resolved = resolveVariant(section, variant, kit ?? (await getSite()).kit);
+const { Variant, defaults } = resolved;
+const settings = isBasic(resolved.name)
+  ? defaults
+  : { tone: tone ?? defaults.tone, width: width ?? defaults.width, pulldown: pulldown ?? defaults.pulldown };
+const themed = resolved.kit !== pageKit && resolved.kit !== BASE_KIT;
+---
+
+{
+  themed ? (
+    <div data-kit={resolved.kit} class="contents">
+      {wrap ? (
+        <Section {...settings}>
+          <Variant {...content} />
+        </Section>
+      ) : (
+        <Variant {...content} />
+      )}
+    </div>
+  ) : wrap ? (
+    <Section {...settings}>
+      <Variant {...content} />
+    </Section>
+  ) : (
+    <Variant {...content} />
+  )
+}

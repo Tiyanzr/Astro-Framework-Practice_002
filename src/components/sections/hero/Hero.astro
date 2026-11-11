@@ -1,15 +1,11 @@
 ---
-// Pintu masuk hero: memilih variasi lewat prop `variant` (= nama file tanpa .astro). Daftar variasi: ./variants.ts.
-import { pickVariant } from "@/lib/variants";
-import { heroVariants } from "./variants";
-import type { HeroProps } from "./types";
+// Pintu masuk hero. Variasi dipilih lewat `variant` dari kit (src/lib/kits.ts), file-nya di kits/<kit>/hero/.
+// Item menu utama disiapkan di sini (`menuLinks`), dipakai variasi yang menampilkan menu kalau `links` kosong.
+import { getMainLinks } from "@/lib/content";
+import KitVariant from "../KitVariant.astro";
 
-interface Props extends HeroProps {
-  variant?: string;
-}
-
-const { variant = "HeroBasic_001", ...props } = Astro.props;
-const Variant = pickVariant(heroVariants, variant, "hero");
+const { variant, kit, pageKit, ...props } = Astro.props;
+const menuLinks = await getMainLinks();
 ---
 
-<Variant {...props} />
+<KitVariant section="hero" variant={variant} kit={kit} pageKit={pageKit} menuLinks={menuLinks} {...props} />

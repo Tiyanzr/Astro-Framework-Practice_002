@@ -3,6 +3,9 @@
 # Salin file ini ke src/content/pages/<nama>.yaml untuk membuat halaman sungguhan.
 
 title: Contoh halaman
+# Contoh halaman dengan kit sendiri: semua section di sini memakai kit `awal`, walaupun situs memakai kit lain.
+# Navbar & footer tetap ikut kit situs (site.yaml).
+kit: awal
 description: Halaman contoh untuk menguji susunan section dari YAML.
 
 sections:

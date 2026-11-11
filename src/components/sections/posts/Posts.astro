@@ -2,13 +2,12 @@
 // Pintu masuk daftar artikel (`type: posts`). Artikel dari src/content/posts/ (tanpa draft saat build), terbaru di atas.
 // `limit` = jumlah artikel (kosong = semua), `category` = saring per kategori.
 // `items` = daftar manual (mis. artikel di situs lain); kalau diisi, koleksi posts tidak dipakai.
-// Daftar variasi: ./variants.ts.
+// Variasi: kits/<kit>/posts/.
 import { getPosts } from "@/lib/content";
-import WrappedVariant from "../WrappedVariant.astro";
-import { postsVariants } from "./variants";
+import KitVariant from "../KitVariant.astro";
 import type { PostItem } from "./types";
 
-const { variant = "PostsBasic_001", limit, category, items, ...props } = Astro.props;
+const { variant, kit, pageKit, limit, category, items, ...props } = Astro.props;
 let posts: PostItem[];
 if (items) {
   posts = items;
@@ -26,4 +25,4 @@ if (items) {
 }
 ---
 
-<WrappedVariant section="posts" variants={postsVariants} variant={variant} posts={posts} {...props} />
+<KitVariant section="posts" wrap variant={variant} kit={kit} pageKit={pageKit} posts={posts} {...props} />

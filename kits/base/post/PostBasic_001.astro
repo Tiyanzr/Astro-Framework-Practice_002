@@ -3,8 +3,8 @@
 // kepala, cover, isi Markdown, daftar isi, tag, dan artikel terkait.
 // Semua HTML polos, termasuk isi artikel (tanpa .prose). Gambar tetap tidak melebihi layar berkat gaya dasar Tailwind.
 import { Image } from "astro:assets";
-import { formatDate } from "./blocks/format";
-import type { PostProps } from "./types";
+import { formatDate } from "@/components/sections/post/blocks/format";
+import type { PostProps } from "@/components/sections/post/types";
 
 type Props = PostProps;
 
