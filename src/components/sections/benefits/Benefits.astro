@@ -1,11 +1,8 @@
 ---
-// Pintu masuk manfaat / bidang penerapan (`type: benefits`): ikon + judul + penjelasan (+ rincian), diisi `items` di YAML halaman.
-// Variasi yang sama isinya bisa tampil sebagai grid berikon, deretan tag, atau dua kolom berincian.
-// Daftar variasi: ./variants.ts.
-import WrappedVariant from "../WrappedVariant.astro";
-import { benefitsVariants } from "./variants";
+// Pintu masuk manfaat / bidang penerapan (`type: benefits`). Variasi: kits/<kit>/benefits/.
+import KitVariant from "../KitVariant.astro";
 
-const { variant = "BenefitsBasic_001", ...props } = Astro.props;
+const { variant, kit, pageKit, ...props } = Astro.props;
 ---
 
-<WrappedVariant section="benefits" variants={benefitsVariants} variant={variant} {...props} />
+<KitVariant section="benefits" wrap variant={variant} kit={kit} pageKit={pageKit} {...props} />

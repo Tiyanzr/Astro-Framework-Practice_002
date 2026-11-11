@@ -1,0 +1,40 @@
+---
+// MediaBanner_001 (referensi: parametris.com, .visual di beranda): foto selebar layar setinggi 370 → 550px,
+// gradasi gelap dari bawah, eyebrow + judul putih di kiri bawah (sejajar tepi isi halaman). Warna gelap dari token theme-dark.
+import { Image } from "astro:assets";
+import type { MediaProps } from "@/components/sections/media/types";
+
+type Props = MediaProps;
+
+const { image, eyebrow, title, accent } = Astro.props;
+---
+
+<section class="theme-dark relative isolate h-[370px] overflow-hidden md:h-[460px] lg:h-[550px]">
+  <Image
+    src={image.src}
+    alt={image.alt}
+    widths={[640, 1024, 1600, 2400]}
+    sizes="100vw"
+    class="absolute inset-0 -z-20 size-full object-cover object-[center_40%]"
+  />
+  <div class="absolute inset-0 -z-10 bg-linear-to-t from-background/90 to-transparent to-85%" aria-hidden="true"></div>
+
+  {
+    (eyebrow || title || accent) && (
+      <div class="container-page absolute inset-x-0 bottom-[30px] md:bottom-[42px]">
+        {eyebrow && <p class="text-eyebrow font-semibold text-primary uppercase max-md:text-[11px]">{eyebrow}</p>}
+        {(title || accent) && (
+          <h2 class="mt-[15px] text-ref-caption">
+            {title}
+            {accent && (
+              <>
+                {title && <br />}
+                {accent}
+              </>
+            )}
+          </h2>
+        )}
+      </div>
+    )
+  }
+</section>

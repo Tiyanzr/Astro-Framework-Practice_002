@@ -1,24 +1,9 @@
 ---
-// Pintu masuk intro: memilih variasi lewat prop `variant` (= nama file tanpa .astro), lalu membungkusnya dengan ui/Section.
-// Variasi hanya mengatur susunan isi; latar, lebar, dan pulldown diatur di sini supaya sama untuk semua variasi.
-// Kalau tone/width/pulldown tidak diisi, dipakai bawaan variasi dari introDefaults (./variants.ts).
-import Section from "@/components/ui/Section.astro";
-import { isBasic, resolveVariant } from "@/lib/variants";
-import { introDefaults, introVariants } from "./variants";
-import type { IntroProps } from "./types";
+// Pintu masuk intro (`type: intro`), dibungkus ui/Section (tone/width/pulldown; bawaan per variasi di kits/<kit>/kit.ts).
+// Variasi: kits/<kit>/intro/.
+import KitVariant from "../KitVariant.astro";
 
-interface Props extends IntroProps {
-  variant?: string;
-}
-
-const { variant = "IntroBasic_001", tone, width, pulldown, ...content } = Astro.props;
-// Untuk variasi Basic, tone/width/pulldown dari YAML diabaikan:
-// pengaturan itu bagian dari desain, bukan isi.
-const { Variant, name } = resolveVariant(introVariants, variant, "intro");
-const defaults = introDefaults[name] ?? {};
-const settings = isBasic(name) ? defaults : { tone: tone ?? defaults.tone, width: width ?? defaults.width, pulldown: pulldown ?? defaults.pulldown };
+const { variant, kit, pageKit, ...props } = Astro.props;
 ---
 
-<Section tone={settings.tone} width={settings.width} pulldown={settings.pulldown}>
-  <Variant {...content} />
-</Section>
+<KitVariant section="intro" wrap variant={variant} kit={kit} pageKit={pageKit} {...props} />

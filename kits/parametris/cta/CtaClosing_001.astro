@@ -1,0 +1,37 @@
+---
+// CtaClosing_001 (referensi: parametris.com, .closing "MULAI PERCAKAPAN"): eyebrow, judul penutup tipis sangat besar
+// (`accent` turun ke baris baru berwarna aksen), lalu tombol garis. Bawaan tone alt (abu muda), lihat ../kit.ts.
+import Button from "@/components/ui/Button.astro";
+import type { CtaProps } from "@/components/sections/cta/types";
+
+type Props = CtaProps;
+
+const { eyebrow, title, accent, description, actions = [] } = Astro.props;
+---
+
+{eyebrow && <p class="text-eyebrow font-semibold uppercase">{eyebrow}</p>}
+{
+  (title || accent) && (
+    <h2 class="mt-7 mb-[35px] text-ref-closing text-balance">
+      {title}
+      {accent && (
+        <>
+          {title && <br />}
+          <span class="text-primary">{accent}</span>
+        </>
+      )}
+    </h2>
+  )
+}
+{description && <p class="-mt-4 mb-[35px] max-w-[610px] text-muted-foreground">{description}</p>}
+{
+  actions.length > 0 && (
+    <div class="flex flex-wrap gap-3.5">
+      {actions.map((action, i) => (
+        <Button href={action.href} variant={i === 0 ? "outline" : "secondary"} size="lg" square class="text-small">
+          {action.label}
+        </Button>
+      ))}
+    </div>
+  )
+}

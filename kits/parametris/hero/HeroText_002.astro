@@ -1,0 +1,64 @@
+---
+// HeroText_002 (referensi: parametris.com, .services-hero di halaman Layanan): susunan sama dengan HeroText_001,
+// tetapi di atas foto selebar layar dengan lapisan gelap dari kiri (pekat → setengah transparan) dan teks putih.
+// Tanpa `image` tampil placeholder bergaris (HeroBackground). Warna gelap dari token theme-dark.
+import Button from "@/components/ui/Button.astro";
+import HeroBackground from "@/components/sections/hero/HeroBackground.astro";
+import type { HeroProps } from "@/components/sections/hero/types";
+
+type Props = HeroProps;
+
+const { eyebrow, aside, title, accent, description, actions = [], image, size = "default" } = Astro.props;
+const action = actions[0];
+---
+
+<section class="theme-dark relative isolate overflow-hidden">
+  <HeroBackground image={image} />
+  <div class="absolute inset-0 -z-10 bg-linear-to-r from-background/92 to-background/57" aria-hidden="true"></div>
+
+  <div class="container-page pt-9 pb-10 md:pt-[50px] md:pb-[65px]">
+    {
+      (eyebrow || aside) && (
+        <div class="flex justify-between gap-5 text-eyebrow font-semibold text-foreground/85 uppercase">
+          {eyebrow && <span>{eyebrow}</span>}
+          {aside && (
+            <span class="ml-auto hidden md:inline">
+              {aside.href ? (
+                <a href={aside.href} class="transition-colors duration-300 hover:text-primary">
+                  {aside.label}
+                </a>
+              ) : (
+                aside.label
+              )}
+            </span>
+          )}
+        </div>
+      )
+    }
+
+    <h1 class:list={["mt-8 mb-8 max-w-[1100px] md:mt-[38px]", size === "xl" ? "text-ref-h1" : "text-ref-h1-inner"]}>
+      {title}
+      {
+        accent && (
+          <>
+            <br />
+            <span class="text-primary">{accent}</span>
+          </>
+        )
+      }
+    </h1>
+
+    {
+      (description || action) && (
+        <div class="max-w-[1260px] md:flex md:items-end md:justify-between md:gap-10">
+          {description && <p class="m-0 max-w-[610px] text-body text-foreground/85 md:text-ref-lead">{description}</p>}
+          {action && (
+            <Button href={action.href} variant="outline" size="lg" square class="mt-6 text-small md:mt-0">
+              {action.label}
+            </Button>
+          )}
+        </div>
+      )
+    }
+  </div>
+</section>

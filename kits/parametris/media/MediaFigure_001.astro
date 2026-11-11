@@ -1,0 +1,22 @@
+---
+// MediaFigure_001 (referensi: parametris.com, .detail-image di halaman IoT & Layanan): gambar/ilustrasi lebar di dalam
+// lebar isi halaman, utuh tanpa dipotong, di atas latar abu sangat muda. Judul (kalau diisi) jadi keterangan di bawah gambar.
+import { Image } from "astro:assets";
+import type { MediaProps } from "@/components/sections/media/types";
+
+type Props = MediaProps;
+
+const { image, eyebrow, title, accent } = Astro.props;
+---
+
+<figure class="container-page mt-4 mb-11 md:mb-[75px]">
+  <Image src={image.src} alt={image.alt} widths={[640, 1024, 1600]} sizes="(min-width: 90rem) 1260px, 90vw" class="h-auto w-full bg-muted" />
+  {
+    (eyebrow || title || accent) && (
+      <figcaption class="mt-4 text-small text-muted-foreground">
+        {eyebrow && <span class="mr-3 text-eyebrow font-semibold uppercase">{eyebrow}</span>}
+        {[title, accent].filter(Boolean).join(" ")}
+      </figcaption>
+    )
+  }
+</figure>

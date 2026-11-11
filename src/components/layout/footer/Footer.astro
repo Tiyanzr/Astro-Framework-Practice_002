@@ -1,15 +1,29 @@
 ---
-// Pintu masuk footer: variasi dipilih lewat `footer.variant` di src/content/site.yaml (= nama file tanpa .astro). Daftar variasi: ./variants.ts.
+// Pintu masuk footer. Variasi: `footer.variant` di src/content/site.yaml, dicari di kit situs (site.yaml › kit);
+// file-nya di kits/<kit>/footer/. Footer selalu ikut kit situs, juga di halaman yang memakai kit lain.
 // Isi: site.yaml › footer + item menu utama (src/content/menu/) untuk variasi yang punya kolom menu.
 import { getMainLinks, getSite } from "@/lib/content";
-import { pickVariant } from "@/lib/variants";
-import { footerVariants } from "./variants";
+import KitVariant from "@/components/sections/KitVariant.astro";
+
+interface Props {
+  /** Paksa variasi tertentu (dipakai halaman /prototype/footer). */
+  variant?: string;
+  /** Kit halaman (tema di sekitarnya). Kosong = halaman prototype. */
+  pageKit?: string;
+}
 
 const site = await getSite();
 const links = await getMainLinks();
 const { variant, explore, ...footer } = site.footer;
-const Variant = pickVariant(footerVariants, variant, "footer");
 ---
 
 <!-- Kolom menu footer: site.yaml › footer.explore kalau diisi, kalau tidak item menu utama -->
-<Variant siteName={site.name} links={explore ?? links} {...footer} />
+<KitVariant
+  section="footer"
+  variant={Astro.props.variant ?? variant}
+  kit={site.kit}
+  pageKit={Astro.props.pageKit}
+  siteName={site.name}
+  links={explore ?? links}
+  {...footer}
+/>

@@ -1,29 +1,25 @@
 ---
-// /prototype/hero: coba variasi hero dengan isi yang sama (hero pertama di src/content/pages/home/index.yaml).
-// Pilih variasi di bar atas (?v=); "Semua" = semua variasi berjajar. Bawaan = variasi yang dipakai beranda.
-// Semua variasi di src/components/sections/hero/ otomatis ikut, diberi tanda pemakaian (src/prototype/usage.ts).
+// /prototype/hero: coba variasi hero dari semua kit dengan isi yang sama (hero pertama di src/content/pages/home/index.yaml).
+// Pilih variasi di bar atas (?v=, "kit/Nama"); "Semua" = semua variasi berjajar. Bawaan = variasi yang dipakai beranda.
+// Semua variasi di kits/<kit>/hero/ otomatis ikut, masing-masing dengan tema kit-nya, diberi tanda pemakaian.
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import Hero from "@/components/sections/hero/Hero.astro";
 import VariantLabel from "@/prototype/VariantLabel.astro";
-import { heroVariants } from "@/components/sections/hero/variants";
 import { getSection } from "@/lib/content";
-import { allOption, control, paletteClass, paletteControl, selected, sitePalette, variantOptions } from "@/prototype/controls";
+import { allOption, control, fullRef, selected, siteKit, variantOptions } from "@/prototype/controls";
 
 const { type: _type, ...hero } = await getSection("home", "hero");
-const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions(Object.keys(heroVariants), "hero")), allOption], hero.variant);
-const palette = paletteControl(Astro.url, await sitePalette());
+const variant = control(Astro.url, "v", "Variasi", [...(await variantOptions("hero")), allOption], fullRef("hero", hero.variant, await siteKit()));
 const shown = selected(variant);
 ---
 
-<PrototypeLayout title="Hero" controls={[variant, palette]}>
-  <div class:list={[paletteClass(palette)]}>
+<PrototypeLayout title="Hero" controls={[variant]}>
   {
-    shown.map((name) => (
+    shown.map((ref) => (
       <div>
-        {shown.length > 1 && <VariantLabel section="hero" name={name} />}
-        <Hero {...hero} variant={name} />
+        {shown.length > 1 && <VariantLabel name={ref} />}
+        <Hero {...hero} variant={ref} />
       </div>
     ))
   }
-  </div>
 </PrototypeLayout>

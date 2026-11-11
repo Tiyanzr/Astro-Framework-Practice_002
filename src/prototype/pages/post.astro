@@ -1,18 +1,17 @@
 ---
-// /prototype/post: coba variasi artikel. Bar atas: variasi (?v=) dan artikel (?p=).
-// Semua variasi di src/components/sections/post/ otomatis ikut, diberi tanda pemakaian (src/prototype/usage.ts).
+// /prototype/post: coba variasi artikel dari semua kit. Bar atas: variasi (?v=, "kit/Nama") dan artikel (?p=).
+// Semua variasi di kits/<kit>/post/ otomatis ikut, dengan tema kit-nya, diberi tanda pemakaian (src/prototype/usage.ts).
 // Artikel: semua postingan, termasuk draft dan contoh di src/prototype/content/posts/ (bawaan: contoh-semua-elemen).
 import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
 import Post from "@/components/sections/post/Post.astro";
-import { postVariants } from "@/components/sections/post/variants";
 import { getPosts, getSite } from "@/lib/content";
-import { control, variantOptions } from "@/prototype/controls";
+import { control, fullRef, variantOptions } from "@/prototype/controls";
 
 const site = await getSite();
 const posts = await getPosts({ withTestPosts: true });
 const shorten = (s: string) => (s.length > 60 ? `${s.slice(0, 57)}…` : s);
 
-const variant = control(Astro.url, "v", "Variasi", await variantOptions(Object.keys(postVariants), "post"), site.post.variant);
+const variant = control(Astro.url, "v", "Variasi", await variantOptions("post"), fullRef("post", site.post.variant, site.kit));
 const article = control(
   Astro.url,
   "p",

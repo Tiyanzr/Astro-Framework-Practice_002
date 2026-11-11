@@ -1,0 +1,24 @@
+---
+// FeaturesRows_001 (referensi: parametris.com, .features "KAPABILITAS"): baris bernomor dipisah garis atas.
+// Mulai md tiga kolom: nomor (aksen) · judul · penjelasan. Di HP penjelasan turun di bawah judul.
+import SplitHeading from "../parts/SplitHeading.astro";
+import { numbered } from "@/components/sections/types";
+import type { FeaturesProps } from "@/components/sections/features/types";
+
+type Props = FeaturesProps;
+
+const { items, ...heading } = Astro.props;
+---
+
+<SplitHeading {...heading} />
+<ol class:list={[!heading.title && !heading.accent && "mt-[30px]"]}>
+  {
+    items.map((item, i) => (
+      <li class="grid grid-cols-[30px_1fr] items-start gap-x-[18px] gap-y-2 border-t border-border py-[30px] md:grid-cols-[50px_1fr_1.25fr] md:gap-[30px]">
+        <span class="text-caption tracking-[0.1em] text-primary">{numbered(i)}</span>
+        <h3 class="m-0 text-ref-h3 md:text-[27px]">{item.title}</h3>
+        {item.description && <p class="col-start-2 m-0 text-muted-foreground md:col-start-auto">{item.description}</p>}
+      </li>
+    ))
+  }
+</ol>

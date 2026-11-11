@@ -1,0 +1,52 @@
+---
+// HeroImage_002: foto penuh selebar layar, kartu putih di kiri berisi judul + daftar link.
+// Daftar link: `links` di YAML halaman kalau diisi; kalau kosong, item menu utama (`menuLinks`, disiapkan Hero.astro).
+// Jumlah barisnya mengikuti jumlah item.
+import HeroBackground from "@/components/sections/hero/HeroBackground.astro";
+import type { HeroProps } from "@/components/sections/hero/types";
+
+type Props = HeroProps;
+
+const { title, description, image, size = "xl", links, menuLinks } = Astro.props;
+const items = links ?? menuLinks ?? [];
+---
+
+<section
+  class:list={[
+    "relative isolate overflow-hidden",
+    size === "xl" ? "min-h-[560px] md:min-h-[680px]" : "min-h-[440px] md:min-h-[520px]",
+  ]}
+>
+  <HeroBackground image={image} />
+
+  <!-- md:pb-36: ruang untuk section berikutnya yang memakai pulldown (ui/Section menarik ke atas 96px) -->
+  <div class="container-page py-10 md:pt-20 md:pb-36">
+    <div class="max-w-xl rounded-sm bg-background p-6 shadow-xl shadow-black/20 md:p-10">
+      <h1 class:list={["text-balance", size === "xl" ? "text-h1" : "text-h2"]}>{title}</h1>
+      {description && <p class="mt-4 text-body text-muted-foreground">{description}</p>}
+
+      {
+        items.length > 0 && (
+          <ul class="mt-6 divide-y divide-border border-t border-border md:mt-8">
+            {items.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="group flex items-center gap-4 px-2 py-4 transition-colors duration-300 ease-out-quart hover:bg-background-alt md:px-3"
+                >
+                  <span class="flex-1">
+                    <span class="block text-h4 text-primary">{item.label}</span>
+                    {item.description && <span class="mt-0.5 block text-small text-muted-foreground">{item.description}</span>}
+                  </span>
+                  <svg class="size-5 shrink-0 text-primary" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="m7.5 4 6 6-6 6" stroke="currentColor" stroke-width="1.5" />
+                  </svg>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</section>

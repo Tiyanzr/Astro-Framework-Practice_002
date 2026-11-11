@@ -1,0 +1,65 @@
+---
+// CatalogGrid_001 (referensi: parametris.com, .software-grid): kartu kategori 3 kolom (2 di HP, 1 di HP sangat kecil).
+// Setiap kartu: gambar 1.65:1 (membesar halus saat hover), nomor aksen + nama kategori, ringkasan.
+// Daftar produk (link keluar, mis. ptc.com) tampil di bawah kartu kalau ada; di beranda pakai `limit: 0` untuk ringkasan saja.
+// Kartu menautkan ke anchor kategori: `more.href#<id>` (beranda → halaman software) atau `#<id>` di halaman itu sendiri.
+import { Image } from "astro:assets";
+import SplitHeading from "../parts/SplitHeading.astro";
+import { numbered } from "@/components/sections/types";
+import type { CatalogProps } from "@/components/sections/catalog/types";
+
+type Props = CatalogProps;
+
+const { categories, more, ...heading } = Astro.props;
+const anchor = (id: string) => `${more?.href ?? ""}#${id}`;
+---
+
+<SplitHeading {...heading} more={more} />
+<ul class="grid grid-cols-1 gap-x-[18px] gap-y-7 min-[391px]:grid-cols-2 md:grid-cols-3 md:gap-x-7 md:gap-y-10">
+  {
+    categories.map((category, i) => (
+      <li id={category.id} class="min-w-0 scroll-mt-28">
+        <a href={anchor(category.id)} class="group block">
+          <div class="aspect-[1.65] overflow-hidden bg-muted">
+            {category.image && (
+              <Image
+                src={category.image.src}
+                alt={category.image.alt}
+                widths={[400, 640, 960]}
+                sizes="(min-width: 48rem) 30vw, 45vw"
+                class="size-full object-cover transition-transform duration-400 group-hover:scale-[1.035]"
+              />
+            )}
+          </div>
+          <div class="mt-5 flex items-baseline gap-[9px] md:gap-4">
+            <span class="text-caption tracking-[0.1em] text-primary">{numbered(i)}</span>
+            <h3 class="m-0 text-ref-h3 md:text-[29px]">{category.title}</h3>
+          </div>
+          {category.summary && <p class="my-2 text-small text-muted-foreground md:text-body">{category.summary}</p>}
+        </a>
+        {
+          category.items.length > 0 && (
+            <ul class="mt-[25px]">
+              {category.items.map((item) => (
+                <li class="border-t border-border py-3 text-[15px]">
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target={item.href.startsWith("http") ? "_blank" : undefined}
+                      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      class="hover:text-primary hover:underline"
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    item.name
+                  )}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </li>
+    ))
+  }
+</ul>

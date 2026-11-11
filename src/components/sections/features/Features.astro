@@ -1,10 +1,8 @@
 ---
-// Pintu masuk daftar kapabilitas/fitur (`type: features`): judul + penjelasan per baris, diisi `items` di YAML halaman.
-// Daftar variasi: ./variants.ts.
-import WrappedVariant from "../WrappedVariant.astro";
-import { featuresVariants } from "./variants";
+// Pintu masuk daftar kapabilitas bernomor (`type: features`). Variasi: kits/<kit>/features/.
+import KitVariant from "../KitVariant.astro";
 
-const { variant = "FeaturesBasic_001", ...props } = Astro.props;
+const { variant, kit, pageKit, ...props } = Astro.props;
 ---
 
-<WrappedVariant section="features" variants={featuresVariants} variant={variant} {...props} />
+<KitVariant section="features" wrap variant={variant} kit={kit} pageKit={pageKit} {...props} />

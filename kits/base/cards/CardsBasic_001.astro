@@ -1,0 +1,22 @@
+---
+// CardsBasic_001: versi bare minimum (tanpa desain). Judul section + daftar kartu sebagai teks dan link.
+import BasicHeading from "../parts/BasicHeading.astro";
+import type { CardsProps } from "@/components/sections/cards/types";
+
+type Props = CardsProps;
+
+const { items, linkLabel: _linkLabel, more, ...heading } = Astro.props;
+---
+
+<BasicHeading {...heading} />
+<ul>
+  {
+    items.map((item) => (
+      <li>
+        {item.href ? <a href={item.href}>{item.title}</a> : item.title}
+        {item.description && <> — {item.description}</>}
+      </li>
+    ))
+  }
+</ul>
+{more && <p><a href={more.href}>{more.label}</a></p>}

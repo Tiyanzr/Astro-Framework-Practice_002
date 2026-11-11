@@ -1,0 +1,143 @@
+---
+// /prototype/kits: semua kit desain di kits/ (dibaca otomatis lewat src/lib/kits.ts).
+// - Ringkasan (bawaan): per kit nama, pembuat, keterangan, tema, section yang sudah dibuat, section yang masih memakai base,
+//   dan di mana kit itu dipakai (site.yaml › kit, `kit:` di YAML halaman).
+// - Pilih kit + halaman di bar atas (?k=, ?h=) = halaman situs itu dirender utuh dengan kit tersebut (navbar, semua section,
+//   footer), untuk menilai satu kit secara keseluruhan. Isi tetap dari YAML halaman; variasi dipetakan begini:
+//   nama yang sama ada di kit itu → dipakai; kalau tidak → variasi pertama kit itu untuk section tersebut; kalau kit itu
+//   belum punya section tersebut → base. Pratinjau ini tidak mengubah YAML apa pun.
+import { getCollection } from "astro:content";
+import PrototypeLayout from "@/prototype/PrototypeLayout.astro";
+import Navbar from "@/components/layout/navbar/Navbar.astro";
+import Footer from "@/components/layout/footer/Footer.astro";
+import Sections from "@/components/sections/Sections.astro";
+import { getSite, pageHref, type PageSection } from "@/lib/content";
+import { BASE_KIT, getKit, kits, refOf, resolveVariant, variantsOf } from "@/lib/kits";
+import { control } from "@/prototype/controls";
+
+const SUMMARY = "ringkasan";
+const site = await getSite();
+const pages = (await getCollection("pages")).sort((a, b) => Number(a.id !== "home") - Number(b.id !== "home") || a.id.localeCompare(b.id));
+
+// Bar atas
+const kitControl = control(Astro.url, "k", "Kit", [
+  { value: SUMMARY, label: "Ringkasan semua kit" },
+  ...kits.map((k) => ({ value: k.id, label: `Pratinjau kit ${k.id}${k.id === site.kit ? " (kit situs)" : ""}` })),
+]);
+const pageControl = control(
+  Astro.url,
+  "h",
+  "Halaman",
+  pages.map((p) => ({ value: p.id, label: `Halaman ${pageHref(p.id)}` })),
+  "home",
+);
+const previewKit = kitControl.value === SUMMARY ? undefined : kitControl.value;
+
+/** Variasi untuk section `section` di kit `kit`, berdasarkan `ref` yang ditulis YAML (di kit `sourceKit`). */
+function pickFor(section: string, ref: string | undefined, sourceKit: string, kit: string) {
+  let name: string | undefined;
+  try {
+    name = ref ? resolveVariant(section, ref, sourceKit).name : undefined;
+  } catch {
+    name = undefined;
+  }
+  const own = variantsOf(kit, section);
+  if (name && own[name]) return refOf(kit, name);
+  const first = Object.keys(own)[0];
+  return first ? refOf(kit, first) : resolveVariant(section, undefined, BASE_KIT).ref;
+}
+
+// Ringkasan
+const allSections = Object.keys(getKit(BASE_KIT)?.sections ?? {}).sort();
+const rows = kits.map((kit) => {
+  const sections = Object.entries(kit.sections).map(([section, variants]) => ({ section, count: Object.keys(variants).length }));
+  const missing = kit.id === BASE_KIT ? [] : allSections.filter((s) => !kit.sections[s]);
+  const usedBy = [
+    ...(site.kit === kit.id ? [{ label: "seluruh situs (site.yaml)", href: undefined }] : []),
+    ...pages.filter((p) => p.data.kit === kit.id).map((p) => ({ label: pageHref(p.id), href: pageHref(p.id) })),
+  ];
+  return { kit, sections, missing, usedBy };
+});
+
+// Pratinjau
+const page = previewKit ? pages.find((p) => p.id === pageControl.value) : undefined;
+const sourceKit = page?.data.kit ?? site.kit;
+const previewSections = previewKit && page
+  ? page.data.sections.map((s) => ({ ...s, variant: pickFor(s.type, s.variant, sourceKit, previewKit) }) as PageSection)
+  : [];
+const navbarRef = previewKit ? pickFor("navbar", site.navbar.variant, site.kit, previewKit) : undefined;
+const footerRef = previewKit ? pickFor("footer", site.footer.variant, site.kit, previewKit) : undefined;
+---
+
+<PrototypeLayout title="Kit" controls={previewKit ? [kitControl, pageControl] : [kitControl]}>
+  {
+    previewKit && page ? (
+      <div data-kit={previewKit} class="relative flex min-h-screen flex-col overflow-x-clip [transform:translateZ(0)]">
+        <Navbar variant={navbarRef} pageKit={previewKit} />
+        <main class="flex-1">
+          <Sections sections={previewSections} kit={previewKit} />
+        </main>
+        <Footer variant={footerRef} pageKit={previewKit} />
+      </div>
+    ) : (
+      <section class="container-page section-y">
+        <h1 class="text-h2">Kit desain</h1>
+        <p class="mt-3 max-w-prose text-small text-muted-foreground">
+          {kits.length} kit di folder <code class="font-mono">kits/</code>. Satu kit = satu set desain utuh (navbar, section, footer, artikel)
+          dengan tema sendiri. Kit situs sekarang: <strong class="font-mono text-foreground">{site.kit}</strong> (site.yaml › kit). Section yang
+          belum dibuat sebuah kit otomatis memakai versi kit <code class="font-mono">base</code>. Pilih "Pratinjau kit" di bar atas untuk melihat
+          halaman situs dengan kit itu.
+        </p>
+
+        <div class="mt-8 overflow-x-auto">
+          <table class="w-full min-w-[820px] text-left text-small">
+            <thead class="border-b border-border font-mono text-eyebrow text-muted-foreground uppercase">
+              <tr>
+                <th class="py-2 pr-4 font-normal">Kit</th>
+                <th class="py-2 pr-4 font-normal">Keterangan</th>
+                <th class="py-2 pr-4 font-normal">Section (jumlah variasi)</th>
+                <th class="py-2 pr-4 font-normal">Masih memakai base</th>
+                <th class="py-2 pr-4 font-normal">Dipakai di</th>
+                <th class="py-2 font-normal">Pratinjau</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map(({ kit, sections, missing, usedBy }) => (
+                <tr class="border-b border-border align-top">
+                  <td class="py-3 pr-4">
+                    <span class="block font-mono">{kit.id}</span>
+                    <span class="block text-muted-foreground">{kit.config.name}</span>
+                  </td>
+                  <td class="py-3 pr-4">
+                    {kit.config.description ?? "—"}
+                    <span class="mt-1 block text-muted-foreground">
+                      {kit.config.author ? `Pembuat: ${kit.config.author} · ` : ""}
+                      {kit.hasTheme ? "tema sendiri (theme.css)" : "tema bawaan (global.css)"}
+                    </span>
+                  </td>
+                  <td class="py-3 pr-4 font-mono">{sections.map((s) => `${s.section} (${s.count})`).join(", ")}</td>
+                  <td class="py-3 pr-4 font-mono text-muted-foreground">{kit.id === BASE_KIT ? "— (kit cadangan)" : missing.join(", ") || "—"}</td>
+                  <td class="py-3 pr-4">
+                    {usedBy.length === 0 ? (
+                      <span class="text-muted-foreground">—</span>
+                    ) : (
+                      usedBy.map((u, j) => (
+                        <>
+                          {j > 0 && ", "}
+                          {u.href ? <a href={u.href} class="underline underline-offset-2 hover:text-primary">{u.label}</a> : u.label}
+                        </>
+                      ))
+                    )}
+                  </td>
+                  <td class="py-3">
+                    <a href={`/prototype/kits?k=${kit.id}&h=home`} class="underline underline-offset-2 hover:text-primary">Beranda</a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )
+  }
+</PrototypeLayout>

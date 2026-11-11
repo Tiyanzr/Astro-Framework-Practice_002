@@ -1,0 +1,29 @@
+---
+// CatalogBasic_001: versi bare minimum (tanpa desain). Setiap kategori: judul, ringkasan, daftar produk sebagai teks/link.
+// Setiap kategori punya id = nama file, jadi bisa ditautkan langsung, mis. /software#category-1.
+import BasicHeading from "../parts/BasicHeading.astro";
+import type { CatalogProps } from "@/components/sections/catalog/types";
+
+type Props = CatalogProps;
+
+const { categories, more, ...heading } = Astro.props;
+---
+
+<BasicHeading {...heading} />
+{
+  categories.map((category) => (
+    <div id={category.id}>
+      <h3>{category.title}</h3>
+      {category.summary && <p>{category.summary}</p>}
+      <ul>
+        {category.items.map((item) => (
+          <li>
+            {item.href ? <a href={item.href}>{item.name}</a> : item.name}
+            {item.description && <> — {item.description}</>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))
+}
+{more && <p><a href={more.href}>{more.label}</a></p>}

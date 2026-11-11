@@ -1,0 +1,54 @@
+---
+// ContactBasic_001: versi bare minimum (tanpa desain). Info kontak sebagai teks/link + formulir HTML polos.
+// Formulir masih mockup: tombol kirim tidak mengirim ke mana pun (nanti bisa memakai Netlify Forms).
+import BasicHeading from "../parts/BasicHeading.astro";
+import { telHref, type ContactProps } from "@/components/sections/contact/types";
+
+type Props = ContactProps;
+
+const { contact, form, actions = [], addressLabel, ...heading } = Astro.props;
+---
+
+<BasicHeading {...heading} />
+<address class="not-italic">
+  {addressLabel && <p>{addressLabel}</p>}
+  {contact.address.map((line) => <p>{line}</p>)}
+  {contact.phone && <p><a href={telHref(contact.phone)}>{contact.phone}</a></p>}
+  {contact.phones.map((p) => <p>{p.label}: {p.number}</p>)}
+  {contact.email && <p><a href={`mailto:${contact.email}`}>{contact.email}</a></p>}
+  {contact.emails.map((e) => <p>{e.label}: <a href={`mailto:${e.email}`}>{e.email}</a></p>)}
+  {contact.hours && <p>{contact.hours}</p>}
+</address>
+{
+  actions.length > 0 && (
+    <ul>
+      {actions.map((action) => (
+        <li>
+          <a href={action.href}>{action.label}</a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+{
+  form && (
+    <form method="post" onsubmit="event.preventDefault()">
+      {form.fields.map((field) => (
+        <p>
+          <label>
+            {field.label}
+            <br />
+            {field.type === "textarea" ? (
+              <textarea name={field.name} required={field.required} rows={4} class="border" />
+            ) : (
+              <input type={field.type} name={field.name} required={field.required} class="border" />
+            )}
+          </label>
+        </p>
+      ))}
+      <p>
+        <button type="submit" class="border px-2">{form.submit}</button>
+      </p>
+    </form>
+  )
+}

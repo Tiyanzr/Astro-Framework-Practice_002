@@ -1,0 +1,33 @@
+---
+// NavbarBasic_001: versi bare minimum (tanpa desain). Nama situs, menu, dan tombol aksi sebagai link teks biasa.
+import type { NavbarProps } from "@/components/layout/navbar/types";
+
+type Props = NavbarProps;
+
+const { siteName, cta, links } = Astro.props;
+---
+
+<header class="container-page">
+  <p><a href="/">{siteName}</a></p>
+  <nav aria-label="Menu utama">
+    <ul>
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+            {link.children && link.children.length > 0 && (
+              <ul class="pl-4">
+                {link.children.map((child) => (
+                  <li>
+                    <a href={child.href}>{child.label}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <p><a href={cta.href}>{cta.label}</a></p>
+</header>

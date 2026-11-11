@@ -22,27 +22,30 @@ const notes: Record<string, string> = {
   media: "Section gambar: banner foto & gambar lebar",
   features: "Daftar kapabilitas bernomor",
   benefits: "Manfaat: grid ikon, tag, dua kolom",
-  variants: "Daftar SEMUA variasi: dipakai / tidak dipakai, dan halaman yang memakainya",
+  variants: "Daftar SEMUA variasi di semua kit: dipakai / tidak dipakai, dan halaman yang memakainya",
+  kits: "Semua kit desain: isi, tema, dipakai di mana, dan pratinjau halaman situs dengan kit tertentu",
 };
 
 // Pengelompokan daftar = folder kodenya, supaya jelas file mana yang diubah untuk tiap tampilan
 // (urutan grup & isi mengikuti daftar ini; template YAML tiap bagian ada di MODULES.md):
 // - global.css : token warna, font, jarak untuk seluruh situs (src/styles/global.css)
 // - ui         : komponen kecil yang dipakai banyak section (src/components/ui/)
-// - layout     : navbar & footer, ada di semua halaman, variasinya dipilih di site.yaml (src/components/layout/)
-// - sections   : modul yang disusun per halaman di `sections:` YAML, + halaman artikel (src/components/sections/)
+// - kits       : set desain utuh (kits/<kit>/), tempat semua variasi berada
+// - layout     : navbar & footer, ada di semua halaman, variasinya dipilih di site.yaml (pintu masuk src/components/layout/)
+// - sections   : modul yang disusun per halaman di `sections:` YAML, + halaman artikel (pintu masuk src/components/sections/)
 // - Tinjauan   : alat melihat hasil keseluruhan
 // File baru yang belum tercantum otomatis masuk grup "Lainnya".
 const groupDefs = [
   { name: "global.css", note: "src/styles/global.css · token warna, font, jarak untuk seluruh situs", pages: ["colors", "fonts"] },
   { name: "ui", note: "src/components/ui/ · komponen kecil yang dipakai banyak section", pages: ["ui"] },
-  { name: "layout", note: "src/components/layout/ · ada di semua halaman, variasinya dipilih di site.yaml", pages: ["navbar", "footer"] },
+  { name: "kits", note: "kits/<kit>/ · set desain utuh; semua variasi navbar, section, footer, artikel ada di sini", pages: ["kits"] },
+  { name: "layout", note: "variasi di kits/<kit>/navbar|footer/ · ada di semua halaman, dipilih di site.yaml", pages: ["navbar", "footer"] },
   {
     name: "sections",
-    note: "src/components/sections/ · disusun per halaman di sections YAML (template di MODULES.md); post = halaman artikel",
+    note: "variasi di kits/<kit>/<section>/ · disusun per halaman di sections YAML (template di MODULES.md); post = halaman artikel",
     pages: ["hero", "intro", "media", "cards", "catalog", "features", "benefits", "posts", "text", "cta", "contact", "post"],
   },
-  { name: "Tinjauan", note: "Semua variasi: dipakai di mana", pages: ["variants"] },
+  { name: "Tinjauan", note: "Semua variasi di semua kit: dipakai di mana", pages: ["variants"] },
 ];
 
 const files = Object.keys(import.meta.glob("./**/*.astro"))

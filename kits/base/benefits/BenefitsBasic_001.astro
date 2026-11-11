@@ -1,0 +1,33 @@
+---
+// BenefitsBasic_001: versi bare minimum (tanpa desain). Judul section + daftar judul — penjelasan (+ rincian) + paragraf penutup.
+// Ikon diabaikan.
+import BasicHeading from "../parts/BasicHeading.astro";
+import type { BenefitsProps } from "@/components/sections/benefits/types";
+
+type Props = BenefitsProps;
+
+const { items, note, ...heading } = Astro.props;
+---
+
+<BasicHeading {...heading} />
+<ul>
+  {
+    items.map((item) => (
+      <li>
+        {item.title}
+        {item.description && <> — {item.description}</>}
+        {item.entries.length > 0 && (
+          <dl>
+            {item.entries.map((entry) => (
+              <>
+                <dt>{entry.term}</dt>
+                <dd>{entry.detail}</dd>
+              </>
+            ))}
+          </dl>
+        )}
+      </li>
+    ))
+  }
+</ul>
+{note && <p>{note}</p>}

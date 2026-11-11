@@ -1,7 +1,7 @@
 # Parametrik — Design System & Arsitektur
 
 > Dokumen hidup: **kondisi terkini** sistem desain dan arsitektur situs, ditambah riwayat keputusan di bagian paling bawah.
-> Semua nilai warna/font/jarak terpasang sebagai token di [`src/styles/global.css`](src/styles/global.css); kalau mengubah token, ubah di sana **dan** catat di sini.
+> Semua nilai warna/font/jarak terpasang sebagai token di [`src/styles/global.css`](src/styles/global.css) (tema bawaan) dan `kits/<kit>/theme.css` (tema kit); kalau mengubah token, ubah di sana **dan** catat di sini.
 > Contoh visual: `/prototype` (hanya saat `astro dev`).
 > Ringkasan proyek, cara kerja, status, rencana: [AGENTS.md](AGENTS.md). Template YAML siap tempel: [MODULES.md](MODULES.md).
 > Terakhir diperbarui: **2026-11-10**.
@@ -14,16 +14,17 @@
 4. [Jarak, radius, gerak](#jarak-radius-gerak)
 5. [Logo](#logo)
 6. [Halaman: data-driven dari YAML](#halaman-data-driven-dari-yaml)
-7. [Section & variasi](#section--variasi)
-8. [Katalog section & variasi](#katalog-section--variasi)
-9. [Navbar, footer, artikel](#navbar-footer-artikel)
-10. [Komponen UI bersama](#komponen-ui-bersama)
-11. [Koleksi konten (skema)](#koleksi-konten-skema)
-12. [SEO & indexing](#seo--indexing)
-13. [Pemakaian variasi & prototype](#pemakaian-variasi--prototype)
-14. [Struktur file](#struktur-file)
-15. [Aturan](#aturan)
-16. [Riwayat keputusan](#riwayat-keputusan)
+7. [Kit desain](#kit-desain)
+8. [Section & variasi](#section--variasi)
+9. [Katalog section & variasi](#katalog-section--variasi)
+10. [Navbar, footer, artikel](#navbar-footer-artikel)
+11. [Komponen UI bersama](#komponen-ui-bersama)
+12. [Koleksi konten (skema)](#koleksi-konten-skema)
+13. [SEO & indexing](#seo--indexing)
+14. [Pemakaian variasi & prototype](#pemakaian-variasi--prototype)
+15. [Struktur file](#struktur-file)
+16. [Aturan](#aturan)
+17. [Riwayat keputusan](#riwayat-keputusan)
 
 ---
 
@@ -32,26 +33,29 @@
 - **Acuan sekarang: parametris.com.** Isi, URL, susunan halaman, dan gaya modul direkonstruksi dari export situs asli klien (`reference/Parametris_Complete_Source_v8/`: `app.js` = susunan halaman, `data.js` = teks ID/EN, `products.js` = katalog PTC, `style.css` = gaya).
 - **Data-driven:** semua kalimat ada di `src/content/` (YAML/Markdown). Komponen tidak berisi teks atau warna hardcode. **Menambah konten = menambah file.**
 - **Halaman = daftar section** di YAML; **section = fungsi, variasi = tampilan.** Ganti tampilan cukup ganti `variant:`.
-- **Dua palet tersedia**, dipilih sekali di `site.yaml › theme`:
-  - `parametris` (**aktif**): palet, font Arial, dan jarak parametris.com (class `.theme-parametris`).
-  - `situs`: palet 5 warna + putih + hitam buatan sendiri (token `:root`). Disimpan sebagai cadangan.
+- **Desain dikelola sebagai kit:** `kits/<kit>/` = satu set desain utuh (variasi navbar, section, footer, artikel + tema). Situs memilih kit di `site.yaml › kit` (sekarang `parametris`); halaman boleh memakai kit lain. Lihat [Kit desain](#kit-desain).
+- **Dua tema tersedia:**
+  - **tema kit parametris** (**aktif**): palet, font Arial, dan jarak parametris.com (`kits/parametris/theme.css`, `[data-kit="parametris"]`).
+  - **tema bawaan** (dulu "palet situs"): 5 warna + putih + hitam buatan sendiri (token `:root` di `global.css`). Dipakai kit `awal`, dan kit apa pun yang tidak punya `theme.css`.
 - **Light mode saja.** Section gelap memakai `theme-dark` (lewat `tone: dark`). Tidak ada tombol ganti tema.
-- **Prinsip token:** komponen memakai token semantik (`bg-background`, `text-primary`, `border-border`, `text-muted-foreground`), bukan kode warna. Karena itu satu variasi bisa tampil benar di kedua palet.
+- **Prinsip token:** komponen memakai token semantik (`bg-background`, `text-primary`, `border-border`, `text-muted-foreground`), bukan kode warna. Karena itu satu variasi bisa tampil benar di tema kit mana pun.
 
 ## Tema & palet
 
-### Memilih palet
+### Tema mengikuti kit
 
 | Di mana | Caranya |
 |---|---|
-| Seluruh situs | `src/content/site.yaml › theme: parametris \| situs`. `BaseLayout` memasang class `theme-parametris` di `<body>` kalau `parametris` |
-| Prototype | combo box **Palet** (`?palet=situs\|referensi`), bawaan = palet situs yang aktif |
+| Seluruh situs | `src/content/site.yaml › kit`. `BaseLayout` memasang `data-kit="<kit>"` di `<body>` dan memuat semua `kits/*/theme.css` |
+| Satu halaman | `kit:` di YAML halaman → `data-kit` body halaman itu |
+| Satu section dari kit lain | pintu masuk membungkusnya `<div data-kit="<kit>" class="contents">` (tanpa efek tata letak) |
+| Prototype | setiap variasi tampil dengan tema kit-nya sendiri; `/prototype/ui` punya combo box **Tema** (`?tema=<kit>`) |
 
-`.theme-parametris` hanya **menimpa nilai token semantik** + font + jarak, jadi komponen tidak perlu tahu palet mana yang aktif.
+`theme.css` sebuah kit hanya **menimpa nilai token semantik** + font + jarak di dalam `[data-kit="<kit>"]`, jadi komponen tidak perlu tahu tema mana yang aktif. `global.css` memasang tema bawaan di `:root` **dan** `:where([data-kit])` (spesifisitas 0): setiap pembungkus kit mulai dari tema bawaan, lalu `theme.css` kit itu (spesifisitas lebih tinggi) menimpanya. Kit tanpa `theme.css` (mis. `awal`) jadi tetap bertema bawaan walaupun bersarang di halaman ber-kit parametris. Kit `base` tidak pernah dibungkus: versi polos selalu ikut tema di sekitarnya.
 
-### Palet aktif: parametris.com (`.theme-parametris`)
+### Tema kit parametris (aktif, `kits/parametris/theme.css`)
 
-| Token semantik | Terang | Gelap (`.theme-parametris .theme-dark`) |
+| Token semantik | Terang | Gelap (`[data-kit="parametris"] .theme-dark`) |
 |---|---|---|
 | `background` | `#FFFFFF` | `#11262C` |
 | `background-alt` | `#F2F3EF` (latar closing/CTA) | `#193039` |
@@ -66,7 +70,7 @@
 
 Font: **Arial** (`--display-family`, `--heading-family`, `font-family`). Jarak: lihat [Jarak](#jarak-radius-gerak).
 
-### Palet cadangan: situs (`:root`, `theme: situs`)
+### Tema bawaan (`global.css` › `:root`; kit `awal` dan kit tanpa `theme.css`)
 
 **5 warna + putih + hitam** (Coolors `001F3E · 1E4890 · 00804D · 75C462 · DBE64C`):
 
@@ -93,9 +97,9 @@ Font: **Arial** (`--display-family`, `--heading-family`, `font-family`). Jarak: 
 
 **Token semantik** (nama mengikuti shadcn): terang `background` white · `foreground` black · `primary` green · `highlight` blue · `ring` green; gelap `background` midnight · `foreground` white · `primary` lime · `primary-foreground` midnight · `highlight` mantis. `logo` = `#AAA753` di keduanya.
 
-**Tone tambahan palet situs:** `theme-green` (latar green, teks putih, tombol lime; maks. satu per halaman) dan `theme-olive` (latar warna logo `#AAA753`, teks putih). ⚠️ Putih di olive hanya 2.5 : 1 (di bawah WCAG), keputusan sadar; jangan menaruh logo di atas olive.
+**Tone tambahan tema bawaan:** `theme-green` (latar green, teks putih, tombol lime; maks. satu per halaman) dan `theme-olive` (latar warna logo `#AAA753`, teks putih). ⚠️ Putih di olive hanya 2.5 : 1 (di bawah WCAG), keputusan sadar; jangan menaruh logo di atas olive.
 
-**Kontras penting (palet situs):** hitam/midnight/blue/green di putih ✅ (21 / 16.6 / 8.8 / 5.0 : 1) · mantis & lime di putih ❌ untuk teks (2.1 / 1.4 : 1) · lime/mantis di midnight ✅ (12.2 / 7.8 : 1) · green di midnight ⚠️ hanya teks besar (3.3 : 1) · blue di midnight ❌ (1.9 : 1). Aturan: di latar putih green = aksi, blue = link; di section gelap lime = aksi, mantis = link; satu aksen dominan per section.
+**Kontras penting (tema bawaan):** hitam/midnight/blue/green di putih ✅ (21 / 16.6 / 8.8 / 5.0 : 1) · mantis & lime di putih ❌ untuk teks (2.1 / 1.4 : 1) · lime/mantis di midnight ✅ (12.2 / 7.8 : 1) · green di midnight ⚠️ hanya teks besar (3.3 : 1) · blue di midnight ❌ (1.9 : 1). Aturan: di latar putih green = aksi, blue = link; di section gelap lime = aksi, mantis = link; satu aksen dominan per section.
 
 ### Tone section (`tone:` di YAML)
 
@@ -140,7 +144,7 @@ Semua judul & teks **Arial**. Judul tipis (weight 400) dengan letter-spacing san
 Skala (`clamp()`): `text-display-xl` 48→88px/800 · `text-display` 40→64px/800 · `text-h1` 36→52px/800 · `text-h2` 28→40px/700 · `text-h3` 24px/700 · `text-h4` 20px/700 · `text-lead` 20px · `text-body` 16px · `text-small` 14px · `text-caption` 13px · `text-eyebrow` 12px/500/0.14em (pakai dengan `font-mono uppercase`).
 
 - Kandidat font lain masih terpasang untuk `/prototype/fonts` (Schibsted Grotesk, Hanken Grotesk, Instrument Sans; referensi awal Trim berbayar). Setelah final: hapus `@import`, `npm uninstall`, dan `src/prototype/pages/fonts.astro`.
-- Tailwind v4: `@theme inline` tidak bisa ditimpa per elemen, maka font judul memakai variabel `--display-family` / `--heading-family` di `:root` (dan ditimpa `.theme-parametris`).
+- Tailwind v4: `@theme inline` tidak bisa ditimpa per elemen, maka font judul memakai variabel `--display-family` / `--heading-family` di `:root` (dan ditimpa `kits/parametris/theme.css`).
 
 ## Jarak, radius, gerak
 
@@ -242,26 +246,61 @@ Urutan bebas, section yang sama boleh dipakai berkali-kali, isi selalu per halam
 
 Halaman uji (dev saja): `src/prototype/content/pages/contoh-halaman.yaml` → `/contoh-halaman`.
 
+## Kit desain
+
+**Kit = satu set desain utuh dari satu orang/tim** (navbar, section, footer, halaman artikel, dan temanya), disimpan di `kits/<kit>/` di root proyek (di luar `src/`). Kit dibaca otomatis oleh `src/lib/kits.ts`: kit baru = folder baru, variasi baru = file baru, tanpa daftar manual.
+
+```
+kits/<kit>/
+├── kit.ts                      ← { name, author?, description?, defaults? } (defaults = tone/width/pulldown bawaan per variasi)
+├── theme.css                   ← (opsional) token kit di dalam [data-kit="<kit>"]; CSS biasa (tanpa @apply/@theme)
+├── <section>/<Nama><Gaya>_<NNN>.astro   ← 1 file = 1 variasi (section = hero, intro, media, cards, catalog, features,
+│                                           benefits, posts, text, cta, contact, navbar, footer, post)
+└── parts/                      ← komponen bantu kit itu (bukan variasi); <section>/parts/ juga boleh
+```
+
+| Kit | Isi | Tema | Dipakai |
+|---|---|---|---|
+| `base` | versi polos semua section (`<Nama>Basic_001`, 14 variasi) | ikut sekitarnya | cadangan otomatis; **jangan dihapus** |
+| `parametris` | gaya parametris.com: hero teks, galeri kartu, katalog, fitur, manfaat, artikel, CTA, kontak, navbar dropdown, footer kolom, `PostArticle_001/_002` | `theme.css` (ink + emas, Arial) | **seluruh situs** (`site.yaml › kit`) |
+| `awal` | desain pertama sebelum referensi: `HeroImage_001/_002`, `IntroMedia_001/_002`, `NavbarPanel_001`, `FooterSimple_001` (fastems.com, dhl.com) | tema bawaan | `/contoh-halaman` (uji) |
+
+**Memilih variasi** (`variant:` di YAML halaman, `site.yaml › navbar/footer/post.variant`, frontmatter artikel):
+
+| Tulisan | Artinya |
+|---|---|
+| `HeroText_001` | dicari di **kit aktif**, lalu di `base` |
+| `parametris/HeroText_001` | dari kit tertentu, apa pun kit aktifnya (section dibungkus tema kit itu) |
+| (kosong) | variasi pertama (urut nama) kit aktif; kalau kit itu belum punya section ini → `base` |
+
+**Kit aktif berlapis:** `site.yaml › kit` (seluruh situs) → `kit:` di YAML halaman (isi halaman itu) → `kit/Nama` (satu section). **Navbar, footer, dan halaman artikel selalu memakai kit situs**, juga di halaman ber-kit lain, supaya navigasi konsisten.
+
+**Kontrak:** props setiap section ada di `src/components/<sections|layout>/<section>/types.ts`, sama untuk semua kit, jadi isi YAML bisa dipakai kit mana pun. Data (menu, artikel, produk, kontak, halaman anak) disiapkan **pintu masuk** di `src/` lalu dikirim sebagai props; file kit tidak membaca konten sendiri. Blok bersama yang boleh dipakai kit mana pun: `src/components/ui/`, `sections/hero/HeroBackground.astro`, `sections/post/blocks/` (+ `prose.css`), `sections/types.ts`.
+
+**Membuat kit baru:** salin `kits/base/` (atau kit lain) → ubah `kit.ts` → (opsional) `theme.css` meniru `kits/parametris/theme.css` → desain ulang variasinya; section yang dihapus otomatis memakai `base`. Nama file boleh sama dengan kit lain (yang dipakai = kit aktif). Lihat hasilnya di `/prototype/kits?k=<kit>&h=home`. Pakai di situs: `site.yaml › kit`, atau `kit:` di satu halaman.
+
+Kenapa di luar `src/`: kit adalah "paket desain" yang bisa diserahkan/diganti utuh (masukan atasan 2026-11-10), dan kelak bisa dijadikan npm package tanpa mengubah situs. Tailwind memindainya lewat `@source "../../kits"` di `global.css`; Astro membacanya lewat `import.meta.glob("/kits/...")`.
+
 ## Section & variasi
 
 ### Susunan folder (standar semua section)
 
 ```
 src/components/sections/<nama>/          (navbar/footer: src/components/layout/<nama>/)
-├── <Nama>.astro                ← pintu masuk: ambil data, pilih variasi (lewat WrappedVariant)
-├── variants.ts                 ← deteksi otomatis file <Nama>*_*.astro (import.meta.glob) + bawaan per variasi (opsional)
-├── types.ts                    ← props bersama SEMUA variasi
+├── <Nama>.astro                ← pintu masuk: ambil data, lalu KitVariant (pilih variasi dari kit + bungkus)
+└── types.ts                    ← props bersama SEMUA variasi di semua kit (kontrak)
+kits/<kit>/<nama>/
 └── <Nama><Gaya>_<NNN>.astro    ← 1 file = 1 variasi
 ```
 
 | Bagian | Aturan |
 |---|---|
 | Nama variasi | `<Nama><Gaya>_<NNN>`. Gaya = bentuk dasar (`Text`, `Gallery`, `Rows`, …); nomor 3 digit mulai `_001`. Gaya baru mulai lagi `_001` |
-| Basic | setiap section punya `<Nama>Basic_001`: HTML polos tanpa desain, hanya `container-page` + `section-y`. Bawaan kalau `variant:` tidak diisi, dan bukti semua data sampai ke halaman. Jangan dihapus |
-| Menambah variasi | tambah file; tidak ada daftar manual. Langsung bisa dipilih, muncul di `/prototype/<nama>` dan `/prototype/variants` (sebagai "tidak dipakai" sampai ditulis di YAML) |
+| Basic | setiap section punya `<Nama>Basic_001` di kit `base`: HTML polos tanpa desain, hanya `container-page` + `section-y`. Cadangan untuk kit yang belum punya section itu, dan bukti semua data sampai ke halaman. Jangan dihapus |
+| Menambah variasi | tambah file di `kits/<kit>/<nama>/`; tidak ada daftar manual. Langsung bisa dipilih, muncul di `/prototype/<nama>`, `/prototype/variants`, dan `/prototype/kits` (sebagai "tidak dipakai" sampai ditulis di YAML) |
 | Props sama | semua variasi menerima props yang sama (`types.ts`), jadi ganti `variant:` tidak merusak isi. Variasi boleh **mengabaikan** field (mis. Basic tidak menampilkan gambar kartu); field yang dikosongkan bagiannya hilang |
-| Helper | `src/lib/variants.ts`: `collectVariants`, `isBasic`, `resolveVariant`, `pickVariant` (pesan error menyebut pilihan yang ada) |
-| Kode bersama | `sections/WrappedVariant.astro` (pilih variasi + bungkus `ui/Section`), `sections/BasicHeading.astro` (judul versi Basic), `sections/SplitHeading.astro` (judul gaya parametris.com), `sections/types.ts` (`SectionHeading`, `SectionImage`, `Link`, `numbered(i)`) |
+| Helper | `src/lib/kits.ts`: `kits`, `resolveVariant(section, ref, kit)`, `isBasic`, `allRefs`, `variantsOf` (pesan error menyebut pilihan yang ada) |
+| Kode bersama | `sections/KitVariant.astro` (pilih variasi dari kit + bungkus `ui/Section` + bungkus `[data-kit]` kalau beda kit), `sections/types.ts` (`SectionHeading`, `SectionImage`, `Link`, `numbered(i)`). Bantu per kit: `kits/base/parts/BasicHeading.astro`, `kits/parametris/parts/SplitHeading.astro` |
 
 **Mengganti variasi aman ke dua arah:** pindah dari variasi tanpa tombol ke variasi bertombol tidak error; tombol muncul kalau `actions` diisi di YAML. Yang perlu diwaspadai: **field salah ketik dibuang diam-diam** oleh zod (mis. `action:` → tombol hilang tanpa pesan). Cocokkan dengan MODULES.md.
 
@@ -275,13 +314,13 @@ Mengatur latar, lebar, dan posisi, terpisah dari isi (pola `b-section` + `s-cont
 | `width` | `full` · `contained` | `contained` = panel `rounded-xl` di dalam gutter |
 | `pulldown` | `true` / `false` | ditarik ke atas 96px (`md:-mt-24`) menumpuk section sebelumnya, hanya mulai `md` |
 
-- **Bawaan per variasi** di `variants.ts` (`introDefaults`, `ctaDefaults`). Nilai di YAML selalu menang. Contoh: `CtaClosing_001` bawaan `tone: alt`.
-- **Variasi Basic selalu mengabaikan `tone/width/pulldown`.**
+- **Bawaan per variasi** di `kits/<kit>/kit.ts › defaults`. Nilai di YAML selalu menang. Contoh: `CtaClosing_001` bawaan `tone: alt` (kit parametris).
+- **Variasi Basic mengabaikan `tone/width/pulldown` dari YAML** (hanya bawaan kit `base`, mis. `IntroBasic_001` `width: full`).
 - Section `media` dan `hero` **tidak** dibungkus `ui/Section` (mengatur latarnya sendiri).
 
 ## Katalog section & variasi
 
-Pemakaian per 2026-11-09: **dipakai** = dipakai di situs, **base** = versi Basic, **tidak dipakai** = desain yang tidak dipakai saat ini (data terbaru otomatis di `/prototype/variants`). Field per variasi: [MODULES.md](MODULES.md).
+Pemakaian per 2026-11-10: **dipakai** = dipakai di situs, **base** = versi Basic, **tidak dipakai** = desain yang tidak dipakai saat ini (data terbaru otomatis di `/prototype/variants`). Kit tiap variasi: `Basic` = `base`, foto/intro/panel/footer sederhana (`HeroImage_*`, `IntroMedia_*`, `NavbarPanel_001`, `FooterSimple_001`) = `awal`, sisanya = `parametris`. File di `kits/<kit>/<section>/`. Field per variasi: [MODULES.md](MODULES.md).
 
 ### Hero — `sections/hero/`
 
@@ -295,7 +334,7 @@ Isi: `eyebrow`, `aside` (`label`, `href?`), `title`, `accent`, `description`, `a
 | `HeroImage_001` | tidak dipakai | foto penuh + gradasi gelap, teks putih kiri bawah (palet situs) |
 | `HeroImage_002` | tidak dipakai | foto penuh + kartu putih berisi judul dan daftar link (`links`, kosong = item menu); referensi fastems.com |
 
-`HeroBackground.astro` = latar foto / placeholder bergaris untuk `HeroImage_*`. Foto hero ideal ≥ 1600px lanskap.
+`sections/hero/HeroBackground.astro` (bersama) = latar foto / placeholder bergaris untuk `HeroImage_*` dan `HeroText_002`. Foto hero ideal ≥ 1600px lanskap.
 
 ### Intro — `sections/intro/`
 
@@ -391,9 +430,9 @@ Isi: judul section, `contact` (menimpa `site.yaml › contact` untuk section ini
 
 ## Navbar, footer, artikel
 
-Ketiganya **mandatory**: berlaku di semua halaman, variasinya dipilih sekali di `site.yaml`.
+Ketiganya **mandatory**: berlaku di semua halaman, variasinya dipilih sekali di `site.yaml` dan dicari di **kit situs** (juga di halaman yang memakai kit lain).
 
-### Navbar — `layout/navbar/`
+### Navbar — `kits/<kit>/navbar/`
 
 Variasi: `site.yaml › navbar.variant`. Item menu: `src/content/menu/*.yaml` (1 item = 1 file: `title`, `description?`, `href`, `order`, `children[]`). Item dengan `href: ""` = hanya judul dropdown (mis. **Produk** → Software, Internet of Things). Tombol CTA: `site.yaml › cta`.
 
@@ -403,7 +442,7 @@ Variasi: `site.yaml › navbar.variant`. Item menu: `src/content/menu/*.yaml` (1
 | `NavbarDropdown_001` | **dipakai** | header **sticky** putih sedikit transparan + blur (`bg-background/96 backdrop-blur-md`, sengaja seperti referensi walau dulu diputuskan "tanpa glassmorphism"), dropdown sub-menu (`<details>`), CTA bergaris, tombol menu di HP (script kecil `data-navdrop`). Tombol bahasa EN/ID belum |
 | `NavbarPanel_001` | tidak dipakai | `fixed` 64px, latar solid tanpa glassmorphism, tombol menu → panel geser dari kanan (700ms `ease-out-expo` buka / 400ms tutup), lapisan `bg-midnight/60`, Escape menutup; hanya judul utama. Menaruh spacer `h-16` sendiri |
 
-### Footer — `layout/footer/`
+### Footer — `kits/<kit>/footer/`
 
 Variasi: `site.yaml › footer.variant`. Selalu di dasar layar (`body` flex `min-h-screen`, `main` `flex-1`).
 
@@ -423,9 +462,9 @@ Variasi: `site.yaml › footer.variant`. Selalu di dasar layar (`body` flex `min
 | `FooterColumns_001` | **dipakai** | 3 kolom (logo + tagline, menu, kontak) + copyright & sosial sebagai link teks |
 | `FooterSimple_001` | tidak dipakai | logo + alamat kiri, ikon sosial bulat kanan (dhl.com), garis + copyright |
 
-### Artikel — `sections/post/`
+### Artikel — `kits/<kit>/post/`
 
-Halaman `/posts/<slug>/`. Variasi hanya **menyusun** blok di `blocks/` (`PostHeader`, `PostCover`, `PostBody`, `PostToc`, `PostTags`, `PostRelated`), tidak menulis ulang isi.
+Halaman `/posts/<slug>/`. Variasi hanya **menyusun** blok bersama di `src/components/sections/post/blocks/` (`PostHeader`, `PostCover`, `PostBody`, `PostToc`, `PostTags`, `PostRelated`), tidak menulis ulang isi.
 
 | Aturan | Isi |
 |---|---|
@@ -519,9 +558,9 @@ Catatan: link internal ditulis tanpa garis miring akhir, canonical dengan; Netli
 
 **Tidak ada status atau daftar persetujuan.** Variasi yang ditulis di `variant:` (YAML halaman atau `site.yaml`) itulah yang tampil, **sama persis saat dev dan build**. Persetujuan terjadi lewat alur kerja:
 
-1. Buat variasi baru (file `<Nama><Gaya>_<NNN>.astro`) di folder section.
-2. Tinjau di `/prototype/<section>` (combo box variasi + contoh isi dari halaman mana pun).
-3. Kalau oke, tulis namanya di `variant:` YAML halaman.
+1. Buat variasi baru (file `<Nama><Gaya>_<NNN>.astro`) di `kits/<kit>/<section>/`, atau kit baru.
+2. Tinjau di `/prototype/<section>` (combo box variasi dari semua kit + contoh isi dari halaman mana pun) atau `/prototype/kits` (satu kit utuh di halaman situs).
+3. Kalau oke, tulis namanya di `variant:` YAML halaman (`Nama` atau `kit/Nama`), atau ganti `kit:`.
 4. Commit/push ke `demo` (Netlify) hanya kalau diminta.
 
 `/prototype/variants` dan combo box prototype memberi label yang **dihitung otomatis dari YAML** (`src/prototype/usage.ts`):
@@ -529,13 +568,13 @@ Catatan: link internal ditulis tanpa garis miring akhir, canonical dengan; Netli
 | Label | Artinya |
 |---|---|
 | **dipakai** | ditulis di YAML situs (halaman, `site.yaml`, frontmatter artikel) |
-| **base** | versi `<Nama>Basic_<NNN>` yang tidak dipakai. Jangan dihapus: bawaan kalau `variant:` kosong |
+| **base** | versi `<Nama>Basic_<NNN>` (kit `base`) yang tidak dipakai. Jangan dihapus: cadangan untuk kit yang belum punya section itu |
 | **tidak dipakai** | desain yang tidak dipakai saat ini. Boleh dihapus kalau tidak diperlukan lagi (riwayat tetap di git) |
 
 - Pemakaian di konten uji (`src/prototype/content/`) tetap ditampilkan dengan tanda "(uji)", tetapi tidak dihitung sebagai dipakai.
 - Nama variasi salah ketik di YAML = error saat dev/build yang menyebut semua pilihan yang ada.
 - Semua variasi (dipakai atau tidak) ikut di-compile saat build: file variasi yang error membuat build gagal.
-- Sekarang (2026-11-09): **17 dipakai, 7 tidak dipakai, 14 base**.
+- Sekarang (2026-11-10): **40 variasi di 3 kit** (17 dipakai, 8 tidak dipakai, 15 base; termasuk 2 salinan uji `... copy.astro`). Kunci pemakaian = `kit/Nama`, dihitung dengan aturan pencarian yang sama seperti saat render.
 
 ### Prototype (`/prototype`, hanya `astro dev`)
 
@@ -546,15 +585,16 @@ Daftar `/prototype` dikelompokkan **per folder kode**, supaya nama grup langsung
 | Grup | Halaman | Isi |
 |---|---|---|
 | **global.css** | colors, fonts | token warna, font, jarak untuk seluruh situs (`src/styles/global.css`) |
-| **ui** | ui | semua komponen `src/components/ui/` dengan semua pilihan props-nya (Button variant × size × square, TextLink, semua ikon di `src/assets/icons/`, SocialIcon, Logo, MediaPlaceholder); combo box palet + latar terang/gelap |
-| **layout** | navbar, footer | `src/components/layout/`: ada di semua halaman, variasinya dipilih di `site.yaml` |
-| **sections** | hero, intro, media, cards, catalog, features, benefits, posts, text, cta, contact, post | `src/components/sections/`: disusun per halaman di YAML (template di MODULES.md); `post` = halaman artikel |
-| **Tinjauan** | variants | tabel semua variasi: dipakai / base / tidak dipakai, dipakai di mana (halaman, `site.yaml`, frontmatter), link preview |
+| **ui** | ui | semua komponen `src/components/ui/` dengan semua pilihan props-nya (Button variant × size × square, TextLink, semua ikon di `src/assets/icons/`, SocialIcon, Logo, MediaPlaceholder); combo box tema kit + latar terang/gelap |
+| **kits** | kits | `kits/`: ringkasan semua kit (isi, tema, section yang masih memakai base, dipakai di mana) + **pratinjau halaman situs dengan kit tertentu** (`?k=<kit>&h=<halaman>`: navbar, semua section, footer; nama variasi yang sama dipakai, kalau tidak ada → variasi pertama kit itu → base) |
+| **layout** | navbar, footer | variasi di `kits/<kit>/navbar|footer/`: ada di semua halaman, dipilih di `site.yaml` |
+| **sections** | hero, intro, media, cards, catalog, features, benefits, posts, text, cta, contact, post | variasi di `kits/<kit>/<section>/`: disusun per halaman di YAML (template di MODULES.md); `post` = halaman artikel |
+| **Tinjauan** | variants | tabel semua variasi di semua kit (kolom Kit): dipakai / base / tidak dipakai, dipakai di mana (halaman, `site.yaml`, frontmatter), link preview |
 | Lainnya | (otomatis) | file baru yang belum dikelompokkan di `pages/index.astro` |
 
-Combo box (nilai di URL, bisa dibagikan): `?v=` variasi (dengan tanda pemakaian, opsi **Semua variasi** = berjajar dengan label), `?c=` contoh isi (setiap section berjenis itu di semua halaman YAML, beranda dulu), `?palet=` palet, `?tone=`, `?p=` artikel, `?font=`. Bawaan = yang dipakai situs.
+Combo box (nilai di URL, bisa dibagikan): `?v=kit/Nama` variasi dari semua kit (dengan tanda pemakaian, opsi **Semua variasi** = semua kit berjajar dengan label, masing-masing bertema kit-nya), `?c=` contoh isi (setiap section berjenis itu di semua halaman YAML, beranda dulu), `?tema=` (hanya `/prototype/ui`), `?tone=`, `?p=` artikel, `?font=`, `?k=`/`?h=` (kits). Bawaan = yang dipakai situs.
 
-Halaman modul cukup satu baris: `<SectionPreview section="cards" />` (`src/prototype/SectionPreview.astro`). Section baru perlu didaftarkan di `variantsBySection` di file itu.
+Halaman modul cukup satu baris: `<SectionPreview section="cards" />` (`src/prototype/SectionPreview.astro`); variasinya dibaca otomatis dari semua kit.
 
 Konten uji (dev saja): `src/prototype/content/pages/contoh-halaman.yaml`, `src/prototype/content/posts/` (`contoh-semua-elemen` berisi semua elemen artikel, artikel kelistrikan asli, `article-title-1..4`). Konten uji ikut muncul di daftar artikel saat dev, tidak saat build.
 
@@ -564,6 +604,7 @@ Konten uji (dev saja): `src/prototype/content/pages/contoh-halaman.yaml`, `src/p
 ├── astro.config.mjs            ← site (domain), integrasi (sitemap, mdx, react, prototype), Tailwind
 ├── netlify.toml                ← build Netlify: npm run build → dist, Node 22
 ├── public/                     ← favicon, logo (+ mask), robots.txt, .htaccess
+├── kits/<kit>/                 ← kit desain: kit.ts, theme.css?, <section>/<Variasi>.astro, parts/ (lihat Kit desain)
 ├── reference/Parametris_Complete_Source_v8/   ← arsip export parametris.com dari klien (read-only, di luar src/, tidak di-scan Astro/Tailwind)
 ├── scripts/import-notion.mjs   ← impor export Notion → src/content/posts/<slug>/
 ├── AGENTS.md · DESIGN.md · MODULES.md
@@ -575,21 +616,21 @@ Konten uji (dev saja): `src/prototype/content/pages/contoh-halaman.yaml`, `src/p
     │   ├── products/<id>.yaml + <id>.jpg
     │   └── posts/<slug>/index.md + gambar
     ├── content.config.ts       ← skema zod
-    ├── lib/                    ← content.ts (pembaca data), variants.ts (deteksi & pemilihan variasi), section.ts (tone/width)
-    ├── layouts/BaseLayout.astro ← <head> (SEO), tema, Navbar, <main>, Footer; prop `bare` = tanpa navbar/footer
+    ├── lib/                    ← content.ts (pembaca data), kits.ts (registry kit & pemilihan variasi), section.ts (tone/width)
+    ├── layouts/BaseLayout.astro ← <head> (SEO), data-kit + tema kit, Navbar, <main>, Footer; prop `bare` = tanpa navbar/footer, `kit` = kit halaman
     ├── pages/
     │   ├── [...slug].astro     ← SEMUA halaman dari content/pages
     │   └── posts/[id].astro    ← halaman artikel
     ├── components/
-    │   ├── layout/navbar/, layout/footer/       ← mandatory
-    │   ├── sections/<nama>/                     ← hero, intro, media, cards, catalog, features, benefits, posts, text, cta, contact, post
+    │   ├── layout/navbar/, layout/footer/       ← pintu masuk + types.ts (mandatory)
+    │   ├── sections/<nama>/                     ← pintu masuk + types.ts: hero, intro, media, cards, catalog, features, benefits, posts, text, cta, contact, post
     │   ├── sections/Sections.astro              ← peta `type` → pintu masuk
-    │   ├── sections/WrappedVariant.astro, BasicHeading.astro, SplitHeading.astro, types.ts
+    │   ├── sections/KitVariant.astro, types.ts  ← pemilih variasi bersama, tipe bersama
     │   └── ui/                                  ← Button, TextLink, Icon, Logo, Section, SocialIcon, YouTube, MediaPlaceholder
     ├── assets/icons/*.svg      ← ikon Lucide untuk ui/Icon
-    ├── styles/global.css       ← SEMUA token (dua palet, font, skala, jarak, tone, .prose)
+    ├── styles/global.css       ← token tema bawaan, font, skala (+ text-ref-*), jarak, tone, @source kits
     └── prototype/              ← hanya dev
-        ├── pages/              ← /prototype/... (index, variants, colors, fonts, ui, navbar, footer, post, + 1 file per section)
+        ├── pages/              ← /prototype/... (index, kits, variants, colors, fonts, ui, navbar, footer, post, + 1 file per section)
         ├── content/            ← halaman & artikel uji
         ├── PrototypeLayout.astro, SectionPreview.astro, VariantLabel.astro, controls.ts, route.astro
         └── integration.mjs
@@ -602,7 +643,8 @@ Branch: `prototype-01` (kerja harian) → `demo` (Netlify https://parametris-ast
 - **Tanpa teks atau warna hardcode di komponen.** Teks dari `src/content/`, warna dari token (`bg-primary`, bukan `bg-green-500` atau `#86732c`).
 - **Satu komponen untuk bentuk yang sama** (satu `Hero` dengan props, bukan `HeroHome`, `HeroAbout`).
 - **Latar & lebar diatur `ui/Section`**, bukan di dalam variasi.
-- **Gaya:** class Tailwind langsung di file variasi, nilainya dari token. `<style>` di variasi hanya untuk hal khusus. `global.css` hanya untuk token situs-wide.
+- **Gaya:** class Tailwind langsung di file variasi, nilainya dari token. CSS yang hanya dipakai satu modul ditaruh di modul itu (`<style>` di variasi, `kits/<kit>/theme.css`, atau `.css` di sebelah komponen seperti `post/blocks/prose.css`). `global.css` hanya untuk token & aturan situs-wide.
+- **File kit hanya menerima props** (tidak mengimpor `@/lib/content` / `astro:content` untuk membaca data); data disiapkan pintu masuk di `src/`.
 - **Jarak:** selalu `container-page` / `section-y`.
 - Import memakai alias `@/` (mis. `@/components/sections/hero/Hero.astro`).
 - Komentar CSS jangan memuat `*/` di tengah teks.
@@ -641,3 +683,5 @@ Branch: `prototype-01` (kerja harian) → `demo` (Netlify https://parametris-ast
 - **2026-11-09 (revisi 2):** Daftar `/prototype` dikelompokkan **per folder kode** (global.css · ui · layout · sections · Tinjauan), menggantikan Mandatory / Modul. Ditambah halaman **`/prototype/ui`** (semua komponen `ui/` + semua ikon, palet & latar gelap).
 - **2026-11-10:** **Uji coba editor artikel Keystatic** (`/keystatic`, mode local, hanya dev) sebagai jalur demo "post editor bawaan". Dipilih karena hasilnya tetap file Markdown biasa di `src/content/posts/` (migrasi ke database nanti cukup script + ganti loader koleksi `posts`; tampilan tidak berubah). Isi memakai editor MDX bersimpan `.md` (bukan Markdoc) dan gambar `publicPath ../` + `directory src/content/posts` supaya pola 1 artikel = 1 folder terjaga. Login & tempat simpan online belum diputuskan (menunggu atasan: GitHub vs database).
 - **2026-11-10 (revisi 2):** **Artikel jadi bagian situs.** 2 artikel lama parametris.com (404 di sana) ditulis ulang dalam bahasa Indonesia di `src/content/posts/` (slug = URL lama). Section artikel beranda kini otomatis dari koleksi (`items` manual dihapus, `limit: 2`, link "Semua artikel"). Halaman baru **`/artikel`** (memakai ulang section `posts`, tanpa komponen baru) + item menu & footer "Artikel". `getPosts()` tidak lagi menyertakan artikel uji prototype supaya daftar artikel saat dev = build.
+- **2026-11-10 (revisi 3):** `/prototype/variants` kini membaca daftar dari `variants.ts` tiap folder section (dulu glob nama file `_NNN.astro` sendiri), jadi isinya sama persis dengan combo box `/prototype/<section>` dan yang dikenali situs. File salinan (`BenefitsBasic_001 copy.astro`) dan folder section baru otomatis ikut.
+- **2026-11-10 (revisi 4):** **Kit desain** (masukan atasan: developer biasanya menyerahkan desain sebagai satu paket berisi banyak section, di luar `src/`). Semua variasi dipindah dari `src/components/<sections|layout>/<section>/` ke `kits/<kit>/<section>/` (riwayat git tetap): `base` (Basic), `parametris` (gaya parametris.com + `PostArticle_*`), `awal` (desain lama). `variants.ts` per section, `WrappedVariant`, dan `lib/variants.ts` diganti `lib/kits.ts` + `sections/KitVariant.astro`. `site.yaml › theme` diganti `kit`; field `kit` per halaman; `variant:` boleh `kit/Nama` atau kosong. Tema: `.theme-parametris` → `kits/parametris/theme.css` (`[data-kit="parametris"]`), tema bawaan juga di `:where([data-kit])`; `.prose` → `sections/post/blocks/prose.css` (CSS satu modul ditaruh di modulnya). HeroImage_002 tidak lagi membaca menu sendiri (`menuLinks` dari Hero.astro). Prototype: `?v=kit/Nama` dari semua kit, kolom Kit di `/prototype/variants`, halaman baru `/prototype/kits` (ringkasan + pratinjau halaman per kit), combo box Palet diganti Tema (`/prototype/ui`). `/contoh-halaman` memakai `kit: awal`. HTML build 16 halaman identik dengan sebelum perubahan (selain atribut `<body>`).

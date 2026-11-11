@@ -23,4 +23,6 @@ export interface HeroProps {
   size?: "xl" | "default";
   /** Daftar link (HeroImage_002). Kosongkan untuk memakai item menu utama dari src/content/menu/. */
   links?: NavLink[];
+  /** Item menu utama (src/content/menu/), disiapkan Hero.astro. Dipakai variasi yang menampilkan menu kalau `links` kosong. */
+  menuLinks?: NavLink[];
 }

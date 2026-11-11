@@ -28,7 +28,7 @@ const posts = defineCollection({
       coverAlt: z.string().optional(),
       // true = belum tayang: tampil saat dev untuk dicek, tidak ikut build. Hapus barisnya untuk menerbitkan.
       draft: z.boolean().default(false),
-      // Opsional: tampilan khusus untuk artikel ini. Kosong = site.yaml › post.variant.
+      // Opsional: tampilan khusus untuk artikel ini ("Nama" atau "kit/Nama"). Kosong = site.yaml › post.variant.
       variant: z.string().optional(),
     }),
 });
@@ -100,16 +100,17 @@ const site = defineCollection({
     lang: z.string().default("id"),
     // Judul tab beranda (halaman lain: "<judul halaman> — <name>"). Kosong = name.
     homeTitle: z.string().optional(),
-    // Palet seluruh situs: "situs" = token :root di global.css, "parametris" = palet referensi parametris.com (.theme-parametris)
-    theme: z.enum(["situs", "parametris"]).default("situs"),
+    // Kit desain seluruh situs = nama folder di kits/ (mis. parametris). Halaman boleh menimpanya lewat `kit:` di YAML-nya.
+    kit: z.string().default("base"),
     cta: link,
     // Kontak perusahaan: dipakai section `contact` (dan bisa dipakai footer).
     contact: contactInfo,
     navbar: z.object({
-      variant: z.string().default("NavbarBasic_001"),
+      // "Nama" (dicari di kit situs) atau "kit/Nama". Kosong = variasi pertama di kit situs.
+      variant: z.string().optional(),
     }),
     footer: z.object({
-      variant: z.string().default("FooterBasic_001"),
+      variant: z.string().optional(),
       company: z.string(),
       // Kalimat singkat di bawah nama perusahaan (FooterColumns_001)
       tagline: z.string().optional(),
@@ -134,7 +135,7 @@ const site = defineCollection({
         .default([]),
     }),
     post: z.object({
-      variant: z.string().default("PostBasic_001"),
+      variant: z.string().optional(),
       labels: z.object({
         author: z.string(),
         published: z.string(),
@@ -148,6 +149,7 @@ const site = defineCollection({
 });
 
 // Isi halaman: 1 halaman = 1 file .yaml di src/content/pages/. Nama file = URL:
+// `variant:` tiap section = "Nama" (dicari di kit halaman, lalu kit base), "kit/Nama", atau kosong (variasi pertama kit). Lihat src/lib/kits.ts.
 // home.yaml → /, produk.yaml → /produk, produk/plc.yaml → /produk/plc.
 // Susunan halaman = daftar `sections`, tampil berurutan dari atas ke bawah. Setiap item memilih jenis section lewat `type`.
 // Saat dev, halaman contoh di src/prototype/content/pages/ ikut terbaca; saat build tidak.
@@ -178,7 +180,7 @@ const pages = defineCollection({
 
     const hero = z.object({
       type: z.literal("hero"),
-      variant: z.string().default("HeroBasic_001"),
+      variant: z.string().optional(),
       eyebrow: z.string().optional(),
       // Teks kecil di kanan atas (HeroText_*), boleh berupa link, mis. { label: Beranda, href: / }
       aside: z.object({ label: z.string(), href: z.string().optional() }).optional(),
@@ -213,7 +215,7 @@ const pages = defineCollection({
     // Kartu: dari halaman anak (`from: iot` → semua file di pages/iot/, urut `order`) atau daftar manual `items`.
     const cards = z.object({
       type: z.literal("cards"),
-      variant: z.string().default("CardsBasic_001"),
+      variant: z.string().optional(),
       ...wrapper,
       ...heading,
       from: z.string().optional(),
@@ -230,7 +232,7 @@ const pages = defineCollection({
     // `limit` = jumlah produk per kategori (kosong = semua).
     const catalog = z.object({
       type: z.literal("catalog"),
-      variant: z.string().default("CatalogBasic_001"),
+      variant: z.string().optional(),
       ...wrapper,
       ...heading,
       categories: z.array(z.string()).optional(),
@@ -241,7 +243,7 @@ const pages = defineCollection({
     // Daftar artikel (terbaru di atas). `limit` kosong = semua, `category` = saring per kategori.
     const posts = z.object({
       type: z.literal("posts"),
-      variant: z.string().default("PostsBasic_001"),
+      variant: z.string().optional(),
       ...wrapper,
       ...heading,
       limit: z.number().optional(),
@@ -256,7 +258,7 @@ const pages = defineCollection({
     // Teks bebas. `body` = paragraf, pisahkan dengan satu baris kosong.
     const text = z.object({
       type: z.literal("text"),
-      variant: z.string().default("TextBasic_001"),
+      variant: z.string().optional(),
       ...wrapper,
       ...heading,
       body: z.string().optional(),
@@ -265,7 +267,7 @@ const pages = defineCollection({
     // Ajakan bertindak, biasanya di akhir halaman.
     const cta = z.object({
       type: z.literal("cta"),
-      variant: z.string().default("CtaBasic_001"),
+      variant: z.string().optional(),
       ...wrapper,
       ...heading,
       actions: z.array(link).default([]),
@@ -274,7 +276,7 @@ const pages = defineCollection({
     // Info kontak (dari site.yaml › contact) + formulir. Label formulir ditulis di sini.
     const contact = z.object({
       type: z.literal("contact"),
-      variant: z.string().default("ContactBasic_001"),
+      variant: z.string().optional(),
       ...wrapper,
       ...heading,
       // Opsional: menimpa site.yaml › contact untuk section ini saja (field yang diisi saja yang menimpa).
@@ -301,7 +303,7 @@ const pages = defineCollection({
     // Gambar sebagai section sendiri: banner foto penuh dengan judul (MediaBanner_001) atau gambar lebar (MediaFigure_001).
     const mediaSection = z.object({
       type: z.literal("media"),
-      variant: z.string().default("MediaBasic_001"),
+      variant: z.string().optional(),
       image: img,
       eyebrow: z.string().optional(),
       title: z.string().optional(),
@@ -311,7 +313,7 @@ const pages = defineCollection({
     // Daftar kapabilitas/fitur bernomor: judul + penjelasan per baris.
     const features = z.object({
       type: z.literal("features"),
-      variant: z.string().default("FeaturesBasic_001"),
+      variant: z.string().optional(),
       ...wrapper,
       ...heading,
       items: z.array(z.object({ title: z.string(), description: z.string().optional() })).default([]),
@@ -321,7 +323,7 @@ const pages = defineCollection({
     // `note` = paragraf penutup di bawah daftar. Ikon = nama file di src/assets/icons/ tanpa .svg (mis. gauge).
     const benefits = z.object({
       type: z.literal("benefits"),
-      variant: z.string().default("BenefitsBasic_001"),
+      variant: z.string().optional(),
       ...wrapper,
       ...heading,
       items: z
@@ -339,7 +341,7 @@ const pages = defineCollection({
 
     const intro = z.object({
       type: z.literal("intro"),
-      variant: z.string().default("IntroBasic_001"),
+      variant: z.string().optional(),
       // Pembungkus section (ui/Section.astro)
       tone: z.enum(sectionTones).optional(),
       width: z.enum(sectionWidths).optional(),
@@ -353,6 +355,8 @@ const pages = defineCollection({
     });
 
     return z.object({
+      // Kit desain halaman ini (nama folder di kits/). Kosong = site.yaml › kit. Navbar & footer tetap ikut kit situs.
+      kit: z.string().optional(),
       // Judul tab browser & SEO. Kosong = nama situs (site.yaml). Juga dipakai sebagai judul kartu (section `cards` › from).
       title: z.string().optional(),
       description: z.string().optional(),
